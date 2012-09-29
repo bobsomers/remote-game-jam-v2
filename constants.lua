@@ -14,7 +14,9 @@ Constants.CENTER = Constants.SCREEN / 2
 Constants.DEBUG_MODE = true
 
 -- Player settings.
-Constants.PLAYER_SPEED = 175 -- 175 pixels/sec
+Constants.CURIOSITY_SPEED = 100 -- 100 pixels/sec
+Constants.CURIOSITY_TURN_SPEED = math.pi / 3 -- pi/3 radians/sec
+Constants.CURIOSITY_FRAME_DURATION = 0.1 -- 1/10 of a sec
 
 -- Olmec Chan's speech thing
 Constants.OLMEC_SPEECH_TIME = 300

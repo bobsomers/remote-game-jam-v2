@@ -13,12 +13,16 @@ local Curiosity = Class(function(self, collider, camera)
     self.shape.kind = "curiosity"
     self.collider:addToGroup("curiosity", self.shape)
 
+    self.image = love.graphics.newImage("assets/curiosity1.png")
+
     self:reset()
 end)
 
 function Curiosity:reset()
     self.velocity = Vector(0, 0)
     self.health = 100
+
+    self.shape:moveTo(100, 100)
 end
 
 function Curiosity:update(dt)
@@ -26,8 +30,14 @@ function Curiosity:update(dt)
 end
 
 function Curiosity:draw()
-    love.graphics.setColor(255, 255, 255, 255)
-    love.graphics.rectangle("fill", 100, 100, self.SIZE.x, self.SIZE.y)
+    local position = Vector(self.shape:center())
+    love.graphics.draw(self.image,
+        position.x, position.y,
+        0,
+        1, 1,
+        self.SIZE.x / 2, self.SIZE.y / 2,
+        0, 0
+    )
 end
 
 return Curiosity

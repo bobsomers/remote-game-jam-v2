@@ -19,6 +19,11 @@ Constants.DEBUG_MODE = true
 -- Player settings.
 Constants.PLAYER_SPEED = 175 -- 175 pixels/sec
 
+-- Melee Viking data
+Constants.MELEE_VIKING_HP = 100
+Constants.MELEE_VIKING_SIZE = Vector(30,30)
+Constants.MELEE_VIKING_SPEED = 5000000000
+
 -- Olmec Chan's speech thing
 Constants.OLMEC_SPEECH_TIME = 300
 

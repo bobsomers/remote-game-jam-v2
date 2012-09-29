@@ -4,6 +4,7 @@ local Collider = require "hardoncollider"
 local GameCam = require "entities.gamecam"
 local Curiosity = require "entities.curiosity"
 local Spirit = require "entities.spirit"
+local Opportunity = require "entities.opportunity"
 local Gibson = require "entities.gibson"
 local Ground = require "entities.ground"
 
@@ -29,6 +30,7 @@ function PlayState:init()
     
     -- Load other rovers (for now)
     self.spirit = Spirit(self.collider)
+    self.opportunity = Opportunity(self.collider)
     self.gibson = Gibson(self.collider)
 
     -- Load temp viking
@@ -90,6 +92,7 @@ function PlayState:draw()
     self.ground:draw()
     self.curiosity:draw()
     self.spirit:draw()
+    self.opportunity:draw()
     self.gibson:draw()
 
     self.tempViking:draw() --TODO remove

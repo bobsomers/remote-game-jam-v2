@@ -17,6 +17,7 @@ local Viking = Class(function(self, collider)
 
     -- sprite initialization
     self.sprite = love.graphics.newImage("assets/meleeviking1.png")
+    self.sprite:setFilter("nearest", "nearest");
 
     -- finish initialization by resetting
     self:reset()

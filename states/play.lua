@@ -3,8 +3,14 @@ local Constants = require "constants"
 
 local PlayState = Gamestate.new()
 
+local Ground = require "entities.ground"
+
 function PlayState:init()
     -- TODO
+
+    -- Load the map stuff
+    self.ground = Ground()
+
 end
 
 function PlayState:enter(previous)
@@ -39,6 +45,7 @@ end
 
 function PlayState:draw()
     love.graphics.print("Hello remote game jam!", 200, 200)
+    self.ground:draw()
 
     -- TODO
 end

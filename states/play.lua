@@ -3,9 +3,15 @@ local Constants = require "constants"
 local Collider = require "hardoncollider"
 local GameCam = require "entities.gamecam"
 local Curiosity = require "entities.curiosity"
+local Spirit = require "entities.spirit"
+local Opportunity = require "entities.opportunity"
+local Gibson = require "entities.gibson"
 local Ground = require "entities.ground"
 
 local PlayState = Gamestate.new()
+
+-- TODO make a list of enemies or some shit
+local TempViking = require "entities.viking"
 
 function PlayState:init()
     -- Forward collision detection to self method.
@@ -21,6 +27,14 @@ function PlayState:init()
 
     -- Load curiosity.
     self.curiosity = Curiosity(self.collider, self.cam)
+    
+    -- Load other rovers (for now)
+    self.spirit = Spirit(self.collider)
+    self.opportunity = Opportunity(self.collider)
+    self.gibson = Gibson(self.collider)
+
+    -- Load temp viking
+    self.tempViking = TempViking(self.collider)
 
     -- Initialize all the crap Olmec Chan says
     self.olmecSays = ""
@@ -48,6 +62,8 @@ function PlayState:update(dt)
     dt = math.min(dt, 1/15) -- Minimum 15 FPS.
 
     self.curiosity:update(dt)
+
+    self.tempViking:update(dt) --TODO remove
 
     -- Update FPS in window title (if DEBUG MODE is on).
     if Constants.DEBUG_MODE then
@@ -77,6 +93,11 @@ end
 function PlayState:draw()
     self.ground:draw()
     self.curiosity:draw()
+    self.spirit:draw()
+    self.opportunity:draw()
+    self.gibson:draw()
+
+    self.tempViking:draw() --TODO remove
     
     love.graphics.print(self.olmecSays, 50, 550)
 end

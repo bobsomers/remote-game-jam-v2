@@ -10,6 +10,9 @@ Constants.AUTHOR = "Bob Somers, Ryan Schmitt, Tim Adam, and Paul Morales"
 Constants.SCREEN = Vector(800, 600)
 Constants.CENTER = Constants.SCREEN / 2
 
+-- Gameplay variabls things.
+Constants.HELPER_SPEED = 10
+
 -- Debug mode.
 Constants.DEBUG_MODE = true
 
@@ -17,6 +20,11 @@ Constants.DEBUG_MODE = true
 Constants.CURIOSITY_SPEED = 100 -- 100 pixels/sec
 Constants.CURIOSITY_TURN_SPEED = math.pi / 3 -- pi/3 radians/sec
 Constants.CURIOSITY_FRAME_DURATION = 0.1 -- 1/10 of a sec
+
+-- Melee Viking data
+Constants.MELEE_VIKING_HP = 100
+Constants.MELEE_VIKING_SIZE = Vector(30,30)
+Constants.MELEE_VIKING_SPEED = 10
 
 -- Olmec Chan's speech thing
 Constants.OLMEC_SPEECH_TIME = 300

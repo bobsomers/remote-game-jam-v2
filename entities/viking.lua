@@ -17,7 +17,6 @@ local Viking = Class(function(self, collider)
 
     -- sprite initialization
     self.sprite = love.graphics.newImage("assets/meleeviking1.png")
-    self.sprite:setFilter("nearest", "nearest");
 
     -- finish initialization by resetting
     self:reset()
@@ -31,17 +30,18 @@ function Viking:reset()
 end
 
 function Viking:update(dt)
-
+    self.shape:move(-dt*self.MOVE_SPEED, 0)
+    self.shape:rotate(dt)
 end
 
 function Viking:draw()
     local pos = Vector(self.shape:center())
     love.graphics.draw(self.sprite,
-                       pos.x, pos.y,  -- position
-                       0,             -- rotation
-                       1,1,           -- scale
-                       15,15,         -- offset
-                       0,0)           -- shearing
+                       pos.x, pos.y,
+                       self.shape:rotation(),
+                       1,1,   -- scale
+                       15,15, -- offset
+                       0,0)   -- shearing
 end
 
 return Viking

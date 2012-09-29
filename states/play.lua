@@ -63,6 +63,8 @@ function PlayState:update(dt)
 
     self.curiosity:update(dt)
 
+    self.tempViking:update(dt) --TODO remove
+
     -- Update FPS in window title (if DEBUG MODE is on).
     if Constants.DEBUG_MODE then
         self.lastFpsTime = self.lastFpsTime + dt

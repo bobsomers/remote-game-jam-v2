@@ -7,6 +7,9 @@ local Ground = require "entities.ground"
 
 local PlayState = Gamestate.new()
 
+-- TODO make a list of enemies or some shit
+local TempViking = require "entities.viking"
+
 function PlayState:init()
     -- Forward collision detection to self method.
     self.collider = Collider(100, function(dt, shape1, shape2, mtvX, mtvY)
@@ -21,6 +24,9 @@ function PlayState:init()
 
     -- Load curiosity.
     self.curiosity = Curiosity(self.collider, self.cam)
+
+    -- Load temp viking
+    self.tempViking = TempViking(self.collider)
 
     -- Initialize all the crap Olmec Chan says
     self.olmecSays = ""
@@ -77,6 +83,8 @@ end
 function PlayState:draw()
     self.ground:draw()
     self.curiosity:draw()
+
+    self.tempViking:draw() --TODO remove
     
     love.graphics.print(self.olmecSays, 50, 550)
 end

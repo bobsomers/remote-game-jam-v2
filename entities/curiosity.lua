@@ -26,7 +26,8 @@ function Curiosity:update(dt)
 end
 
 function Curiosity:draw()
-
+    love.graphics.setColor(255, 255, 255, 255)
+    love.graphics.rectangle("fill", 100, 100, self.SIZE.x, self.SIZE.y)
 end
 
 return Curiosity

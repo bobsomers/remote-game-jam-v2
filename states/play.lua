@@ -1,15 +1,26 @@
 local Gamestate = require "hump.gamestate"
 local Constants = require "constants"
+local Collider = require "hardoncollider"
+local GameCam = require "entities.gamecam"
+local Curiosity = require "entities.curiosity"
+local Ground = require "entities.ground"
 
 local PlayState = Gamestate.new()
 
-local Ground = require "entities.ground"
-
 function PlayState:init()
-    -- TODO
+    -- Forward collision detection to self method.
+    self.collider = Collider(100, function(dt, shape1, shape2, mtvX, mtvY)
+        self:collide(dt, shape1, shape2, mtvX, mtvY)
+    end)
+
+    -- Game camera.
+    self.cam = GameCam()
 
     -- Load the map stuff
     self.ground = Ground()
+
+    -- Load curiosity.
+    self.curiosity = Curiosity(self.collider, self.cam)
 
     -- Initialize all the crap Olmec Chan says
     self.olmecSays = ""
@@ -34,7 +45,7 @@ end
 function PlayState:update(dt)
     dt = math.min(dt, 1/15) -- Minimum 15 FPS.
 
-    -- TODO
+    self.curiosity:update(dt)
 
     -- Update FPS in window title (if DEBUG MODE is on).
     if Constants.DEBUG_MODE then
@@ -64,8 +75,11 @@ end
 function PlayState:draw()
     love.graphics.print("Hello remote game jam!", 200, 200)
     self.ground:draw()
+    self.curiosity:draw()
+end
 
-    -- TODO
+function PlayState:collide(dt, shape1, shape2, mtvX, mtvY)
+    -- TODO dispatch to collision resolvers
 end
 
 function PlayState:keypressed(key)

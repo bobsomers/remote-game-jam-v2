@@ -24,7 +24,7 @@ function PlayState:init()
 
     -- Initialize all the crap Olmec Chan says
     self.olmecSays = ""
-    self.olmecSpeakTime = Constants.OLMEC_SPEECH_TIME
+    self.olmecSpeakTime = 0
 
     -- Initialize the subjects that have more than one line
     self.olmecWorldLines = {Constants.OLMECTALK_WORLD1, Constants.OLMECTALK_WORLD2, Constants.OLMECTALK_WORLD3, Constants.OLMECTALK_WORLD4}
@@ -77,6 +77,8 @@ end
 function PlayState:draw()
     self.ground:draw()
     self.curiosity:draw()
+    
+    love.graphics.print(self.olmecSays, 50, 550)
 end
 
 function PlayState:collide(dt, shape1, shape2, mtvX, mtvY)
@@ -99,7 +101,6 @@ end
 function PlayState:olmecTalk(subject)
     -- If Olmec is not currently speaking, sayeth something
     if self.olmecSpeakTime <= 0 then
-        print("Olmec speaks!")
         if subject == Constants.OLMECSUBJECT_INTRO then
             self.olmecSays = Constants.OLMECTALK_INTRO
         elseif subject == Constants.OLMECSUBJECT_WORLD then
@@ -117,8 +118,6 @@ function PlayState:olmecTalk(subject)
             self.olmecSays = Constants.OLMECTALK_DEFEAT
         end
         self.olmecSpeakTime = Constants.OLMEC_SPEECH_TIME
-        print(self.olmecSays)
-        print(self.olmecSpeakTime)
     end
 end
 

@@ -13,6 +13,9 @@ Constants.CENTER = Constants.SCREEN / 2
 -- Debug mode.
 Constants.DEBUG_MODE = true
 
+-- Player settings.
+Constants.PLAYER_SPEED = 175 -- 175 pixels/sec
+
 -- Melee Viking data
 Constants.MELEE_VIKING_HP = 100
 Constants.MELEE_VIKING_SIZE = Vector(30,30)

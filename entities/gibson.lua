@@ -2,7 +2,7 @@ local Class = require "hump.class"
 local Vector = require "hump.vector"
 local Constants = require "constants"
 
-local Spirit = Class(function(self, collider)
+local Gibson = Class(function(self, collider)
     self.collider = collider
     self.camera = camera
 
@@ -10,25 +10,25 @@ local Spirit = Class(function(self, collider)
     self.MOVE_SPEED = Constants.HELPER_SPEED
 
     self.shape = self.collider:addRectangle(0, 0, self.SIZE.x, self.SIZE.y)
-    self.shape.kind = "spirit"
-    self.collider:addToGroup("spirit", self.shape)
+    self.shape.kind = "gibson"
+    self.collider:addToGroup("gibson", self.shape)
 
     self.image = love.graphics.newImage("assets/curiosity1.png")
 
     self:reset()
 end)
 
-function Spirit:reset()
+function Gibson:reset()
     self.velocity = Vector(0, 0)
 
-    self.shape:moveTo(150, 150)
+    self.shape:moveTo(50, 50)
 end
 
-function Spirit:update(dt)
+function Gibson:update(dt)
 
 end
 
-function Spirit:draw()
+function Gibson:draw()
     local position = Vector(self.shape:center())
     love.graphics.draw(self.image,
         position.x, position.y,
@@ -39,4 +39,4 @@ function Spirit:draw()
     )
 end
 
-return Spirit
+return Gibson

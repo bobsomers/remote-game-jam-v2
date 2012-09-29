@@ -3,6 +3,8 @@ local Constants = require "constants"
 local Collider = require "hardoncollider"
 local GameCam = require "entities.gamecam"
 local Curiosity = require "entities.curiosity"
+local Spirit = require "entities.spirit"
+local Gibson = require "entities.gibson"
 local Ground = require "entities.ground"
 
 local PlayState = Gamestate.new()
@@ -21,6 +23,10 @@ function PlayState:init()
 
     -- Load curiosity.
     self.curiosity = Curiosity(self.collider, self.cam)
+    
+    -- Load other rovers (for now)
+    self.spirit = Spirit(self.collider)
+    self.gibson = Gibson(self.collider)
 
     -- Initialize all the crap Olmec Chan says
     self.olmecSays = ""
@@ -77,6 +83,8 @@ end
 function PlayState:draw()
     self.ground:draw()
     self.curiosity:draw()
+    self.spirit:draw()
+    self.gibson:draw()
     
     love.graphics.print(self.olmecSays, 50, 550)
 end

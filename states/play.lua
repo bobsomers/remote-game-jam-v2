@@ -14,7 +14,7 @@ function PlayState:init()
     -- Initialize all the crap Olmec Chan says
     self.olmecSays = ""
     self.olmecSpeakTime = Constants.OLMEC_SPEECH_TIME
-    
+
     -- Initialize the subjects that have more than one line
     self.olmecWorldLines = {Constants.OLMECTALK_WORLD1, Constants.OLMECTALK_WORLD2, Constants.OLMECTALK_WORLD3, Constants.OLMECTALK_WORLD4}
     self.olmecTempleLines = {Constants.OLMECTALK_TEMPLE1, Constants.OLMECTALK_TEMPLE2, Constants.OLMECTALK_TEMPLE3}
@@ -49,11 +49,11 @@ function PlayState:update(dt)
             self.lastFpsTime = 0
         end
     end
-    
+
     -- Update Olmec talk box
     if self.olmecSpeakTime > 0 then
         -- TODO: Olmec speaks!
-      
+
         self.olmecSpeakTime = self.olmecSpeakTime - 1
     else
         self.olmecSpeakTime = 0

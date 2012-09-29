@@ -30,6 +30,8 @@ function PlayState:init()
     self.olmecWorldLines = {Constants.OLMECTALK_WORLD1, Constants.OLMECTALK_WORLD2, Constants.OLMECTALK_WORLD3, Constants.OLMECTALK_WORLD4}
     self.olmecTempleLines = {Constants.OLMECTALK_TEMPLE1, Constants.OLMECTALK_TEMPLE2, Constants.OLMECTALK_TEMPLE3}
     self.olmecRoverLines = {Constants.OLMECTALK_ROVER1, Constants.OLMECTALK_ROVER2, Constants.OLMECTALK_ROVER3}
+    
+    self:olmecTalk(Constants.OLMECSUBJECT_INTRO)
 end
 
 function PlayState:enter(previous)
@@ -97,23 +99,26 @@ end
 function PlayState:olmecTalk(subject)
     -- If Olmec is not currently speaking, sayeth something
     if self.olmecSpeakTime <= 0 then
-        if subject == "Constants.OLMECSUBJECT_INTRO" then
+        print("Olmec speaks!")
+        if subject == Constants.OLMECSUBJECT_INTRO then
             self.olmecSays = Constants.OLMECTALK_INTRO
-        elseif subject == "Constants.OLMECSUBJECT_WORLD" then
+        elseif subject == Constants.OLMECSUBJECT_WORLD then
             i = math.random(0, (table.getn(self.olmecWorldLines)))
             self.olmecSays = self.olmecWorldLines[i]
-        elseif subject == "Constants.OLMECSUBJECT_TEMPLE" then
+        elseif subject == Constants.OLMECSUBJECT_TEMPLE then
             i = math.random(0, (table.getn(self.olmecTempleLines)))
             self.olmecSays = self.olmecTempleLines[i]
-        elseif subject == "Constants.OLMECSUBJECT_ROVER" then
+        elseif subject == Constants.OLMECSUBJECT_ROVER then
             i = math.random(0, (table.getn(self.olmecRoverLines)))
             self.olmecSays = self.olmecRoverLines[i]
-        elseif subject == "Constants.OLMECSUBJECT_FIGHT" then
+        elseif subject == Constants.OLMECSUBJECT_FIGHT then
             self.olmecSays = Constants.OLMECTALK_FIGHT
-        elseif subject == "Constants.OLMECSUBJECT_DEFEAT" then
+        elseif subject == Constants.OLMECSUBJECT_DEFEAT then
             self.olmecSays = Constants.OLMECTALK_DEFEAT
         end
-        olmecSpeakTime = Constants.OLMEC_SPEECH_TIME
+        self.olmecSpeakTime = Constants.OLMEC_SPEECH_TIME
+        print(self.olmecSays)
+        print(self.olmecSpeakTime)
     end
 end
 

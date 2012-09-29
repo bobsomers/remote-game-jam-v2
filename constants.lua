@@ -14,7 +14,7 @@ Constants.CENTER = Constants.SCREEN / 2
 Constants.DEBUG_MODE = true
 
 -- Olmec Chan's speech thing
-Constants.OLMEC_SPEECH_TIME = 1000
+Constants.OLMEC_SPEECH_TIME = 300
 
 -- Olmec Chan's topics of interest
 Constants.OLMECSUBJECT_INTRO = "INTRO"

@@ -2,16 +2,33 @@ local Class = require "hump.class"
 
 local Ground = Class(function(self)
     self.tile = love.graphics.newImage("assets/groundtile.png")
-    self.quad = love.graphics.newQuad(0,0, 200, 200, 200, 200); -- describes the full image
 end)
 
 function Ground:draw()
-    love.graphics.drawq(self.tile, self.quad,
-                        0, 0, -- x,y pos
-                        0,    -- rotation
-                        1, 1, -- x,y scale
-                        0, 0, -- x,y origin offset
-                        0, 0) -- x,y shearing factor
+    -- top row
+    self:drawAt(0  ,0)
+    self:drawAt(200,0)
+    self:drawAt(400,0)
+    self:drawAt(600,0)
+    --
+    self:drawAt(0  ,200)
+    self:drawAt(200,200)
+    self:drawAt(400,200)
+    self:drawAt(600,200)
+    --
+    self:drawAt(0  ,400)
+    self:drawAt(200,400)
+    self:drawAt(400,400)
+    self:drawAt(600,400)
+end
+
+function Ground:drawAt(x, y)
+    love.graphics.draw(self.tile,
+                       x,y,  -- position
+                       0,    -- rotation
+                       1,1,  -- scale
+                       0,0,  -- offset
+                       0,0) -- shearing
 end
 
 return Ground

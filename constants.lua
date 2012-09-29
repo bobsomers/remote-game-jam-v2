@@ -16,6 +16,9 @@ Constants.HELPER_SPEED = 10
 -- Debug mode.
 Constants.DEBUG_MODE = true
 
+-- Player settings.
+Constants.PLAYER_SPEED = 175 -- 175 pixels/sec
+
 -- Olmec Chan's speech thing
 Constants.OLMEC_SPEECH_TIME = 300
 

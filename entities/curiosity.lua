@@ -32,6 +32,10 @@ function Curiosity:reset()
     self.frameTime = 0
 end
 
+function Curiosity:getPosition()
+    return Vector(self.shape:center())
+end
+
 function Curiosity:update(dt)
     local position = Vector(self.shape:center())
     local moving = false

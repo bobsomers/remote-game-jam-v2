@@ -73,7 +73,6 @@ function PlayState:update(dt)
 end
 
 function PlayState:draw()
-    love.graphics.print("Hello remote game jam!", 200, 200)
     self.ground:draw()
     self.curiosity:draw()
 end

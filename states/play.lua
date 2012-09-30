@@ -32,6 +32,9 @@ function PlayState:init()
     -- Load curiosity.
     self.curiosity = Curiosity(self.collider, self.cam)
     self.entities:register(self.curiosity)
+
+    -- Move the camera over curiosity.
+    self.cam:teleport(self.curiosity:getPosition())
     
     -- Load other rovers (for now)
     self.spirit = Spirit(self.collider, self.curiosity, self.cam)
@@ -61,9 +64,6 @@ function PlayState:init()
     self.olmecRoverAudioFiles = {Constants.OLMECTALK_ROVER1_MP3, Constants.OLMECTALK_ROVER2_MP3, Constants.OLMECTALK_ROVER3_MP3}
     
     self:olmecTalk(Constants.OLMECSUBJECT_INTRO)
-
-    -- Move the camera over curiosity.
-    self.cam:teleport(self.curiosity:getPosition())
 
     self.minimap = MiniMap(self.curiosity, self.vikings)
 end
@@ -184,8 +184,28 @@ end
 
 function PlayState:SpawnVikings()
     local vikings = {}
-    for i = 1, 5 do
-        table.insert(vikings, Viking(self.collider, Vector(math.random(0,800), math.random(0,600))))
+    local pos = Vector(0,0)
+    local min = Vector(self.cam.camera:worldCoords(0, 0))
+    local max = Vector(self.cam.camera:worldCoords(Constants.SCREEN.x - 1, Constants.SCREEN.y - 1))
+    -- vikes from top and bottom
+    for i = 1,Constants.MELEE_VIKING_NUM_TO_SPAWN/2 do
+        pos.x = math.random(min.x, max.x)
+        if math.random() < 0.5 then
+            pos.y = max.y + Constants.MELEE_VIKING_SPAWN_OFFSET_OFF_SCREEN
+        else
+            pos.y = min.y - Constants.MELEE_VIKING_SPAWN_OFFSET_OFF_SCREEN
+        end
+        table.insert(vikings, Viking(self.collider, pos, self.curiosity:getPosition()-pos))
+    end
+    -- vikes from left and right
+    for i = 1,Constants.MELEE_VIKING_NUM_TO_SPAWN-(Constants.MELEE_VIKING_NUM_TO_SPAWN/2) do
+        pos.y = math.random(min.y, max.y)
+        if math.random() < 0.5 then
+            pos.x = max.x + Constants.MELEE_VIKING_SPAWN_OFFSET_OFF_SCREEN
+        else
+            pos.x = min.x - Constants.MELEE_VIKING_SPAWN_OFFSET_OFF_SCREEN
+        end
+        table.insert(vikings, Viking(self.collider, pos, self.curiosity:getPosition()-pos))
     end
     return vikings
 end

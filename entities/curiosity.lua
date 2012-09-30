@@ -28,7 +28,7 @@ end)
 
 function Curiosity:reset()
     self.health = 100
-    self.shape:moveTo(100, 100)
+    self.shape:moveTo(Constants.WORLD.x/2, Constants.WORLD.y/2)
 
     self.frame = 0
     self.frameTime = 0

@@ -2,14 +2,15 @@ local Class = require "hump.class"
 local Vector = require "hump.vector"
 local Constants = require "constants"
 
-local Viking = Class(function(self, collider, initialPos)
+local Viking = Class(function(self, collider, initialPos, initialDir)
     -- handle params
     self.collider = collider
     self.initialPos = initialPos
+    self.initialDir = initialDir
 
     -- init constants
     self.SIZE = Vector(30, 30)
-    self.MOVE_SPEED = Constants.MELEE_VIKING_SPEED
+    self.MOVE_SPEED = math.random(Constants.MELEE_VIKING_MIN_SPEED, Constants.MELEE_VIKING_MAX_SPEED)
     self.FRAME_DURATION = Constants.MELEE_VIKING_FRAME_DURATION
 
     -- collison detection
@@ -28,7 +29,8 @@ local Viking = Class(function(self, collider, initialPos)
 end)
 
 function Viking:reset()
-    self.velocity = Vector(math.random(-self.MOVE_SPEED, self.MOVE_SPEED), math.random(-self.MOVE_SPEED, self.MOVE_SPEED))
+    self.velocity = self.MOVE_SPEED * self.initialDir:normalized()
+    self.shape:setRotation((-math.pi/2)+math.atan2(self.velocity.y, self.velocity.x))
     self.health = Constants.MELEE_VIKING_HP
     self.shape:moveTo(self.initialPos.x, self.initialPos.y)
 

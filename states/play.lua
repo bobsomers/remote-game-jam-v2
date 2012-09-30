@@ -46,6 +46,9 @@ function PlayState:init()
     self.olmecRoverLines = {Constants.OLMECTALK_ROVER1, Constants.OLMECTALK_ROVER2, Constants.OLMECTALK_ROVER3}
     
     self:olmecTalk(Constants.OLMECSUBJECT_INTRO)
+
+    -- Move the camera over curiosity.
+    self.cam:teleport(self.curiosity:getPosition())
 end
 
 function PlayState:enter(previous)
@@ -65,6 +68,20 @@ function PlayState:update(dt)
 
     self.tempViking:update(dt) --TODO remove
 
+    -- Update Olmec talk box
+    if self.olmecSpeakTime > 0 then
+        -- TODO: Olmec speaks!
+
+        self.olmecSpeakTime = self.olmecSpeakTime - 1
+    else
+        self.olmecSpeakTime = 0
+        self.olmecSays = ""
+    end
+
+    -- The camera follows curiosity.
+    self.cam:focus(self.curiosity:getPosition())
+    self.cam:update(dt)
+
     -- Update FPS in window title (if DEBUG MODE is on).
     if Constants.DEBUG_MODE then
         self.lastFpsTime = self.lastFpsTime + dt
@@ -78,19 +95,12 @@ function PlayState:update(dt)
             self.lastFpsTime = 0
         end
     end
-
-    -- Update Olmec talk box
-    if self.olmecSpeakTime > 0 then
-        -- TODO: Olmec speaks!
-
-        self.olmecSpeakTime = self.olmecSpeakTime - 1
-    else
-        self.olmecSpeakTime = 0
-        self.olmecSays = ""
-    end
 end
 
 function PlayState:draw()
+    self.cam:attach()
+
+    -- Draw things affected by the camera.
     self.ground:draw()
     self.curiosity:draw()
     self.spirit:draw()
@@ -99,6 +109,9 @@ function PlayState:draw()
 
     self.tempViking:draw() --TODO remove
     
+    self.cam:detach()
+
+    -- Draw things in screen space.
     love.graphics.print(self.olmecSays, 50, 550)
 end
 

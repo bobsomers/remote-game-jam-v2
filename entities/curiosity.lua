@@ -21,6 +21,8 @@ local Curiosity = Class(function(self, collider, camera)
         love.graphics.newImage("assets/curiosity3.png")
     }
 
+    self.head = love.graphics.newImage("assets/curiosityhead.png")
+
     self:reset()
 end)
 
@@ -90,6 +92,19 @@ function Curiosity:draw()
         self.shape:rotation(),
         1, 1,
         self.SIZE.x / 2, self.SIZE.y / 2,
+        0, 0
+    )
+
+    local mouseX, mouseY = self.camera.camera:worldCoords(love.mouse.getX(), love.mouse.getY())
+    local dx = mouseX - position.x
+    local dy = mouseY - position.y
+    local rotation = math.atan2(dy, dx) + math.pi / 2
+
+    love.graphics.draw(self.head,
+        position.x, position.y,
+        rotation,
+        1, 1,
+        8, 7,
         0, 0
     )
 end

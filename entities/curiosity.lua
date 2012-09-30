@@ -26,7 +26,8 @@ local Curiosity = Class(function(self, collider, camera, entities)
 
     self.head = love.graphics.newImage("assets/curiosityhead.png")
 
-    self.damage = Damage(self, Constants.CURIOSITY_HEALTH, self.SIZE.x, Vector(-self.SIZE.x / 2, -self.SIZE.y / 2 - 5))
+    self.damage = Damage(self, Constants.CURIOSITY_HEALTH, self.SIZE.x,
+        Vector(-self.SIZE.x / 2, -self.SIZE.y / 2 - 5))
 
     self:reset()
 end)

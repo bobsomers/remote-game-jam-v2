@@ -25,6 +25,7 @@ Constants.CURIOSITY_HEALTH = 100 -- 100 hit points
 
 -- Laser weapon settings.
 Constants.LASER_SPEED = 250 -- 250 pixels/sec
+Constants.LASER_DAMAGE = 7
 
 -- Gameplay variabls things.
 Constants.HELPER_SPEED = 120
@@ -38,6 +39,7 @@ Constants.MELEE_VIKING_MAX_SPEED = 100
 Constants.MELEE_VIKING_FRAME_DURATION = 0.1 -- 1/10 of a sec
 Constants.MELEE_VIKING_NUM_TO_SPAWN = 50
 Constants.MELEE_VIKING_SPAWN_OFFSET_OFF_SCREEN = 15
+Constants.MELEE_VIKING_HEALTH = 25
 
 -- Olmec Chan's speech thing
 Constants.OLMEC_SPEECH_TIME = 400

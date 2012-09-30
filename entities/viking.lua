@@ -1,6 +1,7 @@
 local Class = require "hump.class"
 local Vector = require "hump.vector"
 local Constants = require "constants"
+local Damage = require "entities.damage"
 
 local Viking = Class(function(self, collider, initialPos, initialDir)
     -- handle params
@@ -24,6 +25,9 @@ local Viking = Class(function(self, collider, initialPos, initialDir)
         love.graphics.newImage("assets/meleeviking2.png")
     }
 
+    self.damage = Damage(self, Constants.MELEE_VIKING_HEALTH, self.SIZE.x,
+        Vector(-self.SIZE.x / 2, -self.SIZE.y / 2 - 5))
+
     -- finish initialization by resetting
     self:reset()
 end)
@@ -37,6 +41,10 @@ function Viking:reset()
     -- animation data
     self.frame = 0
     self.frameTime = 0
+end
+
+function Viking:getPosition()
+    return Vector(self.shape:center())
 end
 
 function Viking:update(dt)
@@ -80,6 +88,8 @@ function Viking:draw()
                        scale.x, scale.y,
                        15, 15, -- offset
                        0,0)   -- shearing
+
+    self.damage:draw()
 end
 
 return Viking

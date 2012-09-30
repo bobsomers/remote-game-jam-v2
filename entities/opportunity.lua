@@ -1,7 +1,7 @@
 local Class = require "hump.class"
 local Vector = require "hump.vector"
 local Constants = require "constants"
-local Laser = require "entities.laser"
+local RoverMissile = require "entities.rovermissile"
 
 local Opportunity = Class(function(self, collider, curiosity, camera, entities)
     self.collider = collider
@@ -36,7 +36,7 @@ function Opportunity:reset()
     self.frameTime = 0
 
     self.fireTime = 0
-    self.fireRate = Constants.CURIOSITY_BASE_FIRE_RATE
+    self.fireRate = Constants.OPPORTUNITY_BASE_FIRE_RATE
     
     self.explosive = false
 end
@@ -67,7 +67,7 @@ function Opportunity:update(dt)
     self.fireTime = self.fireTime + dt
     if love.mouse.isDown("l") and self.fireTime > self.fireRate then
         self.entities:register(
-            Laser(self.collider, position,
+            RoverMissile(self.collider, position,
                   Vector(math.cos(self.headRotation - math.pi / 2),
                          math.sin(self.headRotation - math.pi / 2)),
                   self.explosive

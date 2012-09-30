@@ -83,6 +83,7 @@ function PlayState:update(dt)
     dt = math.min(dt, 1/15) -- Minimum 15 FPS.
 
     self.entities:update(dt)
+    self.collider:update(dt)
 
     -- Update Olmec talk box
     if self.olmecSpeakTime > 0 then
@@ -135,7 +136,23 @@ function PlayState:draw()
 end
 
 function PlayState:collide(dt, shape1, shape2, mtvX, mtvY)
-    -- TODO dispatch to collision resolvers
+    local laser, enemy
+
+    if shape1.kind == "laser" then
+        laser = self.entities:findByShape(shape1)
+    elseif shape1.kind == "viking" then
+        enemy = self.entities:findByShape(shape1)
+    end
+
+    if shape2.kind == "laser" then
+        laser = self.entities:findByShape(shape2)
+    elseif shape2.kind == "viking" then
+        enemy = self.entities:findByShape(shape2)
+    end
+
+    if laser and enemy then
+        enemy:takeDamage(Constants.LASER_DAMAGE)
+    end
 end
 
 function PlayState:keypressed(key)

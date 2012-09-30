@@ -12,8 +12,12 @@ local Viking = Class(function(self, collider, initialPos, initialDir, isRanged)
 
     -- init constants
     self.SIZE = Vector(30, 30)
-    self.MOVE_SPEED = math.random(Constants.MELEE_VIKING_MIN_SPEED, Constants.MELEE_VIKING_MAX_SPEED)
-    self.FRAME_DURATION = Constants.MELEE_VIKING_FRAME_DURATION
+    if self.isRanged then
+        self.MOVE_SPEED = math.random(Constants.RANGED_VIKING_MIN_SPEED, Constants.RANGED_VIKING_MAX_SPEED)
+    else
+        self.MOVE_SPEED = math.random(Constants.MELEE_VIKING_MIN_SPEED, Constants.MELEE_VIKING_MAX_SPEED)
+    end
+    self.FRAME_DURATION = Constants.VIKING_FRAME_DURATION
 
     -- collison detection
     self.shape = self.collider:addRectangle(0, 0, self.SIZE.x, self.SIZE.y)
@@ -33,8 +37,13 @@ local Viking = Class(function(self, collider, initialPos, initialDir, isRanged)
         }
     end
 
-    self.damage = Damage(self, Constants.MELEE_VIKING_HEALTH, self.SIZE.x,
-        Vector(-self.SIZE.x / 2, -self.SIZE.y / 2 - 5))
+    local hp = 0
+    if self.isRanged then
+        hp = Constants.RANGED_VIKING_HEALTH
+    else
+        hp = Constants.MELEE_VIKING_HEALTH
+    end
+    self.damage = Damage(self, hp, self.SIZE.x, Vector(-self.SIZE.x / 2, -self.SIZE.y / 2 - 5))
 
     -- finish initialization by resetting
     self:reset()
@@ -43,7 +52,6 @@ end)
 function Viking:reset()
     self.velocity = self.MOVE_SPEED * self.initialDir:normalized()
     self.shape:setRotation((-math.pi/2)+math.atan2(self.velocity.y, self.velocity.x))
-    self.health = Constants.MELEE_VIKING_HP
     self.shape:moveTo(self.initialPos.x, self.initialPos.y)
 
     -- animation data
@@ -83,7 +91,12 @@ function Viking:update(dt)
     newPos.y = math.min(Constants.WORLD.y-1, math.max(0, newPos.y))
     self.shape:moveTo(newPos.x, newPos.y)
 
-    local animationSpeed = Vector(Constants.MELEE_VIKING_MAX_SPEED, Constants.MELEE_VIKING_MAX_SPEED):len() / self.velocity:len()
+    local animationSpeed = 0
+    if self.isRanged then
+        animationSpeed = Vector(Constants.RANGED_VIKING_MAX_SPEED, Constants.RANGED_VIKING_MAX_SPEED):len() / self.velocity:len()
+    else
+        animationSpeed = Vector(Constants.MELEE_VIKING_MAX_SPEED, Constants.MELEE_VIKING_MAX_SPEED):len() / self.velocity:len()
+    end
 
     if moving then
         self.frameTime = self.frameTime + dt

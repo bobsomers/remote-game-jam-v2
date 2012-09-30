@@ -225,22 +225,22 @@ function PlayState:SpawnVikings(entities)
     local min = Vector(self.cam.camera:worldCoords(0, 0))
     local max = Vector(self.cam.camera:worldCoords(Constants.SCREEN.x - 1, Constants.SCREEN.y - 1))
     -- vikes from top and bottom
-    for i = 1,Constants.MELEE_VIKING_NUM_TO_SPAWN/2 do
+    for i = 1,math.ceil(Constants.VIKING_NUM_TO_SPAWN/2) do
         pos.x = math.random(min.x, max.x)
         if math.random() < 0.5 then
-            pos.y = max.y + Constants.MELEE_VIKING_SPAWN_OFFSET_OFF_SCREEN
+            pos.y = max.y + Constants.VIKING_SPAWN_OFFSET_OFF_SCREEN
         else
-            pos.y = min.y - Constants.MELEE_VIKING_SPAWN_OFFSET_OFF_SCREEN
+            pos.y = min.y - Constants.VIKING_SPAWN_OFFSET_OFF_SCREEN
         end
         entities:register(Viking(self.collider, pos, self.curiosity:getPosition()-pos, false))
     end
     -- vikes from left and right
-    for i = 1,Constants.MELEE_VIKING_NUM_TO_SPAWN-(Constants.MELEE_VIKING_NUM_TO_SPAWN/2) do
+    for i = 1,Constants.VIKING_NUM_TO_SPAWN-(Constants.VIKING_NUM_TO_SPAWN/2) do
         pos.y = math.random(min.y, max.y)
         if math.random() < 0.5 then
-            pos.x = max.x + Constants.MELEE_VIKING_SPAWN_OFFSET_OFF_SCREEN
+            pos.x = max.x + Constants.VIKING_SPAWN_OFFSET_OFF_SCREEN
         else
-            pos.x = min.x - Constants.MELEE_VIKING_SPAWN_OFFSET_OFF_SCREEN
+            pos.x = min.x - Constants.VIKING_SPAWN_OFFSET_OFF_SCREEN
         end
         entities:register(Viking(self.collider, pos, self.curiosity:getPosition()-pos, true))
     end

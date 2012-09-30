@@ -40,14 +40,18 @@ Constants.HELPER_SPEED = 120
 Constants.HELPER_FRAME_DURATION = 0.1 -- 1/10 of a sec
 Constants.HELPER_MINIMUM_DISTANCE = 150
 
+-- Viking general data
+Constants.VIKING_NUM_TO_SPAWN = 50
+Constants.VIKING_FRAME_DURATION = 0.1 -- 1/10 of a sec
+Constants.VIKING_SPAWN_OFFSET_OFF_SCREEN = 15
 -- Melee Viking data
-Constants.MELEE_VIKING_HP = 100
 Constants.MELEE_VIKING_MIN_SPEED = 10
 Constants.MELEE_VIKING_MAX_SPEED = 100
-Constants.MELEE_VIKING_FRAME_DURATION = 0.1 -- 1/10 of a sec
-Constants.MELEE_VIKING_NUM_TO_SPAWN = 50
-Constants.MELEE_VIKING_SPAWN_OFFSET_OFF_SCREEN = 15
 Constants.MELEE_VIKING_HEALTH = 25
+-- Ranged Viking data
+Constants.RANGED_VIKING_MIN_SPEED = 10
+Constants.RANGED_VIKING_MAX_SPEED = 100
+Constants.RANGED_VIKING_HEALTH = 25
 
 -- Olmec Chan's speech thing
 Constants.OLMEC_SPEECH_TIME = 400

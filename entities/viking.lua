@@ -3,8 +3,8 @@ local Vector = require "hump.vector"
 local Constants = require "constants"
 local Damage = require "entities.damage"
 
-local Viking = Class(function(self, collider, curiosity, initialPos, isRanged)
-    -- handle params
+local Viking = Class(function(self, media, collider, curiosity, initialPos, isRanged)
+    self.media = media
     self.collider = collider
     self.curiosity = curiosity
     self.initialPos = initialPos
@@ -26,15 +26,9 @@ local Viking = Class(function(self, collider, curiosity, initialPos, isRanged)
 
     -- sprite initialization
     if self.isRanged then
-        self.frames = {
-            love.graphics.newImage("assets/rangedviking1.png"),
-            love.graphics.newImage("assets/rangedviking2.png")
-        }
+        self.frames = self.media.RANGED_VIKING_FRAMES
     else
-        self.frames = {
-            love.graphics.newImage("assets/meleeviking1.png"),
-            love.graphics.newImage("assets/meleeviking2.png")
-        }
+        self.frames = self.media.MELEE_VIKING_FRAMES
     end
 
     local hp = 0

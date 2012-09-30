@@ -5,7 +5,8 @@ local RoverMissile = require "entities.rovermissile"
 local Damage = require "entities.damage"
 local TireTrack = require "entities.tiretrack"
 
-local Opportunity = Class(function(self, collider, curiosity, camera, entities)
+local Opportunity = Class(function(self, media, collider, curiosity, camera, entities)
+    self.media = media
     self.collider = collider
     self.curiosity = curiosity
     self.camera = camera
@@ -19,12 +20,8 @@ local Opportunity = Class(function(self, collider, curiosity, camera, entities)
     self.shape.kind = "opportunity"
     self.collider:addToGroup("friend", self.shape)
 
-    self.frames = {
-        love.graphics.newImage("assets/opportunity1.png"),
-        love.graphics.newImage("assets/opportunity2.png")
-    }
-    
-    self.head = love.graphics.newImage("assets/opportunityhead.png")
+    self.frames = self.media.OPPORTUNITY_FRAMES
+    self.head = self.media.OPPORTUNITY_HEAD
 
     self.damage = Damage(self, Constants.ROVER_HEALTH, self.SIZE.x,
         Vector(-self.SIZE.x / 2, -self.SIZE.y / 2 - 5))
@@ -81,7 +78,7 @@ function Opportunity:update(dt)
     self.fireTime = self.fireTime + dt
     if love.mouse.isDown("l") and self.fireTime > self.fireRate then
         self.entities:register(
-            RoverMissile(self.collider, position,
+            RoverMissile(self.media, self.collider, position,
                   Vector(math.cos(self.headRotation - math.pi / 2),
                          math.sin(self.headRotation - math.pi / 2))
             )

@@ -2,15 +2,15 @@ local Class = require "hump.class"
 local Vector = require "hump.vector"
 local Constants = require "constants"
 
-local TalkBox = Class(function(self)
+local TalkBox = Class(function(self, media)
     self.FACE_SIZE = Vector(100, 100)
     self.BOX_SIZE = Vector(685, 100)
     self.OFFSET = Vector(5, 5)
 
-    self.face = love.graphics.newImage("assets/talkface.png")
-    self.mouth = love.graphics.newImage("assets/talkmouth.png")
+    self.face = media.TALKBOX_FACE
+    self.mouth = media.TALKBOX_MOUTH
 
-    self.font = love.graphics.newFont("assets/spacefont.ttf", 24)
+    self.font = media.TALKBOX_FONT
 
     self:reset()
 end)

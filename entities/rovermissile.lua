@@ -2,7 +2,7 @@ local Class = require "hump.class"
 local Vector = require "hump.vector"
 local Constants = require "constants"
 
-local RoverMissile = Class(function(self, collider, position, direction)
+local RoverMissile = Class(function(self, media, collider, position, direction)
     self.collider = collider
     self.direction = direction
 
@@ -14,7 +14,7 @@ local RoverMissile = Class(function(self, collider, position, direction)
     self.collider:addToGroup("friend", self.shape)
     self.shape:moveTo(position.x, position.y)
 
-    self.image = love.graphics.newImage("assets/rovermissile.png"),
+    self.image = media.ROVER_MISSILE
 
     self:reset()
 end)

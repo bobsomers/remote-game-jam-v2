@@ -5,7 +5,8 @@ local Laser = require "entities.laser"
 local Damage = require "entities.damage"
 local TireTrack = require "entities.tiretrack"
 
-local Curiosity = Class(function(self, collider, camera, entities)
+local Curiosity = Class(function(self, media, collider, camera, entities)
+    self.media = media
     self.collider = collider
     self.camera = camera
     self.entities = entities
@@ -19,13 +20,8 @@ local Curiosity = Class(function(self, collider, camera, entities)
     self.shape.kind = "curiosity"
     self.collider:addToGroup("friend", self.shape)
 
-    self.frames = {
-        love.graphics.newImage("assets/curiosity1.png"),
-        love.graphics.newImage("assets/curiosity2.png"),
-        love.graphics.newImage("assets/curiosity3.png")
-    }
-
-    self.head = love.graphics.newImage("assets/curiosityhead.png")
+    self.frames = self.media.CURIOSITY_FRAMES
+    self.head = self.media.CURIOSITY_HEAD
 
     self.damage = Damage(self, Constants.CURIOSITY_HEALTH, self.SIZE.x,
         Vector(-self.SIZE.x / 2, -self.SIZE.y / 2 - 5))
@@ -142,7 +138,7 @@ function Curiosity:update(dt)
     self.fireTime = self.fireTime + dt
     if love.mouse.isDown("l") and self.fireTime > self.fireRate then
         self.entities:register(
-            Laser(self.collider, self:getPosition(),
+            Laser(self.media, self.collider, self:getPosition(),
                   Vector(math.cos(self.headRotation - math.pi / 2),
                          math.sin(self.headRotation - math.pi / 2)),
                   self.explosive
@@ -151,14 +147,14 @@ function Curiosity:update(dt)
 
         if self.tripleFire then
             self.entities:register(
-                Laser(self.collider, self:getPosition(),
+                Laser(self.media, self.collider, self:getPosition(),
                       Vector(math.cos(self.headRotation - math.pi / 2 - math.pi / 15),
                              math.sin(self.headRotation - math.pi / 2 - math.pi / 15)),
                       self.explosive
                 )
             )
             self.entities:register(
-                Laser(self.collider, self:getPosition(),
+                Laser(self.media, self.collider, self:getPosition(),
                       Vector(math.cos(self.headRotation - math.pi / 2 + math.pi / 15),
                              math.sin(self.headRotation - math.pi / 2 + math.pi / 15)),
                       self.explosive

@@ -12,10 +12,14 @@ local Vector = require "hump.vector"
 local EntityManager = require "entities.manager"
 local Viking = require "entities.viking"
 local TalkBox = require "entities.talkbox"
+local Media = require "media"
 
 local PlayState = Gamestate.new()
 
 function PlayState:init()
+    -- Load media library.
+    self.media = Media()
+
     -- Forward collision detection to self method.
     self.collider = Collider(100, function(dt, shape1, shape2, mtvX, mtvY)
         self:collide(dt, shape1, shape2, mtvX, mtvY)
@@ -30,25 +34,25 @@ function PlayState:init()
     self.entities = EntityManager()
 
     -- Load the map stuff
-    self.ground = Ground(self.cam)
+    self.ground = Ground(self.media, self.cam)
 
     -- Load curiosity.
-    self.curiosity = Curiosity(self.collider, self.cam, self.entities)
+    self.curiosity = Curiosity(self.media, self.collider, self.cam, self.entities)
     self.entities:register(self.curiosity)
 
     -- Move the camera over curiosity.
     self.cam:teleport(self.curiosity:getPosition())
     
     -- Load other rovers (for now)
-    self.spirit = Spirit(self.collider, self.curiosity, self.cam, self.entities)
+    self.spirit = Spirit(self.media, self.collider, self.curiosity, self.cam, self.entities)
     self.entities:register(self.spirit)
-    self.opportunity = Opportunity(self.collider, self.curiosity, self.cam, self.entities)
+    self.opportunity = Opportunity(self.media, self.collider, self.curiosity, self.cam, self.entities)
     self.entities:register(self.opportunity)
-    self.gibson = Gibson(self.collider, self.curiosity, self.cam, self.entities)
+    self.gibson = Gibson(self.media, self.collider, self.curiosity, self.cam, self.entities)
     self.entities:register(self.gibson)
 
     self.minimap = MiniMap(self.entities)
-    self.talkbox = TalkBox()
+    self.talkbox = TalkBox(self.media)
 end
 
 function PlayState:enter(previous)
@@ -171,7 +175,7 @@ function PlayState:SpawnVikings(entities)
         else
             pos.y = min.y - Constants.VIKING_SPAWN_OFFSET_OFF_SCREEN
         end
-        entities:register(Viking(self.collider, self.curiosity, pos, false))
+        entities:register(Viking(self.media, self.collider, self.curiosity, pos, false))
     end
     -- vikes from left and right
     for i = 1,Constants.VIKING_NUM_TO_SPAWN-(Constants.VIKING_NUM_TO_SPAWN/2) do
@@ -181,7 +185,7 @@ function PlayState:SpawnVikings(entities)
         else
             pos.x = min.x - Constants.VIKING_SPAWN_OFFSET_OFF_SCREEN
         end
-        entities:register(Viking(self.collider, self.curiosity, pos, true))
+        entities:register(Viking(self.media, self.collider, self.curiosity, pos, true))
     end
 end
 

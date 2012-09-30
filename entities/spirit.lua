@@ -5,7 +5,8 @@ local RoverLaser = require "entities.roverlaser"
 local Damage = require "entities.damage"
 local TireTrack = require "entities.tiretrack"
 
-local Spirit = Class(function(self, collider, curiosity, camera, entities)
+local Spirit = Class(function(self, media, collider, curiosity, camera, entities)
+    self.media = media
     self.collider = collider
     self.curiosity = curiosity
     self.camera = camera
@@ -19,12 +20,8 @@ local Spirit = Class(function(self, collider, curiosity, camera, entities)
     self.shape.kind = "spirit"
     self.collider:addToGroup("friend", self.shape)
 
-    self.frames = {
-        love.graphics.newImage("assets/spirit1.png"),
-        love.graphics.newImage("assets/spirit2.png")
-    }
-
-    self.head = love.graphics.newImage("assets/spirithead.png")
+    self.frames = self.media.SPIRIT_FRAMES
+    self.head = self.media.SPIRIT_HEAD
 
     self.damage = Damage(self, Constants.ROVER_HEALTH, self.SIZE.x,
         Vector(-self.SIZE.x / 2, -self.SIZE.y / 2 - 5))
@@ -81,7 +78,7 @@ function Spirit:update(dt)
     self.fireTime = self.fireTime + dt
     if love.mouse.isDown("l") and self.fireTime > self.fireRate then
         self.entities:register(
-            RoverLaser(self.collider, position,
+            RoverLaser(self.media, self.collider, position,
                   Vector(math.cos(self.headRotation - math.pi / 2),
                          math.sin(self.headRotation - math.pi / 2))
             )

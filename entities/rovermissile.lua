@@ -7,7 +7,7 @@ local RoverMissile = Class(function(self, collider, position, direction)
     self.direction = direction
 
     self.SIZE = Vector(10, 15)
-    self.SPEED = Constants.ROVER_LASER_SPEED
+    self.SPEED = Constants.ROVER_MISSILE_SPEED
 
     self.shape = self.collider:addRectangle(0, 0, self.SIZE.x, self.SIZE.y)
     self.shape.kind = "roverlaser"

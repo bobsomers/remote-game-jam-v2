@@ -32,7 +32,7 @@ Constants.MELEE_VIKING_SPEED = 100
 Constants.MELEE_VIKING_FRAME_DURATION = 0.1 -- 1/10 of a sec
 
 -- Olmec Chan's speech thing
-Constants.OLMEC_SPEECH_TIME = 300
+Constants.OLMEC_SPEECH_TIME = 400
 
 -- Olmec Chan's topics of interest
 Constants.OLMECSUBJECT_INTRO = "INTRO"

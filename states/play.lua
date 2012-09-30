@@ -54,6 +54,7 @@ function PlayState:init()
 
     -- Initialize the subjects that have more than one line
     self.olmecWorldLines = {Constants.OLMECTALK_WORLD1, Constants.OLMECTALK_WORLD2, Constants.OLMECTALK_WORLD3, Constants.OLMECTALK_WORLD4}
+    self.olmecWorldAudioFiles = {Constants.OLMECTALK_WORLD1_MP3, Constants.OLMECTALK_WORLD2_MP3, Constants.OLMECTALK_WORLD3_MP3, Constants.OLMECTALK_WORLD4_MP3}
     self.olmecTempleLines = {Constants.OLMECTALK_TEMPLE1, Constants.OLMECTALK_TEMPLE2, Constants.OLMECTALK_TEMPLE3}
     self.olmecRoverLines = {Constants.OLMECTALK_ROVER1, Constants.OLMECTALK_ROVER2, Constants.OLMECTALK_ROVER3}
     
@@ -87,8 +88,15 @@ function PlayState:update(dt)
 
         self.olmecSpeakTime = self.olmecSpeakTime - 1
     else
-        self.olmecSpeakTime = 0
-        self.olmecSays = ""
+        -- Something random so that Olmec Chan isn't always speaking
+        i = math.random(1, 10)
+        print("If this is greated than 8, you will get OLMEC CHAN: " .. i)
+        if i > 8 then
+            self:olmecTalk(Constants.OLMECSUBJECT_WORLD)
+        else
+            self.olmecSpeakTime = Constants.OLMEC_SPEECH_TIME
+            self.olmecSays = ""
+        end
     end
 
     -- The camera follows curiosity.
@@ -148,8 +156,9 @@ function PlayState:olmecTalk(subject)
             self.olmecSays = Constants.OLMECTALK_INTRO
             self.olmecAudio = love.audio.newSource(Constants.OLMECTALK_INTRO_MP3, "stream")
         elseif subject == Constants.OLMECSUBJECT_WORLD then
-            i = math.random(0, (table.getn(self.olmecWorldLines)))
+            i = math.random(1, (table.getn(self.olmecWorldLines)))
             self.olmecSays = self.olmecWorldLines[i]
+            self.olmecAudio = love.audio.newSource(self.olmecWorldAudioFiles[i], "stream")
         elseif subject == Constants.OLMECSUBJECT_TEMPLE then
             i = math.random(0, (table.getn(self.olmecTempleLines)))
             self.olmecSays = self.olmecTempleLines[i]
@@ -162,7 +171,7 @@ function PlayState:olmecTalk(subject)
             self.olmecSays = Constants.OLMECTALK_DEFEAT
         end
         self.olmecSpeakTime = Constants.OLMEC_SPEECH_TIME
-        self.olmecAudio:setVolume(1.0)
+        self.olmecAudio:setVolume(2.0)
         self.olmecAudio:play()
     end
 end

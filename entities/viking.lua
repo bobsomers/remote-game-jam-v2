@@ -24,21 +24,23 @@ local Viking = Class(function(self, collider, initialPos)
 end)
 
 function Viking:reset()
-    self.velocity = Vector(-self.MOVE_SPEED, self.MOVE_SPEED)
+    self.velocity = Vector(math.random(-self.MOVE_SPEED, self.MOVE_SPEED), math.random(-self.MOVE_SPEED, self.MOVE_SPEED))
     self.health = Constants.MELEE_VIKING_HP
     self.shape:moveTo(self.initialPos.x, self.initialPos.y)
 end
 
 function Viking:update(dt)
     self.shape:move(self.velocity*dt)
-    self.shape:rotate(5*dt)
+
+    -- TODO: think of caching this value because the velocity isn't changing often
+    self.shape:setRotation((-math.pi/2)+math.atan2(self.velocity.y, self.velocity.x))
 
     -- shitty bounce code
     local pos = Vector(self.shape:center())
-    if pos.x > Constants.SCREEN.x or pos.x < 0 then
+    if pos.x > Constants.WORLD.x or pos.x < 0 then
         self.velocity.x = -1 * self.velocity.x
     end
-    if pos.y > Constants.SCREEN.y or pos.y < 0 then
+    if pos.y > Constants.WORLD.y or pos.y < 0 then
         self.velocity.y = -1 * self.velocity.y
     end
 end

@@ -80,7 +80,7 @@ function PlayState:enter(previous)
     -- MUSIC
     self.music = love.audio.newSource(Constants.MUSIC, "stream")
     self.music:setLooping(true)
-    self.music:setVolume(0.5)
+    self.music:setVolume(0.7)
     self.music:play()
 end
 

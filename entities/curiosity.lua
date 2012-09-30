@@ -3,6 +3,7 @@ local Vector = require "hump.vector"
 local Constants = require "constants"
 local Laser = require "entities.laser"
 local Damage = require "entities.damage"
+local TireTrack = require "entities.tiretrack"
 
 local Curiosity = Class(function(self, collider, camera, entities)
     self.collider = collider
@@ -44,6 +45,9 @@ function Curiosity:reset()
     self.fireTime = 0
     self.fireRate = Constants.CURIOSITY_BASE_FIRE_RATE
 
+    self.tireTrackTime = 0
+    self.previousTracks = nil
+
     -- TODO: reset these to non-upgraded
     self.tripleFire = true
     self:upgradeFireRate()
@@ -68,15 +72,18 @@ function Curiosity:update(dt)
     local position = Vector(self.shape:center())
     local moving = false
     local backward = false
+    local advancing = false
 
     delta = Vector(0, 0)
     if love.keyboard.isDown("w") then
         delta.y = delta.y - Constants.CURIOSITY_SPEED * dt
         moving = true
+        advancing = true
     elseif love.keyboard.isDown("s") then
         delta.y = delta.y + Constants.CURIOSITY_SPEED * dt
         moving = true
         backward = true
+        advancing = true
     end
 
     if love.keyboard.isDown("a") then
@@ -115,6 +122,15 @@ function Curiosity:update(dt)
             self.frame = self.frame + 1
             self.frame = self.frame % 3
             self.frameTime = 0
+        end
+    end
+
+    if advancing then
+        self.tireTrackTime = self.tireTrackTime + dt
+        if self.tireTrackTime > 0.1 then
+            self.previousTrack = TireTrack(self:getPosition(), self.shape:rotation(), self.previousTrack)
+            self.entities:register(self.previousTrack)
+            self.tireTrackTime = 0
         end
     end
 

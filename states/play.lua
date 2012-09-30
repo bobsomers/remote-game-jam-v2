@@ -18,6 +18,8 @@ function PlayState:init()
     -- Forward collision detection to self method.
     self.collider = Collider(100, function(dt, shape1, shape2, mtvX, mtvY)
         self:collide(dt, shape1, shape2, mtvX, mtvY)
+    end, function(dt, shape1, shape2)
+        self:collideStop(dt, shape1, shape2)
     end)
 
     -- Game camera.
@@ -152,6 +154,31 @@ function PlayState:collide(dt, shape1, shape2, mtvX, mtvY)
 
     if laser and enemy then
         enemy:takeDamage(Constants.LASER_DAMAGE)
+        laser:kill()
+    end
+end
+
+function PlayState:collideStop(dt, shape1, shape2)
+    local laser, enemy
+
+    if shape1.kind == "laser" then
+        laser = self.entities:findByShape(shape1)
+    elseif shape1.kind == "viking" then
+        enemy = self.entities:findByShape(shape1)
+    end
+
+    if shape2.kind == "laser" then
+        laser = self.entities:findByShape(shape2)
+    elseif shape2.kind == "viking" then
+        enemy = self.entities:findByShape(shape2)
+    end
+
+    if laser and laser.zombie then
+        laser.dead = true
+    end
+
+    if enemy and enemy.zombie then
+        enemy.dead = true
     end
 end
 

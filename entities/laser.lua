@@ -22,6 +22,12 @@ end)
 
 function Laser:reset()
     self.dead = false
+    self.zombie = false
+end
+
+function Laser:kill()
+    self.collider:remove(self.shape)
+    self.zombie = true
 end
 
 function Laser:update(dt)

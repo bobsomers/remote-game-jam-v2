@@ -16,7 +16,7 @@ local Curiosity = Class(function(self, collider, camera, entities)
 
     self.shape = self.collider:addRectangle(0, 0, self.SIZE.x, self.SIZE.y)
     self.shape.kind = "curiosity"
-    self.collider:addToGroup("curiosity", self.shape)
+    self.collider:addToGroup("friend", self.shape)
 
     self.frames = {
         love.graphics.newImage("assets/curiosity1.png"),

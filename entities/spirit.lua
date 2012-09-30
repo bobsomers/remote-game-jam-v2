@@ -15,7 +15,7 @@ local Spirit = Class(function(self, collider, curiosity, camera, entities)
 
     self.shape = self.collider:addRectangle(0, 0, self.SIZE.x, self.SIZE.y)
     self.shape.kind = "spirit"
-    self.collider:addToGroup("spirit", self.shape)
+    self.collider:addToGroup("friend", self.shape)
 
     self.frames = {
         love.graphics.newImage("assets/spirit1.png"),

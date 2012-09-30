@@ -3,11 +3,12 @@ local Vector = require "hump.vector"
 local Constants = require "constants"
 local Damage = require "entities.damage"
 
-local Viking = Class(function(self, collider, initialPos, initialDir)
+local Viking = Class(function(self, collider, initialPos, initialDir, isRanged)
     -- handle params
     self.collider = collider
     self.initialPos = initialPos
     self.initialDir = initialDir
+    self.isRanged = isRanged
 
     -- init constants
     self.SIZE = Vector(30, 30)
@@ -17,13 +18,20 @@ local Viking = Class(function(self, collider, initialPos, initialDir)
     -- collison detection
     self.shape = self.collider:addRectangle(0, 0, self.SIZE.x, self.SIZE.y)
     self.shape.kind = "viking"
-    self.collider:addToGroup("viking", self.shape)
+    self.collider:addToGroup("foe", self.shape)
 
     -- sprite initialization
-    self.frames = {
-        love.graphics.newImage("assets/meleeviking1.png"),
-        love.graphics.newImage("assets/meleeviking2.png")
-    }
+    if self.isRanged then
+        self.frames = {
+            love.graphics.newImage("assets/rangedviking1.png"),
+            love.graphics.newImage("assets/rangedviking2.png")
+        }
+    else
+        self.frames = {
+            love.graphics.newImage("assets/meleeviking1.png"),
+            love.graphics.newImage("assets/meleeviking2.png")
+        }
+    end
 
     self.damage = Damage(self, Constants.MELEE_VIKING_HEALTH, self.SIZE.x,
         Vector(-self.SIZE.x / 2, -self.SIZE.y / 2 - 5))

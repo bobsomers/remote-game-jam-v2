@@ -9,10 +9,11 @@ local Gibson = require "entities.gibson"
 local Ground = require "entities.ground"
 local Vector = require "hump.vector"
 
-local PlayState = Gamestate.new()
+-- enemy stuff
+local EntityManager = require "entities.manager"
+local Viking = require "entities.viking"
 
--- TODO make a list of enemies or some shit
-local TempViking = require "entities.viking"
+local PlayState = Gamestate.new()
 
 function PlayState:init()
     -- Forward collision detection to self method.
@@ -34,8 +35,8 @@ function PlayState:init()
     self.opportunity = Opportunity(self.collider)
     self.gibson = Gibson(self.collider)
 
-    -- Load temp viking
-    self.tempViking = TempViking(self.collider, Vector(750, 510))
+    -- Load viking manager
+    self.vikings = EntityManager()
 
     -- Initialize all the crap Olmec Chan says
     self.olmecSays = ""
@@ -54,6 +55,7 @@ end
 
 function PlayState:enter(previous)
     self.lastFpsTime = 0
+    self:SpawnVikings()
 
     -- TODO
 end
@@ -67,8 +69,7 @@ function PlayState:update(dt)
 
     self.curiosity:update(dt)
     self.spirit:update(dt)
-
-    self.tempViking:update(dt) --TODO remove
+    self.vikings:update(dt)
 
     -- Update Olmec talk box
     if self.olmecSpeakTime > 0 then
@@ -108,9 +109,8 @@ function PlayState:draw()
     self.spirit:draw()
     self.opportunity:draw()
     self.gibson:draw()
+    self.vikings:draw()
 
-    self.tempViking:draw() --TODO remove
-    
     self.cam:detach()
 
     -- Draw things in screen space.
@@ -154,6 +154,13 @@ function PlayState:olmecTalk(subject)
             self.olmecSays = Constants.OLMECTALK_DEFEAT
         end
         self.olmecSpeakTime = Constants.OLMEC_SPEECH_TIME
+    end
+end
+
+function PlayState:SpawnVikings()
+    for i=1,5 do
+        local vike = Viking(self.collider, Vector(math.random(0,800), math.random(0,600)))
+        self.vikings:register(vike)
     end
 end
 

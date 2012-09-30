@@ -25,6 +25,10 @@ Constants.CURIOSITY_BASE_FIRE_RATE = 0.7 -- 0.7 sec between lasers
 -- Laser weapon settings.
 Constants.LASER_SPEED = 250 -- 250 pixels/sec
 
+-- Rover laser weapon settings.
+Constants.ROVER_LASER_SPEED = 500 -- 250 pixels/sec
+Constants.SPIRIT_BASE_FIRE_RATE = 2
+
 -- Gameplay variabls things.
 Constants.HELPER_SPEED = 120
 Constants.HELPER_FRAME_DURATION = 0.1 -- 1/10 of a sec

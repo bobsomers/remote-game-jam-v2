@@ -55,7 +55,7 @@ function Gibson:update(dt)
     position = position + delta
 
     distance = math.sqrt(math.pow(dx, 2) + math.pow(dy, 2))
-    if distance > (Constants.HELPER_MINIMUM_DISTANCE - 120) then
+    if distance > (Constants.HELPER_MINIMUM_DISTANCE - 50) then
         self.shape:moveTo(position.x, position.y)
     end
     

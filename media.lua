@@ -72,6 +72,8 @@ local Media = Class(function(self)
 
     self.UPGRADE = love.audio.newSource("assets/upgrade.wav", "static")
     self.UPGRADE:setVolume(0.5)
+
+    self.PARTICLE = love.graphics.newImage("assets/particle.png")
 end)
 
 return Media

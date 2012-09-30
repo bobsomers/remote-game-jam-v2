@@ -71,6 +71,8 @@ Constants.TEMPLE_SPAWN_AMOUNT = {
     40
 }
 
+Constants.MUSIC = "assets/chan.wav"
+
 -- Olmec Chan's speech thing
 Constants.OLMEC_SPEECH_TIME = 400
 

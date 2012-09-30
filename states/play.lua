@@ -76,6 +76,12 @@ function PlayState:enter(previous)
     self.lastFpsTime = 0
     self.talkbox:olmecTalk(Constants.OLMECSUBJECT_INTRO)
     love.mouse.setVisible(false)
+    
+    -- MUSIC
+    self.music = love.audio.newSource(Constants.MUSIC, "stream")
+    self.music:setLooping(true)
+    self.music:setVolume(0.5)
+    self.music:play()
 end
 
 function PlayState:leave()

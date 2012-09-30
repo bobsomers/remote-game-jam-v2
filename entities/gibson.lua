@@ -74,7 +74,7 @@ function Gibson:draw()
         position.x, position.y,
         rotation,
         1, 1,
-        8, 7,
+        8, 10,
         0, 0
     )
 end

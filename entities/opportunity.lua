@@ -74,7 +74,7 @@ function Opportunity:draw()
         position.x, position.y,
         rotation,
         1, 1,
-        8, 7,
+        5, 15,
         0, 0
     )
 end

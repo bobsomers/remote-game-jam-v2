@@ -75,7 +75,7 @@ function Spirit:draw()
         position.x, position.y,
         rotation,
         1, 1,
-        8, 7,
+        2, 18,
         0, 0
     )
 end

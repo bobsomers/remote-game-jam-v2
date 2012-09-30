@@ -56,7 +56,9 @@ function PlayState:init()
     self.olmecWorldLines = {Constants.OLMECTALK_WORLD1, Constants.OLMECTALK_WORLD2, Constants.OLMECTALK_WORLD3, Constants.OLMECTALK_WORLD4}
     self.olmecWorldAudioFiles = {Constants.OLMECTALK_WORLD1_MP3, Constants.OLMECTALK_WORLD2_MP3, Constants.OLMECTALK_WORLD3_MP3, Constants.OLMECTALK_WORLD4_MP3}
     self.olmecTempleLines = {Constants.OLMECTALK_TEMPLE1, Constants.OLMECTALK_TEMPLE2, Constants.OLMECTALK_TEMPLE3}
+    self.olmecTempleAudioFiles = {Constants.OLMECTALK_TEMPLE1_MP3, Constants.OLMECTALK_TEMPLE2_MP3, Constants.OLMECTALK_TEMPLE3_MP3}
     self.olmecRoverLines = {Constants.OLMECTALK_ROVER1, Constants.OLMECTALK_ROVER2, Constants.OLMECTALK_ROVER3}
+    self.olmecRoverAudioFiles = {Constants.OLMECTALK_ROVER1_MP3, Constants.OLMECTALK_ROVER2_MP3, Constants.OLMECTALK_ROVER3_MP3}
     
     self:olmecTalk(Constants.OLMECSUBJECT_INTRO)
 
@@ -162,16 +164,20 @@ function PlayState:olmecTalk(subject)
         elseif subject == Constants.OLMECSUBJECT_TEMPLE then
             i = math.random(0, (table.getn(self.olmecTempleLines)))
             self.olmecSays = self.olmecTempleLines[i]
+            self.olmecAudio = love.audio.newSource(self.olmecTempleAudioFiles[i], "stream")
         elseif subject == Constants.OLMECSUBJECT_ROVER then
             i = math.random(0, (table.getn(self.olmecRoverLines)))
             self.olmecSays = self.olmecRoverLines[i]
+            self.olmecAudio = love.audio.newSource(self.olmecRoverAudioFiles[i], "stream")
         elseif subject == Constants.OLMECSUBJECT_FIGHT then
             self.olmecSays = Constants.OLMECTALK_FIGHT
+            self.olmecAudio = love.audio.newSource(Constants.OLMECTALK_FIGHT_MP3, "stream")
         elseif subject == Constants.OLMECSUBJECT_DEFEAT then
             self.olmecSays = Constants.OLMECTALK_DEFEAT
+            self.olmecAudio = love.audio.newSource(Constants.OLMECTALK_DEFEAT_MP3, "stream")
         end
         self.olmecSpeakTime = Constants.OLMEC_SPEECH_TIME
-        self.olmecAudio:setVolume(2.0)
+        self.olmecAudio:setVolume(1.0)
         self.olmecAudio:play()
     end
 end

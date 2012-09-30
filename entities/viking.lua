@@ -3,9 +3,11 @@ local Vector = require "hump.vector"
 local Constants = require "constants"
 local Damage = require "entities.damage"
 local Signal = require "hump.signal"
+local VikingShot = require "entities.vikingshot"
 
-local Viking = Class(function(self, media, collider, curiosity, initialPos, isRanged)
+local Viking = Class(function(self, media, entities, collider, curiosity, initialPos, isRanged)
     self.media = media
+    self.entities = entities
     self.collider = collider
     self.curiosity = curiosity
     self.initialPos = initialPos
@@ -50,6 +52,18 @@ function Viking:reset()
     self.velocity = self.MOVE_SPEED * initialDir
     self.shape:setRotation((-math.pi/2)+math.atan2(self.velocity.y, self.velocity.x))
 
+    -- shooting stuffs
+    self.fireRate = Constants.RANGED_VIKING_FIRE_RATE
+    self.fireTime = self.fireRate -- shoot right off the bat
+
+    -- melee stuffs
+    if self.isRanged then
+        self.meleeRate = Constants.RANGED_VIKING_MELEE_RATE
+    else
+        self.meleeRate = Constants.MELEE_VIKING_MELEE_RATE
+    end
+    self.meleeTime = self.meleeRate -- melee right off the bat
+
     -- animation data
     self.frame = 0
     self.frameTime = 0
@@ -65,6 +79,17 @@ function Viking:takeDamage(amount)
         self.collider:remove(self.shape)
         self.zombie = true
         Signal.emit("viking-death")
+    end
+end
+
+function Viking:meleeAttack()
+    if self.meleeTime > self.meleeRate then
+        if self.isRanged then
+            self.curiosity:takeDamage(Constants.RANGED_VIKING_MELEE_DAMAGE)
+        else
+            self.curiosity:takeDamage(Constants.MELEE_VIKING_DAMAGE)
+        end
+        self.meleeTime = 0
     end
 end
 
@@ -85,6 +110,9 @@ function Viking:update(dt)
         end
     end
 
+    -- always allow recharge, whether moving or not
+    self.fireTime = self.fireTime + dt
+    self.meleeTime = self.meleeTime + dt
 
     if moving then
         -- update velocity and direction
@@ -116,6 +144,19 @@ function Viking:update(dt)
             self.frame = self.frame + 1
             self.frame = self.frame % 2
             self.frameTime = 0
+        end
+    elseif self.isRanged then
+        -- turn
+        self.shape:setRotation((-math.pi/2)+math.atan2(dir.y, dir.x))
+        -- shoot
+        if self.fireTime > self.fireRate then
+            local rotation = math.atan2(dir.y, dir.x) + math.pi / 2
+            self.entities:register(
+                VikingShot(self.media, self.collider, self:getPosition(),
+                           Vector(math.cos(rotation - math.pi / 2),
+                                  math.sin(rotation - math.pi / 2)))
+            )
+            self.fireTime = 0
         end
     end
 end

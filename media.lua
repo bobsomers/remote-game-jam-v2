@@ -2,6 +2,7 @@ local Class = require "hump.class"
 
 local Media = Class(function(self)
     self.LASER = love.graphics.newImage("assets/laserbullet.png")
+    self.FIRE_PARTICLE = love.graphics.newImage("assets/fireparticle.png")
 
     self.CURIOSITY_FRAMES = {
         love.graphics.newImage("assets/curiosity1.png"),

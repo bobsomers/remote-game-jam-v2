@@ -51,8 +51,7 @@ end)
 
 function Viking:reset()
     self.shape:moveTo(self.initialPos.x, self.initialPos.y)
-    local initialDir = self.curiosity:getPosition() - Vector(self.shape:center())
-    initialDir:normalize_inplace()
+    local initialDir = (self.curiosity:getPosition() - Vector(self.shape:center())):normalized()
     self.velocity = self.MOVE_SPEED * initialDir
     self.shape:setRotation((-math.pi/2)+math.atan2(self.velocity.y, self.velocity.x))
 
@@ -74,38 +73,48 @@ function Viking:takeDamage(amount)
 end
 
 function Viking:update(dt)
-    local moving = false
+    local moving = true
 
---    local dir = Vector(-pos):normalized()
+    -- calculate range and direction
+    local dir = self.curiosity:getPosition() - Vector(self.shape:center())
+    local dist = dir:len()
+    dir:normalize_inplace()
     if self.isRanged then
+        if dist < Constants.RANGED_VIKING_RANGE then
+            moving = false
+        end
     else
+        if dist < Constants.MELEE_VIKING_RANGE then
+            moving = false
+        end
     end
 
-
-    local pos = Vector(self.shape:center())
-    local newPos = Vector(self.shape:center()) + (self.velocity*dt)
-    -- TODO: think of caching this value because the velocity isn't changing often
-    self.shape:setRotation((-math.pi/2)+math.atan2(self.velocity.y, self.velocity.x))
-
-    -- bounce code
-    if newPos.x > Constants.WORLD.x-1 or newPos.x < 0 then
-        self.velocity.x = -1 * self.velocity.x
-    end
-    if newPos.y > Constants.WORLD.y-1 or newPos.y < 0 then
-        self.velocity.y = -1 * self.velocity.y
-    end
-    newPos.x = math.min(Constants.WORLD.x-1, math.max(0, newPos.x))
-    newPos.y = math.min(Constants.WORLD.y-1, math.max(0, newPos.y))
-    self.shape:moveTo(newPos.x, newPos.y)
-
-    local animationSpeed = 0
-    if self.isRanged then
-        animationSpeed = Vector(Constants.RANGED_VIKING_MAX_SPEED, Constants.RANGED_VIKING_MAX_SPEED):len() / self.velocity:len()
-    else
-        animationSpeed = Vector(Constants.MELEE_VIKING_MAX_SPEED, Constants.MELEE_VIKING_MAX_SPEED):len() / self.velocity:len()
-    end
 
     if moving then
+        -- update velocity and direction
+        self.velocity = self.MOVE_SPEED * dir
+        local newPos = Vector(self.shape:center()) + (self.velocity*dt)
+        self.shape:setRotation((-math.pi/2)+math.atan2(self.velocity.y, self.velocity.x))
+
+        -- bounce off walls?
+--        if newPos.x > Constants.WORLD.x-1 or newPos.x < 0 then
+--            self.velocity.x = -1 * self.velocity.x
+--        end
+--        if newPos.y > Constants.WORLD.y-1 or newPos.y < 0 then
+--            self.velocity.y = -1 * self.velocity.y
+--        end
+--        newPos.x = math.min(Constants.WORLD.x-1, math.max(0, newPos.x))
+--        newPos.y = math.min(Constants.WORLD.y-1, math.max(0, newPos.y))
+
+        self.shape:moveTo(newPos.x, newPos.y)
+
+        -- animate
+        local animationSpeed = 0
+        if self.isRanged then
+            animationSpeed = Vector(Constants.RANGED_VIKING_MAX_SPEED, Constants.RANGED_VIKING_MAX_SPEED):len() / self.velocity:len()
+        else
+            animationSpeed = Vector(Constants.MELEE_VIKING_MAX_SPEED, Constants.MELEE_VIKING_MAX_SPEED):len() / self.velocity:len()
+        end
         self.frameTime = self.frameTime + dt
         if self.frameTime > self.FRAME_DURATION*animationSpeed then
             self.frame = self.frame + 1

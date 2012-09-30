@@ -51,7 +51,7 @@ function Curiosity:getPosition()
 end
 
 function Curiosity:upgradeFireRate()
-    self.fireRate = self.fireRate / 2
+    self.fireRate = self.fireRate / 3
 end
 
 function Curiosity:upgradeTripleFire()
@@ -130,15 +130,15 @@ function Curiosity:update(dt)
         if self.tripleFire then
             self.entities:register(
                 Laser(self.collider, self:getPosition(),
-                      Vector(math.cos(self.headRotation - math.pi / 2 - math.pi / 6),
-                             math.sin(self.headRotation - math.pi / 2 - math.pi / 6)),
+                      Vector(math.cos(self.headRotation - math.pi / 2 - math.pi / 15),
+                             math.sin(self.headRotation - math.pi / 2 - math.pi / 15)),
                       self.explosive
                 )
             )
             self.entities:register(
                 Laser(self.collider, self:getPosition(),
-                      Vector(math.cos(self.headRotation - math.pi / 2 + math.pi / 6),
-                             math.sin(self.headRotation - math.pi / 2 + math.pi / 6)),
+                      Vector(math.cos(self.headRotation - math.pi / 2 + math.pi / 15),
+                             math.sin(self.headRotation - math.pi / 2 + math.pi / 15)),
                       self.explosive
                 )
             )

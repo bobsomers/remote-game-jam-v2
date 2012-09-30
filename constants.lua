@@ -28,8 +28,12 @@ Constants.LASER_SPEED = 250 -- 250 pixels/sec
 Constants.LASER_DAMAGE = 5
 
 -- Rover laser weapon settings.
-Constants.ROVER_LASER_SPEED = 500 -- 250 pixels/sec
-Constants.SPIRIT_BASE_FIRE_RATE = 2
+Constants.ROVER_LASER_SPEED = 800
+Constants.SPIRIT_BASE_FIRE_RATE = 3
+
+-- Rover laser weapon settings.
+Constants.ROVER_MISSILE_SPEED = 1000
+Constants.OPPORTUNITY_BASE_FIRE_RATE = 2
 
 -- Gameplay variabls things.
 Constants.HELPER_SPEED = 120

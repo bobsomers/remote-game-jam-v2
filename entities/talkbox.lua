@@ -117,7 +117,7 @@ function TalkBox:draw()
 end
 
 function TalkBox:olmecTalk(subject)
-    -- If Olmec is not currently speaking, sayeth something
+    -- If Olmec is speaking, shut him up and make him say something else
     if self.olmecSpeakTime <= 0 then
         if subject == Constants.OLMECSUBJECT_INTRO then
             self.olmecSays = Constants.OLMECTALK_INTRO

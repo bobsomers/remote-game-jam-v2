@@ -182,6 +182,8 @@ end
 
 function PlayState:templeTriggered(which)
     self:SpawnVikings(Constants.TEMPLE_SPAWN_AMOUNT[which])
+    self.talkbox:reset()
+    self.talkbox:olmecTalk(Constants.OLMECSUBJECT_TEMPLE)
 end
 
 function PlayState:vikingDeath()

@@ -2,8 +2,9 @@ local Class = require "hump.class"
 local Vector = require "hump.vector"
 local Constants = require "constants"
 
-local MiniMap = Class(function(self, entities)
+local MiniMap = Class(function(self, entities, temples)
     self.entities = entities
+    self.temples = temples
 
     self.SIZE = Vector(100, 100)
     self.OFFSET = Vector(5, 5)
@@ -17,14 +18,20 @@ function MiniMap:draw()
         self.SIZE.x, self.SIZE.y
     )
 
+    self:drawTemple(self.temples[1])
+    if self.temples[1].complete then
+        self:drawTemple(self.temples[2])
+    end
+    if self.temples[2].complete then
+        self:drawTemple(self.temples[3])
+    end
+
     for _, entity in ipairs(self.entities.entities) do
         if entity.shape then
             if entity.shape.kind == "curiosity" then
                 self:drawCuriosity(entity)
             elseif entity.shape.kind == "viking" then
                 self:drawViking(entity)
-            elseif entity.shape.kind == "temple" then
-                self:drawTemple(entity)
             end
         end
     end

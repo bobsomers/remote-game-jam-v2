@@ -32,7 +32,8 @@ local Spirit = Class(function(self, media, collider, curiosity, camera, entities
 end)
 
 function Spirit:reset()
-    self.shape:moveTo(150, 150)
+    local where = self.curiosity:getPosition() - Vector(100, 100)
+    self.shape:moveTo(where.x, where.y)
     
     self.headRotation = 0
 

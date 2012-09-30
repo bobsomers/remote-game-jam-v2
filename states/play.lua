@@ -54,16 +54,12 @@ function PlayState:init()
     -- Move the camera over curiosity.
     self.cam:teleport(self.curiosity:getPosition())
     
-    -- Load other rovers (for now)
-    --self.spirit = Spirit(self.media, self.collider, self.curiosity, self.cam, self.entities)
-    --self.entities:register(self.spirit)
-    --self.opportunity = Opportunity(self.media, self.collider, self.curiosity, self.cam, self.entities)
-    --self.entities:register(self.opportunity)
-    --self.gibson = Gibson(self.media, self.collider, self.curiosity, self.cam, self.entities)
-    --self.entities:register(self.gibson)
-
     -- Load HUD things.
-    self.minimap = MiniMap(self.entities)
+    self.minimap = MiniMap(self.entities, {
+        self.temple1,
+        self.temple2,
+        self.temple3
+    })
     self.talkbox = TalkBox(self.media)
     self.crosshair = Crosshair()
 
@@ -183,22 +179,37 @@ function PlayState:templeTriggered(which)
 end
 
 function PlayState:vikingDeath()
-    -- If there are no more vikings, give them their upgrade based on which
-    -- temples they triggered.
+    -- If there are still vikings, no upgrades for you!
     for _, entity in ipairs(self.entities.entities) do
         if entity.shape and entity.shape.kind == "viking" and not entity.zombie then
             return
         end
     end
 
+    -- Upgrades!
     if self.temple1.triggered then
+        self.temple1.complete = true
         self.curiosity:upgradeFireRate()
+        if not self.gibson then
+            self.gibson = Gibson(self.media, self.collider, self.curiosity, self.cam, self.entities)
+            self.entities:register(self.gibson)
+        end
     end
     if self.temple2.triggered then
+        self.temple2.complete = true
         self.curiosity:upgradeTripleFire()
+        if not self.opportunity then
+            self.opportunity = Opportunity(self.media, self.collider, self.curiosity, self.cam, self.entities)
+            self.entities:register(self.opportunity)
+        end
     end
     if self.temple3.triggered then
+        self.temple3.complete = true
         self.curiosity:upgradeExplosive()
+        if not self.spirit then
+            self.spirit = Spirit(self.media, self.collider, self.curiosity, self.cam, self.entities)
+            self.entities:register(self.spirit)
+        end
     end
 end
 

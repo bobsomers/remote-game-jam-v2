@@ -27,6 +27,7 @@ end)
 function Temple:reset()
     self.shape:moveTo(self.POSITION.x + self.SIZE.x / 2, self.POSITION.y + self.SIZE.y / 2)
     self.triggered = false
+    self.complete = false
 end
 
 function Temple:getPosition()

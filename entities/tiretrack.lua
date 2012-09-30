@@ -46,7 +46,7 @@ end
 function TireTrack:draw()
     if self.alpha <= 0 then return end
 
-    love.graphics.setColor(0, 0, 0, self.alpha)
+    love.graphics.setColor(74, 53, 8, self.alpha)
     if self.rover then
         love.graphics.setLineWidth(3)
     else

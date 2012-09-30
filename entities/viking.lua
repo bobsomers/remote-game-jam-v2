@@ -55,6 +55,13 @@ function Viking:getPosition()
     return Vector(self.shape:center())
 end
 
+function Viking:takeDamage(amount)
+    self.damage.health = math.max(self.damage.health - amount, 0)
+    if self.damage.health <= 0 then
+        self.dead = true
+    end
+end
+
 function Viking:update(dt)
     local moving = false
     local pos = Vector(self.shape:center())

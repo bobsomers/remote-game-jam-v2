@@ -23,8 +23,7 @@ Constants.CURIOSITY_FRAME_DURATION = 0.1 -- 1/10 of a sec
 
 -- Melee Viking data
 Constants.MELEE_VIKING_HP = 100
-Constants.MELEE_VIKING_SIZE = Vector(30,30)
-Constants.MELEE_VIKING_SPEED = 10
+Constants.MELEE_VIKING_SPEED = 100
 
 -- Olmec Chan's speech thing
 Constants.OLMEC_SPEECH_TIME = 300

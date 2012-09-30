@@ -54,7 +54,7 @@ function PlayState:init()
     -- Move the camera over curiosity.
     self.cam:teleport(self.curiosity:getPosition())
 
-    self.minimap = MiniMap(self.curiosity)
+    self.minimap = MiniMap(self.curiosity, self.vikings)
 end
 
 function PlayState:enter(previous)

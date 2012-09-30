@@ -212,7 +212,7 @@ function PlayState:SpawnVikings()
         else
             pos.y = min.y - Constants.VIKING_SPAWN_OFFSET_OFF_SCREEN
         end
-        table.insert(vikings, Viking(self.collider, pos, self.curiosity:getPosition()-pos, false))
+        table.insert(vikings, Viking(self.collider, self.curiosity, pos, false))
     end
     -- vikes from left and right
     for i = 1,Constants.VIKING_NUM_TO_SPAWN-(Constants.VIKING_NUM_TO_SPAWN/2) do
@@ -222,7 +222,7 @@ function PlayState:SpawnVikings()
         else
             pos.x = min.x - Constants.VIKING_SPAWN_OFFSET_OFF_SCREEN
         end
-        table.insert(vikings, Viking(self.collider, pos, self.curiosity:getPosition()-pos, true))
+        table.insert(vikings, Viking(self.collider, self.curiosity, pos, true))
     end
     return vikings
 end

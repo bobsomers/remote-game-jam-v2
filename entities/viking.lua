@@ -3,11 +3,11 @@ local Vector = require "hump.vector"
 local Constants = require "constants"
 local Damage = require "entities.damage"
 
-local Viking = Class(function(self, collider, initialPos, initialDir, isRanged)
+local Viking = Class(function(self, collider, curiosity, initialPos, isRanged)
     -- handle params
     self.collider = collider
+    self.curiosity = curiosity
     self.initialPos = initialPos
-    self.initialDir = initialDir
     self.isRanged = isRanged
 
     -- init constants
@@ -50,7 +50,9 @@ local Viking = Class(function(self, collider, initialPos, initialDir, isRanged)
 end)
 
 function Viking:reset()
-    self.velocity = self.MOVE_SPEED * self.initialDir:normalized()
+    local initialDir = self.curiosity:getPosition() - Vector(self.shape:center())
+    initialDir:normalize_inplace()
+    self.velocity = self.MOVE_SPEED * initialDir
     self.shape:setRotation((-math.pi/2)+math.atan2(self.velocity.y, self.velocity.x))
     self.shape:moveTo(self.initialPos.x, self.initialPos.y)
 
@@ -72,10 +74,15 @@ end
 
 function Viking:update(dt)
     local moving = false
-    local pos = Vector(self.shape:center())
 
+--    local dir = Vector(-pos):normalized()
+    if self.isRanged then
+    else
+    end
+
+
+    local pos = Vector(self.shape:center())
     local newPos = Vector(self.shape:center()) + (self.velocity*dt)
-    moving = true
     -- TODO: think of caching this value because the velocity isn't changing often
     self.shape:setRotation((-math.pi/2)+math.atan2(self.velocity.y, self.velocity.x))
 

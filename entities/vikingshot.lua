@@ -4,6 +4,7 @@ local Constants = require "constants"
 
 local VikingShot = Class(function(self, media, collider, position, direction)
     self.collider = collider
+	self.media = media
     self.direction = direction
 
     self.SIZE = Vector(5, 20)
@@ -16,6 +17,10 @@ local VikingShot = Class(function(self, media, collider, position, direction)
 
     self.image = media.VIKING_ARROW
 
+    love.audio.stop(self.media.ARROW)
+    love.audio.rewind(self.media.ARROW)
+    love.audio.play(self.media.ARROW)
+	
     self:reset()
 end)
 

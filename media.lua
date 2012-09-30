@@ -69,7 +69,22 @@ local Media = Class(function(self)
 
     self.BEAM = love.audio.newSource("assets/beam.wav", "static")
     self.BEAM:setVolume(0.5)
+	
+	self.ARROW = love.audio.newSource("assets/whoosh2.wav", "static");
+	self.ARROW:setVolume(0.5)
 
+	self.THUD = love.audio.newSource("assets/thud.wav", "static");
+	self.THUD:setVolume(0.9)
+	
+	self.EXPLODE = love.audio.newSource("assets/bomb.wav", "static");
+	self.EXPLODE:setVolume(0.5)
+	
+	self.DEATH = love.audio.newSource("assets/Fireball.wav", "static");
+	self.DEATH:setVolume(0.9)
+
+	self.HITBYLASER = love.audio.newSource("assets/cut.wav", "static");
+	self.HITBYLASER:setVolume(0.5)
+	
     self.UPGRADE = love.audio.newSource("assets/upgrade.wav", "static")
     self.UPGRADE:setVolume(0.5)
 

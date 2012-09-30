@@ -2,9 +2,9 @@ local Class = require "hump.class"
 local Vector = require "hump.vector"
 local Constants = require "constants"
 
-local MiniMap = Class(function(self, curiosity, vikingManager)
+local MiniMap = Class(function(self, curiosity, vikings)
     self.curiosity = curiosity
-    self.vikingManager = vikingManager
+    self.vikings = vikings
 
     self.SIZE = Vector(100, 100)
     self.OFFSET = Vector(5, 5)
@@ -30,7 +30,7 @@ function MiniMap:draw()
 
     -- draw red vikings
     love.graphics.setColor(255, 0, 0, 255)
-    for i,entity in ipairs(self.vikingManager.entities) do
+    for _, entity in ipairs(self.vikings) do
         local vikePos = Vector(entity.shape:center())
         vikePos.x = vikePos.x / Constants.WORLD.x * self.SIZE.x
         vikePos.y = vikePos.y / Constants.WORLD.y * self.SIZE.y

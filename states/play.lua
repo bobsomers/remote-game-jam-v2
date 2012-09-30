@@ -9,8 +9,6 @@ local Opportunity = require "entities.opportunity"
 local Gibson = require "entities.gibson"
 local Ground = require "entities.ground"
 local Vector = require "hump.vector"
-
--- enemy stuff
 local EntityManager = require "entities.manager"
 local Viking = require "entities.viking"
 
@@ -25,19 +23,29 @@ function PlayState:init()
     -- Game camera.
     self.cam = GameCam()
 
+    -- EntityManager.
+    self.entities = EntityManager()
+
     -- Load the map stuff
     self.ground = Ground(self.cam)
 
     -- Load curiosity.
     self.curiosity = Curiosity(self.collider, self.cam)
+    self.entities:register(self.curiosity)
     
     -- Load other rovers (for now)
     self.spirit = Spirit(self.collider, self.curiosity)
+    self.entities:register(self.spirit)
     self.opportunity = Opportunity(self.collider, self.curiosity)
+    self.entities:register(self.opportunity)
     self.gibson = Gibson(self.collider, self.curiosity)
+    self.entities:register(self.gibson)
 
     -- Load viking manager
-    self.vikings = EntityManager()
+    self.vikings = self:SpawnVikings()
+    for _, viking in ipairs(self.vikings) do
+        self.entities:register(viking)
+    end
 
     -- Initialize all the crap Olmec Chan says
     self.olmecSays = ""
@@ -71,11 +79,7 @@ end
 function PlayState:update(dt)
     dt = math.min(dt, 1/15) -- Minimum 15 FPS.
 
-    self.curiosity:update(dt)
-    self.spirit:update(dt)
-    self.opportunity:update(dt)
-    self.gibson:update(dt)
-    self.vikings:update(dt)
+    self.entities:update(dt)
 
     -- Update Olmec talk box
     if self.olmecSpeakTime > 0 then
@@ -111,11 +115,7 @@ function PlayState:draw()
 
     -- Draw things affected by the camera.
     self.ground:draw()
-    self.curiosity:draw()
-    self.spirit:draw()
-    self.opportunity:draw()
-    self.gibson:draw()
-    self.vikings:draw()
+    self.entities:draw()
 
     self.cam:detach()
 
@@ -168,10 +168,11 @@ function PlayState:olmecTalk(subject)
 end
 
 function PlayState:SpawnVikings()
-    for i=1,5 do
-        local vike = Viking(self.collider, Vector(math.random(0,800), math.random(0,600)))
-        self.vikings:register(vike)
+    local vikings = {}
+    for i = 1, 5 do
+        table.insert(vikings, Viking(self.collider, Vector(math.random(0,800), math.random(0,600))))
     end
+    return vikings
 end
 
 return PlayState

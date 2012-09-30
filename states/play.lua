@@ -131,8 +131,10 @@ function PlayState:draw()
 end
 
 function PlayState:collide(dt, shape1, shape2, mtvX, mtvY)
-    local laser, missile, beam, enemy, vikingshot, curiosity, rangedViking, meleeViking
+    local laser, missile, beam, enemy, vikingshot, goodguy,
+          rangedViking, meleeViking
 
+    -- find first entity
     if shape1.kind == "laser" then
         laser = self.entities:findByShape(shape1)
     elseif shape1.kind == "missile" then
@@ -143,10 +145,14 @@ function PlayState:collide(dt, shape1, shape2, mtvX, mtvY)
         enemy = self.entities:findByShape(shape1)
     elseif shape1.kind == "vikingshot" then
         vikingshot = self.entities:findByShape(shape1)
-    elseif shape1.kind == "curiosity" then
-        curiosity = self.entities:findByShape(shape1)
+    elseif shape1.kind == "curiosity" or
+           shape1.kind == "opportunity" or
+           shape1.kind == "spirit" or
+           shape1.kind == "gibson" then
+        goodguy = self.entities:findByShape(shape1)
     end
 
+    -- find second entity
     if shape2.kind == "laser" then
         laser = self.entities:findByShape(shape2)
     elseif shape2.kind == "missile" then
@@ -157,30 +163,26 @@ function PlayState:collide(dt, shape1, shape2, mtvX, mtvY)
         enemy = self.entities:findByShape(shape2)
     elseif shape2.kind == "vikingshot" then
         vikingshot = self.entities:findByShape(shape2)
-    elseif shape2.kind == "curiosity" then
-        curiosity = self.entities:findByShape(shape2)
+    elseif shape1.kind == "curiosity" or
+           shape1.kind == "opportunity" or
+           shape1.kind == "spirit" or
+           shape1.kind == "gibson" then
+        goodguy = self.entities:findByShape(shape2)
     end
 
+    -- collsion logic
     if laser and enemy then
         enemy:takeDamage(Constants.LASER_DAMAGE)
         laser:kill()
-    end
-
-    if missile and enemy then
+    elseif missile and enemy then
         enemy:takeDamage(Constants.ROVER_MISSILE_DAMAGE)
         missile:kill()
-    end
-
-    if beam and enemy then
+    elseif beam and enemy then
         enemy:takeDamage(Constants.ROVER_LASER_DAMAGE)
-    end
-
-    if curiosity and enemy then
-        enemy:meleeAttack()
-    end
-
-    if curiosity and vikingshot then
-        curiosity:takeDamage(Constants.RANGED_VIKING_SHOT_DAMAGE)
+    elseif goodguy and enemy then
+        enemy:meleeAttack(goodguy)
+    elseif goodguy and vikingshot then
+        goodguy:takeDamage(Constants.RANGED_VIKING_SHOT_DAMAGE)
         vikingshot:kill()
     end
 end

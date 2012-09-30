@@ -10,6 +10,7 @@ local Viking = Class(function(self, collider, initialPos)
     -- init constants
     self.SIZE = Vector(30, 30)
     self.MOVE_SPEED = Constants.MELEE_VIKING_SPEED
+    self.FRAME_DURATION = Constants.MELEE_VIKING_FRAME_DURATION
 
     -- collison detection
     self.shape = self.collider:addRectangle(0, 0, self.SIZE.x, self.SIZE.y)
@@ -17,7 +18,10 @@ local Viking = Class(function(self, collider, initialPos)
     self.collider:addToGroup("viking", self.shape)
 
     -- sprite initialization
-    self.sprite = love.graphics.newImage("assets/meleeviking1.png")
+    self.frames = {
+        love.graphics.newImage("assets/meleeviking1.png"),
+        love.graphics.newImage("assets/meleeviking2.png")
+    }
 
     -- finish initialization by resetting
     self:reset()
@@ -27,28 +31,49 @@ function Viking:reset()
     self.velocity = Vector(math.random(-self.MOVE_SPEED, self.MOVE_SPEED), math.random(-self.MOVE_SPEED, self.MOVE_SPEED))
     self.health = Constants.MELEE_VIKING_HP
     self.shape:moveTo(self.initialPos.x, self.initialPos.y)
+
+    -- animation data
+    self.frame = 0
+    self.frameTime = 0
 end
 
 function Viking:update(dt)
-    self.shape:move(self.velocity*dt)
+    local moving = false
+    local pos = Vector(self.shape:center())
 
+    self.shape:move(self.velocity*dt)
+    moving = true
     -- TODO: think of caching this value because the velocity isn't changing often
     self.shape:setRotation((-math.pi/2)+math.atan2(self.velocity.y, self.velocity.x))
 
     -- shitty bounce code
-    local pos = Vector(self.shape:center())
     if pos.x > Constants.WORLD.x or pos.x < 0 then
         self.velocity.x = -1 * self.velocity.x
+        self.shape:move(self.velocity*dt)
+        self.shape:move(self.velocity*dt)
     end
     if pos.y > Constants.WORLD.y or pos.y < 0 then
         self.velocity.y = -1 * self.velocity.y
+        self.shape:move(self.velocity*dt)
+        self.shape:move(self.velocity*dt)
+    end
+
+    local speed_ratio = Vector(Constants.MELEE_VIKING_SPEED, Constants.MELEE_VIKING_SPEED):len() / self.velocity:len()
+
+    if moving then
+        self.frameTime = self.frameTime + dt
+        if self.frameTime > self.FRAME_DURATION*speed_ratio then
+            self.frame = self.frame + 1
+            self.frame = self.frame % 2
+            self.frameTime = 0
+        end
     end
 end
 
 function Viking:draw()
     local pos = Vector(self.shape:center())
     local scale = Vector(self.SIZE.x/30.0, self.SIZE.y/30.0)
-    love.graphics.draw(self.sprite,
+    love.graphics.draw(self.frames[self.frame + 1],
                        pos.x, pos.y,
                        self.shape:rotation(),
                        scale.x, scale.y,

@@ -2,8 +2,9 @@ local Class = require "hump.class"
 local Vector = require "hump.vector"
 local Constants = require "constants"
 
-local MiniMap = Class(function(self, entities)
+local MiniMap = Class(function(self, entities, temples)
     self.entities = entities
+    self.temples = temples
 
     self.SIZE = Vector(100, 100)
     self.OFFSET = Vector(5, 5)
@@ -16,6 +17,14 @@ function MiniMap:draw()
         Constants.SCREEN.y - 1 - self.SIZE.y - self.OFFSET.y,
         self.SIZE.x, self.SIZE.y
     )
+
+    self:drawTemple(self.temples[1])
+    if self.temples[1].complete then
+        self:drawTemple(self.temples[2])
+    end
+    if self.temples[2].complete then
+        self:drawTemple(self.temples[3])
+    end
 
     for _, entity in ipairs(self.entities.entities) do
         if entity.shape then
@@ -52,6 +61,18 @@ function MiniMap:drawViking(viking)
         Constants.SCREEN.x - 1 - self.SIZE.x - self.OFFSET.x + vikePos.x - 1,
         Constants.SCREEN.y - 1 - self.SIZE.y - self.OFFSET.y + vikePos.y - 1,
         3, 3)
+end
+
+function MiniMap:drawTemple(temple)
+    local templePos = temple:getPosition()
+    templePos.x = templePos.x / Constants.WORLD.x * self.SIZE.x
+    templePos.y = templePos.y / Constants.WORLD.y * self.SIZE.y
+
+    love.graphics.setColor(255, 255, 0, 255)
+    love.graphics.rectangle("fill",
+        Constants.SCREEN.x - 1 - self.SIZE.x - self.OFFSET.x + templePos.x - 3,
+        Constants.SCREEN.y - 1 - self.SIZE.y - self.OFFSET.y + templePos.y - 3,
+        6, 6)
 end
 
 return MiniMap

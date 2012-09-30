@@ -2,26 +2,31 @@ local Class = require "hump.class"
 local Vector = require "hump.vector"
 local Constants = require "constants"
 
-local RoverMissile = Class(function(self, collider, position, direction, explosive)
+local RoverMissile = Class(function(self, media, collider, position, direction)
     self.collider = collider
     self.direction = direction
-    self.explosive = explosive
 
     self.SIZE = Vector(10, 15)
-    self.SPEED = Constants.ROVER_LASER_SPEED
+    self.SPEED = Constants.ROVER_MISSILE_SPEED
 
     self.shape = self.collider:addRectangle(0, 0, self.SIZE.x, self.SIZE.y)
-    self.shape.kind = "roverlaser"
+    self.shape.kind = "missile"
     self.collider:addToGroup("friend", self.shape)
     self.shape:moveTo(position.x, position.y)
 
-    self.image = love.graphics.newImage("assets/rovermissile.png"),
+    self.image = media.ROVER_MISSILE
 
     self:reset()
 end)
 
 function RoverMissile:reset()
     self.dead = false
+    self.zombie = false
+end
+
+function RoverMissile:kill()
+    self.collider:remove(self.shape)
+    self.zombie = true
 end
 
 function RoverMissile:update(dt)

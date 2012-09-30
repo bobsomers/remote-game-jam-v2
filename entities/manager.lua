@@ -37,9 +37,16 @@ function EntityManager:update(dt)
 end
 
 function EntityManager:draw()
-    -- Update all entities we manage.
+    -- Two passes. First draw "bg" entities, then any others.
     for i, entity in ipairs(self.entities) do
-        entity:draw()
+        if entity.bg then
+            entity:draw()
+        end
+    end
+    for i, entity in ipairs(self.entities) do
+        if not entity.bg then
+            entity:draw()
+        end
     end
 end
 

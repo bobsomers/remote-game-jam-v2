@@ -2,8 +2,11 @@ local Class = require "hump.class"
 local Vector = require "hump.vector"
 local Constants = require "constants"
 local RoverMissile = require "entities.rovermissile"
+local Damage = require "entities.damage"
+local TireTrack = require "entities.tiretrack"
 
-local Opportunity = Class(function(self, collider, curiosity, camera, entities)
+local Opportunity = Class(function(self, media, collider, curiosity, camera, entities)
+    self.media = media
     self.collider = collider
     self.curiosity = curiosity
     self.camera = camera
@@ -17,18 +20,20 @@ local Opportunity = Class(function(self, collider, curiosity, camera, entities)
     self.shape.kind = "opportunity"
     self.collider:addToGroup("friend", self.shape)
 
-    self.frames = {
-        love.graphics.newImage("assets/opportunity1.png"),
-        love.graphics.newImage("assets/opportunity2.png")
-    }
-    
-    self.head = love.graphics.newImage("assets/opportunityhead.png")
+    self.frames = self.media.OPPORTUNITY_FRAMES
+    self.head = self.media.OPPORTUNITY_HEAD
+
+    self.damage = Damage(self, Constants.ROVER_HEALTH, self.SIZE.x,
+        Vector(-self.SIZE.x / 2, -self.SIZE.y / 2 - 5))
+
+    self.rotation = 0
 
     self:reset()
 end)
 
 function Opportunity:reset()
-    self.shape:moveTo(50, 50)
+    local where = self.curiosity:getPosition() - Vector(100, 100)
+    self.shape:moveTo(where.x, where.y)
     
     self.headRotation = 0
 
@@ -37,26 +42,33 @@ function Opportunity:reset()
 
     self.fireTime = 0
     self.fireRate = Constants.OPPORTUNITY_BASE_FIRE_RATE
-    
-    self.explosive = false
+
+    self.tireTrackTime = 0
+    self.previousTracks = nil
+end
+
+function Opportunity:getPosition()
+    return Vector(self.shape:center())
 end
 
 function Opportunity:update(dt)
     local curiosityPosition = self.curiosity:getPosition()
-    local position = Vector(self.shape:center())
+    local position = self:getPosition()
     local dx = curiosityPosition.x - position.x
     local dy = curiosityPosition.y - position.y
-    local rotation = math.atan2(dy, dx) + math.pi / 2
+    self.rotation = math.atan2(dy, dx) + math.pi / 2
  
     delta = Vector(0, 0)
     delta.y = delta.y - self.MOVE_SPEED * dt
     
-    delta:rotate_inplace(rotation)
+    delta:rotate_inplace(self.rotation)
     position = position + delta
 
+    local advancing = false
     distance = math.sqrt(math.pow(dx, 2) + math.pow(dy, 2))
     if distance > (Constants.HELPER_MINIMUM_DISTANCE + 100) then
         self.shape:moveTo(position.x, position.y)
+        advancing = true
     end
     
     local mouseX, mouseY = self.camera.camera:worldCoords(love.mouse.getX(), love.mouse.getY())
@@ -67,26 +79,30 @@ function Opportunity:update(dt)
     self.fireTime = self.fireTime + dt
     if love.mouse.isDown("l") and self.fireTime > self.fireRate then
         self.entities:register(
-            RoverMissile(self.collider, position,
+            RoverMissile(self.media, self.collider, position,
                   Vector(math.cos(self.headRotation - math.pi / 2),
-                         math.sin(self.headRotation - math.pi / 2)),
-                  self.explosive
+                         math.sin(self.headRotation - math.pi / 2))
             )
         )
         
         self.fireTime = 0
     end
+
+    if advancing then
+        self.tireTrackTime = self.tireTrackTime + dt
+        if self.tireTrackTime > 0.1 then
+            self.previousTrack = TireTrack(self:getPosition(), self.rotation, self.previousTrack, true)
+            self.entities:register(self.previousTrack)
+            self.tireTrackTime = 0
+        end
+    end
 end
 
 function Opportunity:draw()
-    local position = Vector(self.shape:center())
-    local curiosityPosition = self.curiosity:getPosition()
-    local dx = curiosityPosition.x - position.x
-    local dy = curiosityPosition.y - position.y
-    local rotation = math.atan2(dy, dx) + math.pi / 2
+    local position = self:getPosition()
     love.graphics.draw(self.frames[self.frame + 1],
         position.x, position.y,
-        rotation,
+        self.rotation,
         1, 1,
         self.SIZE.x / 2, self.SIZE.y / 2,
         0, 0
@@ -95,15 +111,17 @@ function Opportunity:draw()
     local mouseX, mouseY = self.camera.camera:worldCoords(love.mouse.getX(), love.mouse.getY())
     local dx = mouseX - position.x
     local dy = mouseY - position.y
-    local rotation = math.atan2(dy, dx) + math.pi / 2
+    local rot = math.atan2(dy, dx) + math.pi / 2
     
     love.graphics.draw(self.head,
         position.x, position.y,
-        rotation,
+        rot,
         1, 1,
         5, 15,
         0, 0
     )
+
+    self.damage:draw()
 end
 
 return Opportunity

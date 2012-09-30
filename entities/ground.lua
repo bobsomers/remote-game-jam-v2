@@ -2,13 +2,13 @@ local Class = require "hump.class"
 local Vector = require "hump.vector"
 local Constants = require "constants"
 
-local Ground = Class(function(self, camera)
+local Ground = Class(function(self, media, camera)
     self.camera = camera
 
     self.TILE_SIZE = Vector(200, 200)
 
-    self.ground_tile = love.graphics.newImage("assets/groundtile.png")
-    self.border_tile = love.graphics.newImage("assets/groundtile2.png")
+    self.ground_tile = media.GROUND_TILE
+    self.border_tile = media.BORDER_TILE
 end)
 
 function Ground:draw()

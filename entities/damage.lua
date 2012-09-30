@@ -29,6 +29,7 @@ function Damage:draw()
         self.health / self.totalHealth * (self.width - 1), 4
     )
     love.graphics.setColor(255, 255, 255, 255)
+    love.graphics.setLineWidth(1)
     love.graphics.line(
         position.x, position.y + 5,
         position.x + self.width, position.y + 5,

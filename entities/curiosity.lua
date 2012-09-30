@@ -3,8 +3,10 @@ local Vector = require "hump.vector"
 local Constants = require "constants"
 local Laser = require "entities.laser"
 local Damage = require "entities.damage"
+local TireTrack = require "entities.tiretrack"
 
-local Curiosity = Class(function(self, collider, camera, entities)
+local Curiosity = Class(function(self, media, collider, camera, entities)
+    self.media = media
     self.collider = collider
     self.camera = camera
     self.entities = entities
@@ -18,13 +20,8 @@ local Curiosity = Class(function(self, collider, camera, entities)
     self.shape.kind = "curiosity"
     self.collider:addToGroup("friend", self.shape)
 
-    self.frames = {
-        love.graphics.newImage("assets/curiosity1.png"),
-        love.graphics.newImage("assets/curiosity2.png"),
-        love.graphics.newImage("assets/curiosity3.png")
-    }
-
-    self.head = love.graphics.newImage("assets/curiosityhead.png")
+    self.frames = self.media.CURIOSITY_FRAMES
+    self.head = self.media.CURIOSITY_HEAD
 
     self.damage = Damage(self, Constants.CURIOSITY_HEALTH, self.SIZE.x,
         Vector(-self.SIZE.x / 2, -self.SIZE.y / 2 - 5))
@@ -44,12 +41,12 @@ function Curiosity:reset()
     self.fireTime = 0
     self.fireRate = Constants.CURIOSITY_BASE_FIRE_RATE
 
-    -- TODO: reset these to non-upgraded
-    self.tripleFire = true
-    self:upgradeFireRate()
-    self.explosive = false
+    self.tireTrackTime = 0
+    self.previousTracks = nil
 
-    self.damage.health = 50
+    self.fastFire = false
+    self.tripleFire = false
+    self.explosive = false
 end
 
 function Curiosity:getPosition()
@@ -57,26 +54,36 @@ function Curiosity:getPosition()
 end
 
 function Curiosity:upgradeFireRate()
-    self.fireRate = self.fireRate / 3
+    if not self.fastFire then
+        self.fireRate = self.fireRate / 3
+        self.fastFire = true
+    end
 end
 
 function Curiosity:upgradeTripleFire()
     self.tripleFire = true
 end
 
+function Curiosity:upgradeExplosive()
+    self.explosive = true
+end
+
 function Curiosity:update(dt)
     local position = Vector(self.shape:center())
     local moving = false
     local backward = false
+    local advancing = false
 
     delta = Vector(0, 0)
     if love.keyboard.isDown("w") then
         delta.y = delta.y - Constants.CURIOSITY_SPEED * dt
         moving = true
+        advancing = true
     elseif love.keyboard.isDown("s") then
         delta.y = delta.y + Constants.CURIOSITY_SPEED * dt
         moving = true
         backward = true
+        advancing = true
     end
 
     if love.keyboard.isDown("a") then
@@ -118,6 +125,15 @@ function Curiosity:update(dt)
         end
     end
 
+    if advancing then
+        self.tireTrackTime = self.tireTrackTime + dt
+        if self.tireTrackTime > 0.1 then
+            self.previousTrack = TireTrack(self:getPosition(), self.shape:rotation(), self.previousTrack, false)
+            self.entities:register(self.previousTrack)
+            self.tireTrackTime = 0
+        end
+    end
+
     local mouseX, mouseY = self.camera.camera:worldCoords(love.mouse.getX(), love.mouse.getY())
     local dx = mouseX - position.x
     local dy = mouseY - position.y
@@ -126,7 +142,7 @@ function Curiosity:update(dt)
     self.fireTime = self.fireTime + dt
     if love.mouse.isDown("l") and self.fireTime > self.fireRate then
         self.entities:register(
-            Laser(self.collider, self:getPosition(),
+            Laser(self.media, self.collider, self:getPosition(),
                   Vector(math.cos(self.headRotation - math.pi / 2),
                          math.sin(self.headRotation - math.pi / 2)),
                   self.explosive
@@ -135,14 +151,14 @@ function Curiosity:update(dt)
 
         if self.tripleFire then
             self.entities:register(
-                Laser(self.collider, self:getPosition(),
+                Laser(self.media, self.collider, self:getPosition(),
                       Vector(math.cos(self.headRotation - math.pi / 2 - math.pi / 15),
                              math.sin(self.headRotation - math.pi / 2 - math.pi / 15)),
                       self.explosive
                 )
             )
             self.entities:register(
-                Laser(self.collider, self:getPosition(),
+                Laser(self.media, self.collider, self:getPosition(),
                       Vector(math.cos(self.headRotation - math.pi / 2 + math.pi / 15),
                              math.sin(self.headRotation - math.pi / 2 + math.pi / 15)),
                       self.explosive

@@ -2,7 +2,7 @@ local Class = require "hump.class"
 local Vector = require "hump.vector"
 local Constants = require "constants"
 
-local Laser = Class(function(self, collider, position, direction, explosive)
+local Laser = Class(function(self, media, collider, position, direction, explosive)
     self.collider = collider
     self.direction = direction
     self.explosive = explosive
@@ -15,7 +15,7 @@ local Laser = Class(function(self, collider, position, direction, explosive)
     self.collider:addToGroup("friend", self.shape)
     self.shape:moveTo(position.x, position.y)
 
-    self.image = love.graphics.newImage("assets/laserbullet.png"),
+    self.image = media.LASER
 
     self:reset()
 end)

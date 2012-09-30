@@ -141,11 +141,18 @@ function Curiosity:update(dt)
 
     self.fireTime = self.fireTime + dt
     if love.mouse.isDown("l") and self.fireTime > self.fireRate then
+        local upgrade = "weak"
+        if self.tripleFire then
+            upgrade = "triple"
+        elseif self.fastFire then
+            upgrade = "fast"
+        end
+
         self.entities:register(
             Laser(self.media, self.collider, self:getPosition(),
                   Vector(math.cos(self.headRotation - math.pi / 2),
                          math.sin(self.headRotation - math.pi / 2)),
-                  self.explosive
+                  upgrade, false
             )
         )
 
@@ -154,14 +161,14 @@ function Curiosity:update(dt)
                 Laser(self.media, self.collider, self:getPosition(),
                       Vector(math.cos(self.headRotation - math.pi / 2 - math.pi / 15),
                              math.sin(self.headRotation - math.pi / 2 - math.pi / 15)),
-                      self.explosive
+                      upgrade, true
                 )
             )
             self.entities:register(
                 Laser(self.media, self.collider, self:getPosition(),
                       Vector(math.cos(self.headRotation - math.pi / 2 + math.pi / 15),
                              math.sin(self.headRotation - math.pi / 2 + math.pi / 15)),
-                      self.explosive
+                      upgrade, true
                 )
             )
         end

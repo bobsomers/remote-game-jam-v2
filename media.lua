@@ -54,6 +54,13 @@ local Media = Class(function(self)
         love.graphics.newImage("assets/ruins2.png"),
         love.graphics.newImage("assets/ruins3.png")
     }
+
+    self.WEAK_LASER = love.audio.newSource("assets/weaklaser.wav", "static")
+    self.WEAK_LASER:setVolume(0.3)
+    self.FAST_LASER = love.audio.newSource("assets/fastlaser.wav", "static")
+    self.FAST_LASER:setVolume(0.3)
+    self.TRIPLE_LASER = love.audio.newSource("assets/triplelaser.wav", "static")
+    self.TRIPLE_LASER:setVolume(0.3)
 end)
 
 return Media

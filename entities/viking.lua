@@ -18,7 +18,7 @@ local Viking = Class(function(self, collider, initialPos, initialDir, isRanged)
     -- collison detection
     self.shape = self.collider:addRectangle(0, 0, self.SIZE.x, self.SIZE.y)
     self.shape.kind = "viking"
-    self.collider:addToGroup("viking", self.shape)
+    self.collider:addToGroup("foe", self.shape)
 
     -- sprite initialization
     if self.isRanged then

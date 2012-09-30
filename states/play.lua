@@ -30,7 +30,7 @@ function PlayState:init()
     self.ground = Ground(self.cam)
 
     -- Load curiosity.
-    self.curiosity = Curiosity(self.collider, self.cam)
+    self.curiosity = Curiosity(self.collider, self.cam, self.entities)
     self.entities:register(self.curiosity)
     
     -- Load other rovers (for now)

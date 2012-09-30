@@ -1,10 +1,12 @@
 local Class = require "hump.class"
 local Vector = require "hump.vector"
 local Constants = require "constants"
+local Laser = require "entities.laser"
 
-local Curiosity = Class(function(self, collider, camera)
+local Curiosity = Class(function(self, collider, camera, entities)
     self.collider = collider
     self.camera = camera
+    self.entities = entities
 
     self.SIZE = Vector(50, 50)
     self.MOVE_SPEED = Constants.CURIOSITY_SPEED
@@ -30,8 +32,13 @@ function Curiosity:reset()
     self.health = 100
     self.shape:moveTo(100, 100)
 
+    self.headRotation = 0
+
     self.frame = 0
     self.frameTime = 0
+
+    self.fireTime = 0
+    self.fireRate = Constants.CURIOSITY_BASE_FIRE_RATE
 end
 
 function Curiosity:getPosition()
@@ -91,6 +98,18 @@ function Curiosity:update(dt)
             self.frameTime = 0
         end
     end
+
+    local mouseX, mouseY = self.camera.camera:worldCoords(love.mouse.getX(), love.mouse.getY())
+    local dx = mouseX - position.x
+    local dy = mouseY - position.y
+    self.headRotation = math.atan2(dy, dx) + math.pi / 2
+
+    self.fireTime = self.fireTime + dt
+    if love.mouse.isDown("l") and self.fireTime > self.fireRate then
+        local laser = Laser(self.collider, self:getPosition(), Vector(math.cos(self.headRotation - math.pi / 2), math.sin(self.headRotation - math.pi / 2)))
+        self.entities:register(laser)
+        self.fireTime = 0
+    end
 end
 
 function Curiosity:draw()
@@ -103,14 +122,9 @@ function Curiosity:draw()
         0, 0
     )
 
-    local mouseX, mouseY = self.camera.camera:worldCoords(love.mouse.getX(), love.mouse.getY())
-    local dx = mouseX - position.x
-    local dy = mouseY - position.y
-    local rotation = math.atan2(dy, dx) + math.pi / 2
-
     love.graphics.draw(self.head,
         position.x, position.y,
-        rotation,
+        self.headRotation,
         1, 1,
         8, 7,
         0, 0

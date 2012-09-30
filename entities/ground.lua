@@ -15,11 +15,11 @@ function Ground:draw()
     min = Vector(self.camera.camera:worldCoords(0, 0))
     max = Vector(self.camera.camera:worldCoords(Constants.SCREEN.x - 1, Constants.SCREEN.y - 1))
 
-    min.x = min.x - (min.x % 200)
-    min.y = min.y - (min.y % 200)
+    min.x = math.max(min.x - (min.x % self.TILE_SIZE.x), 0)
+    min.y = math.max(min.y - (min.y % self.TILE_SIZE.y), 0)
 
-    max.x = max.x - (max.x % 200)
-    max.y = max.y - (max.y % 200)
+    max.x = math.min(max.x - (max.x % self.TILE_SIZE.x), Constants.WORLD.x - 1)
+    max.y = math.min(max.y - (max.y % self.TILE_SIZE.y), Constants.WORLD.y - 1)
 
     for i = min.x, max.x, self.TILE_SIZE.x do
         for j = min.y, max.y, self.TILE_SIZE.y do

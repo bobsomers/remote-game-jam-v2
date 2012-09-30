@@ -46,8 +46,6 @@ function Curiosity:reset()
 
     self.tripleFire = false
     self.explosive = false
-
-    self.damage.health = 50
 end
 
 function Curiosity:getPosition()

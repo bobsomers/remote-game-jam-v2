@@ -13,8 +13,8 @@ end)
 
 function Ground:draw()
     -- Figure out start and stop positions for tile drawing.
-    min = Vector(self.camera.camera:worldCoords(0, 0))
-    max = Vector(self.camera.camera:worldCoords(Constants.SCREEN.x - 1, Constants.SCREEN.y - 1))
+    local min = Vector(self.camera.camera:worldCoords(0, 0))
+    local max = Vector(self.camera.camera:worldCoords(Constants.SCREEN.x - 1, Constants.SCREEN.y - 1))
 
     min.x = min.x - (min.x % self.TILE_SIZE.x)
     min.y = min.y - (min.y % self.TILE_SIZE.y)

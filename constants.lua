@@ -21,6 +21,7 @@ Constants.CURIOSITY_SPEED = 100 -- 100 pixels/sec
 Constants.CURIOSITY_TURN_SPEED = math.pi / 3 -- pi/3 radians/sec
 Constants.CURIOSITY_FRAME_DURATION = 0.1 -- 1/10 of a sec
 Constants.CURIOSITY_BASE_FIRE_RATE = 0.7 -- 0.7 sec between lasers
+Constants.CURIOSITY_HEALTH = 100 -- 100 hit points
 
 -- Laser weapon settings.
 Constants.LASER_SPEED = 250 -- 250 pixels/sec
@@ -36,8 +37,11 @@ Constants.HELPER_MINIMUM_DISTANCE = 150
 
 -- Melee Viking data
 Constants.MELEE_VIKING_HP = 100
-Constants.MELEE_VIKING_SPEED = 100
+Constants.MELEE_VIKING_MIN_SPEED = 10
+Constants.MELEE_VIKING_MAX_SPEED = 100
 Constants.MELEE_VIKING_FRAME_DURATION = 0.1 -- 1/10 of a sec
+Constants.MELEE_VIKING_NUM_TO_SPAWN = 50
+Constants.MELEE_VIKING_SPAWN_OFFSET_OFF_SCREEN = 15
 
 -- Olmec Chan's speech thing
 Constants.OLMEC_SPEECH_TIME = 400

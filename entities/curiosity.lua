@@ -2,6 +2,7 @@ local Class = require "hump.class"
 local Vector = require "hump.vector"
 local Constants = require "constants"
 local Laser = require "entities.laser"
+local Damage = require "entities.damage"
 
 local Curiosity = Class(function(self, collider, camera, entities)
     self.collider = collider
@@ -25,12 +26,14 @@ local Curiosity = Class(function(self, collider, camera, entities)
 
     self.head = love.graphics.newImage("assets/curiosityhead.png")
 
+    self.damage = Damage(self, Constants.CURIOSITY_HEALTH, self.SIZE.x, Vector(-self.SIZE.x / 2, -self.SIZE.y / 2 - 5))
+
     self:reset()
 end)
 
 function Curiosity:reset()
     self.health = 100
-    self.shape:moveTo(100, 100)
+    self.shape:moveTo(Constants.WORLD.x/2, Constants.WORLD.y/2)
 
     self.headRotation = 0
 
@@ -44,6 +47,8 @@ function Curiosity:reset()
     self.tripleFire = true
     self:upgradeFireRate()
     self.explosive = false
+
+    self.damage.health = 50
 end
 
 function Curiosity:getPosition()
@@ -165,6 +170,8 @@ function Curiosity:draw()
         8, 7,
         0, 0
     )
+
+    self.damage:draw()
 end
 
 return Curiosity

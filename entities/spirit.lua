@@ -2,6 +2,8 @@ local Class = require "hump.class"
 local Vector = require "hump.vector"
 local Constants = require "constants"
 local RoverLaser = require "entities.roverlaser"
+local Damage = require "entities.damage"
+local TireTrack = require "entities.tiretrack"
 
 local Spirit = Class(function(self, collider, curiosity, camera, entities)
     self.collider = collider
@@ -23,6 +25,11 @@ local Spirit = Class(function(self, collider, curiosity, camera, entities)
     }
 
     self.head = love.graphics.newImage("assets/spirithead.png")
+
+    self.damage = Damage(self, Constants.ROVER_HEALTH, self.SIZE.x,
+        Vector(-self.SIZE.x / 2, -self.SIZE.y / 2 - 5))
+
+    self.rotation = 0
     
     self:reset()
 end)
@@ -37,26 +44,33 @@ function Spirit:reset()
 
     self.fireTime = 0
     self.fireRate = Constants.SPIRIT_BASE_FIRE_RATE
-    
-    self.explosive = false
+
+    self.tireTrackTime = 0
+    self.previousTracks = nil
+end
+
+function Spirit:getPosition()
+    return Vector(self.shape:center())
 end
 
 function Spirit:update(dt)
     local curiosityPosition = self.curiosity:getPosition()
-    local position = Vector(self.shape:center())
+    local position = self:getPosition()
     local dx = curiosityPosition.x - position.x
     local dy = curiosityPosition.y - position.y
-    local rotation = math.atan2(dy, dx) + math.pi / 2
+    self.rotation = math.atan2(dy, dx) + math.pi / 2
  
     delta = Vector(0, 0)
     delta.y = delta.y - self.MOVE_SPEED * dt
     
-    delta:rotate_inplace(rotation)
+    delta:rotate_inplace(self.rotation)
     position = position + delta
 
+    local advancing = false
     distance = math.sqrt(math.pow(dx, 2) + math.pow(dy, 2))
     if distance > Constants.HELPER_MINIMUM_DISTANCE then
         self.shape:moveTo(position.x, position.y)
+        advancing = true
     end
     
     local mouseX, mouseY = self.camera.camera:worldCoords(love.mouse.getX(), love.mouse.getY())
@@ -69,25 +83,29 @@ function Spirit:update(dt)
         self.entities:register(
             RoverLaser(self.collider, position,
                   Vector(math.cos(self.headRotation - math.pi / 2),
-                         math.sin(self.headRotation - math.pi / 2)),
-                  self.explosive
+                         math.sin(self.headRotation - math.pi / 2))
             )
         )
         
         self.fireTime = 0
     end
+
+    if advancing then
+        self.tireTrackTime = self.tireTrackTime + dt
+        if self.tireTrackTime > 0.1 then
+            self.previousTrack = TireTrack(self:getPosition(), self.rotation, self.previousTrack, true)
+            self.entities:register(self.previousTrack)
+            self.tireTrackTime = 0
+        end
+    end
 end
 
 function Spirit:draw()    
-    local position = Vector(self.shape:center())
-    local curiosityPosition = self.curiosity:getPosition()
-    local dx = curiosityPosition.x - position.x
-    local dy = curiosityPosition.y - position.y
-    local rotation = math.atan2(dy, dx) + math.pi / 2
+    local position = self:getPosition()
     
     love.graphics.draw(self.frames[self.frame + 1],
         position.x, position.y,
-        rotation,
+        self.rotation,
         1, 1,
         self.SIZE.x / 2, self.SIZE.y / 2,
         0, 0
@@ -96,15 +114,17 @@ function Spirit:draw()
     local mouseX, mouseY = self.camera.camera:worldCoords(love.mouse.getX(), love.mouse.getY())
     local dx = mouseX - position.x
     local dy = mouseY - position.y
-    local rotation = math.atan2(dy, dx) + math.pi / 2
+    local rot = math.atan2(dy, dx) + math.pi / 2
     
     love.graphics.draw(self.head,
         position.x, position.y,
-        rotation,
+        rot,
         1, 1,
         2, 18,
         0, 0
     )
+
+    self.damage:draw()
 end
 
 return Spirit

@@ -128,7 +128,7 @@ function Curiosity:update(dt)
     if advancing then
         self.tireTrackTime = self.tireTrackTime + dt
         if self.tireTrackTime > 0.1 then
-            self.previousTrack = TireTrack(self:getPosition(), self.shape:rotation(), self.previousTrack)
+            self.previousTrack = TireTrack(self:getPosition(), self.shape:rotation(), self.previousTrack, false)
             self.entities:register(self.previousTrack)
             self.tireTrackTime = 0
         end

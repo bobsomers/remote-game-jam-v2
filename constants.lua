@@ -27,6 +27,9 @@ Constants.CURIOSITY_HEALTH = 100 -- 100 hit points
 Constants.LASER_SPEED = 250 -- 250 pixels/sec
 Constants.LASER_DAMAGE = 7
 
+-- Rover settings.
+Constants.ROVER_HEALTH = 100 -- 100 hit points
+
 -- Rover laser weapon settings.
 Constants.ROVER_LASER_SPEED = 800
 Constants.SPIRIT_BASE_FIRE_RATE = 3

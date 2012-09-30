@@ -74,7 +74,6 @@ function PlayState:update(dt)
     self.spirit:update(dt)
     self.opportunity:update(dt)
     self.gibson:update(dt)
-
     self.vikings:update(dt)
 
     -- Update Olmec talk box

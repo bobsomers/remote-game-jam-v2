@@ -127,11 +127,11 @@ function TalkBox:olmecTalk(subject)
             self.olmecSays = self.olmecWorldLines[i]
             self.olmecAudio = love.audio.newSource(self.olmecWorldAudioFiles[i], "stream")
         elseif subject == Constants.OLMECSUBJECT_TEMPLE then
-            i = math.random(0, (table.getn(self.olmecTempleLines)))
+            i = math.random(1, (table.getn(self.olmecTempleLines)))
             self.olmecSays = self.olmecTempleLines[i]
             self.olmecAudio = love.audio.newSource(self.olmecTempleAudioFiles[i], "stream")
         elseif subject == Constants.OLMECSUBJECT_ROVER then
-            i = math.random(0, (table.getn(self.olmecRoverLines)))
+            i = math.random(1, (table.getn(self.olmecRoverLines)))
             self.olmecSays = self.olmecRoverLines[i]
             self.olmecAudio = love.audio.newSource(self.olmecRoverAudioFiles[i], "stream")
         elseif subject == Constants.OLMECSUBJECT_FIGHT then

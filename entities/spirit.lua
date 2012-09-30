@@ -98,6 +98,15 @@ function Spirit:update(dt)
     end
 end
 
+function Spirit:takeDamage(amount)
+    self.damage.health = math.max(self.damage.health - amount, 0)
+    if self.damage.health <= 0 then
+        self.collider:remove(self.shape)
+        self.zombie = true
+        --Signal.emit("viking-death")
+    end
+end
+
 function Spirit:draw()    
     local position = self:getPosition()
     

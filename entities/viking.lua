@@ -82,12 +82,12 @@ function Viking:takeDamage(amount)
     end
 end
 
-function Viking:meleeAttack()
+function Viking:meleeAttack(goodguy)
     if self.meleeTime > self.meleeRate then
         if self.isRanged then
-            self.curiosity:takeDamage(Constants.RANGED_VIKING_MELEE_DAMAGE)
+            goodguy:takeDamage(Constants.RANGED_VIKING_MELEE_DAMAGE)
         else
-            self.curiosity:takeDamage(Constants.MELEE_VIKING_DAMAGE)
+            goodguy:takeDamage(Constants.MELEE_VIKING_DAMAGE)
         end
         self.meleeTime = 0
     end

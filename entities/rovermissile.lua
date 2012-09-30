@@ -10,7 +10,7 @@ local RoverMissile = Class(function(self, media, collider, position, direction)
     self.SPEED = Constants.ROVER_MISSILE_SPEED
 
     self.shape = self.collider:addRectangle(0, 0, self.SIZE.x, self.SIZE.y)
-    self.shape.kind = "roverlaser"
+    self.shape.kind = "missile"
     self.collider:addToGroup("friend", self.shape)
     self.shape:moveTo(position.x, position.y)
 
@@ -21,6 +21,12 @@ end)
 
 function RoverMissile:reset()
     self.dead = false
+    self.zombie = false
+end
+
+function RoverMissile:kill()
+    self.collider:remove(self.shape)
+    self.zombie = true
 end
 
 function RoverMissile:update(dt)

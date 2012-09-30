@@ -44,9 +44,7 @@ function Curiosity:reset()
     self.tireTrackTime = 0
     self.previousTracks = nil
 
-    -- TODO: reset these to non-upgraded
-    self.tripleFire = true
-    self:upgradeFireRate()
+    self.tripleFire = false
     self.explosive = false
 
     self.damage.health = 50

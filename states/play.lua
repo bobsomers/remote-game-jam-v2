@@ -107,16 +107,20 @@ function PlayState:draw()
 end
 
 function PlayState:collide(dt, shape1, shape2, mtvX, mtvY)
-    local laser, enemy
+    local laser, missile, enemy
 
     if shape1.kind == "laser" then
         laser = self.entities:findByShape(shape1)
+    elseif shape1.kind == "missile" then
+        missile = self.entities:findByShape(shape1)
     elseif shape1.kind == "viking" then
         enemy = self.entities:findByShape(shape1)
     end
 
     if shape2.kind == "laser" then
         laser = self.entities:findByShape(shape2)
+    elseif shape2.kind == "missile" then
+        missile = self.entities:findByShape(shape2)
     elseif shape2.kind == "viking" then
         enemy = self.entities:findByShape(shape2)
     end
@@ -125,29 +129,22 @@ function PlayState:collide(dt, shape1, shape2, mtvX, mtvY)
         enemy:takeDamage(Constants.LASER_DAMAGE)
         laser:kill()
     end
+
+    if missile and enemy then
+        enemy:takeDamage(Constants.ROVER_MISSILE_DAMAGE)
+        missile:kill()
+    end
 end
 
 function PlayState:collideStop(dt, shape1, shape2)
-    local laser, enemy
+    local entity1 = self.entities:findByShape(shape1)
+    local entity2 = self.entities:findByShape(shape2)
 
-    if shape1.kind == "laser" then
-        laser = self.entities:findByShape(shape1)
-    elseif shape1.kind == "viking" then
-        enemy = self.entities:findByShape(shape1)
+    if entity1.zombie then
+        entity1.dead = true
     end
-
-    if shape2.kind == "laser" then
-        laser = self.entities:findByShape(shape2)
-    elseif shape2.kind == "viking" then
-        enemy = self.entities:findByShape(shape2)
-    end
-
-    if laser and laser.zombie then
-        laser.dead = true
-    end
-
-    if enemy and enemy.zombie then
-        enemy.dead = true
+    if entity2.zombie then
+        entity2.dead = true
     end
 end
 

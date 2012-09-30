@@ -34,8 +34,9 @@ Constants.ROVER_HEALTH = 100 -- 100 hit points
 Constants.ROVER_LASER_SPEED = 800
 Constants.SPIRIT_BASE_FIRE_RATE = 3
 
--- Rover laser weapon settings.
+-- Rover missile weapon settings.
 Constants.ROVER_MISSILE_SPEED = 150
+Constants.ROVER_MISSILE_DAMAGE = 20
 Constants.OPPORTUNITY_BASE_FIRE_RATE = 2
 
 -- Gameplay variabls things.

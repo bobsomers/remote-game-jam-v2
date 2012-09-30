@@ -1,9 +1,9 @@
 local Class = require "hump.class"
 local Vector = require "hump.vector"
 local Constants = require "constants"
-local Laser = require "entities.laser"
 local Damage = require "entities.damage"
 local TireTrack = require "entities.tiretrack"
+local Flamethrower = require "entities.flamethrower"
 
 local Gibson = Class(function(self, media, collider, curiosity, camera, entities)
     self.media = media
@@ -28,6 +28,8 @@ local Gibson = Class(function(self, media, collider, curiosity, camera, entities
 
     self.rotation = 0
     
+    self.flamethrower = Flamethrower(self, collider, entities)
+    
     self:reset()
 end)
 
@@ -49,6 +51,15 @@ end
 
 function Gibson:getPosition()
     return Vector(self.shape:center())
+end
+
+function Gibson:getDirection()
+    local position = self:getPosition()
+    local mouseX, mouseY = self.camera.camera:worldCoords(love.mouse.getX(), love.mouse.getY())
+    local dx = mouseX - position.x
+    local dy = mouseY - position.y
+    
+    return math.atan2(dy, dx)
 end
 
 function Gibson:update(dt)
@@ -77,15 +88,12 @@ function Gibson:update(dt)
     self.headRotation = math.atan2(dy, dx) + math.pi / 2
 
     self.fireTime = self.fireTime + dt
-    if love.mouse.isDown("l") and self.fireTime > self.fireRate then
-        self.entities:register(
-            Laser(self.media, self.collider, position,
-                  Vector(math.cos(self.headRotation - math.pi / 2),
-                         math.sin(self.headRotation - math.pi / 2))
-            )
-        )
-        
-        self.fireTime = 0
+    if love.mouse.isDown("l") then        
+        self.flamethrower.firing = true
+        self.flamethrower.particles:start()
+    elseif love.mouse.isDown("l") == false then
+        self.flamethrower.firing = false
+        self.flamethrower.particles:stop()
     end
 
     if advancing then
@@ -96,6 +104,8 @@ function Gibson:update(dt)
             self.tireTrackTime = 0
         end
     end
+    
+    self.flamethrower:update(dt)
 end
 
 function Gibson:draw()
@@ -122,6 +132,7 @@ function Gibson:draw()
     )
 
     self.damage:draw()
+    self.flamethrower:draw()
 end
 
 return Gibson

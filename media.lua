@@ -64,6 +64,12 @@ local Media = Class(function(self)
 
     self.MISSILE_LAUNCH = love.audio.newSource("assets/missilelaunch.wav", "static")
     self.MISSILE_LAUNCH:setVolume(0.3)
+
+    self.BEAM = love.audio.newSource("assets/beam.wav", "static")
+    self.BEAM:setVolume(0.5)
+
+    self.UPGRADE = love.audio.newSource("assets/upgrade.wav", "static")
+    self.UPGRADE:setVolume(0.5)
 end)
 
 return Media

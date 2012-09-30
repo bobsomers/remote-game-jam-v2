@@ -50,11 +50,11 @@ local Viking = Class(function(self, collider, curiosity, initialPos, isRanged)
 end)
 
 function Viking:reset()
+    self.shape:moveTo(self.initialPos.x, self.initialPos.y)
     local initialDir = self.curiosity:getPosition() - Vector(self.shape:center())
     initialDir:normalize_inplace()
     self.velocity = self.MOVE_SPEED * initialDir
     self.shape:setRotation((-math.pi/2)+math.atan2(self.velocity.y, self.velocity.x))
-    self.shape:moveTo(self.initialPos.x, self.initialPos.y)
 
     -- animation data
     self.frame = 0

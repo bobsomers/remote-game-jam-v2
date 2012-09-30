@@ -2,13 +2,13 @@ local Class = require "hump.class"
 local Vector = require "hump.vector"
 local Constants = require "constants"
 
-local Gibson = Class(function(self, collider, curiosity)
+local Gibson = Class(function(self, collider, curiosity, camera)
     self.collider = collider
     self.curiosity = curiosity
+    self.camera = camera
 
     self.SIZE = Vector(20, 20)
     self.MOVE_SPEED = Constants.HELPER_SPEED
-    self.TURN_SPEED = Constants.HELPER_TURN_SPEED
     self.FRAME_DURATION = Constants.HELPER_FRAME_DURATION
 
     self.shape = self.collider:addRectangle(0, 0, self.SIZE.x, self.SIZE.y)
@@ -16,11 +16,12 @@ local Gibson = Class(function(self, collider, curiosity)
     self.collider:addToGroup("gibson", self.shape)
 
     self.frames = {
-        love.graphics.newImage("assets/curiosity1.png"),
-        love.graphics.newImage("assets/curiosity2.png"),
-        love.graphics.newImage("assets/curiosity3.png")
+        love.graphics.newImage("assets/gibson1.png"),
+        love.graphics.newImage("assets/gibson2.png")
     }
 
+    self.head = love.graphics.newImage("assets/gibsonhead.png")
+    
     self:reset()
 end)
 
@@ -45,7 +46,7 @@ function Gibson:update(dt)
     position = position + delta
 
     distance = math.sqrt(math.pow(dx, 2) + math.pow(dy, 2))
-    if distance > (Constants.HELPER_MINIMUM_DISTANCE - 125) then
+    if distance > (Constants.HELPER_MINIMUM_DISTANCE - 120) then
         self.shape:moveTo(position.x, position.y)
     end
 end
@@ -59,8 +60,21 @@ function Gibson:draw()
     love.graphics.draw(self.frames[self.frame + 1],
         position.x, position.y,
         rotation,
-        .6, .6,
+        1, 1,
         self.SIZE.x / 2, self.SIZE.y / 2,
+        0, 0
+    )
+    
+    local mouseX, mouseY = self.camera.camera:worldCoords(love.mouse.getX(), love.mouse.getY())
+    local dx = mouseX - position.x
+    local dy = mouseY - position.y
+    local rotation = math.atan2(dy, dx) + math.pi / 2
+    
+    love.graphics.draw(self.head,
+        position.x, position.y,
+        rotation,
+        1, 1,
+        8, 7,
         0, 0
     )
 end

@@ -107,12 +107,14 @@ function PlayState:draw()
 end
 
 function PlayState:collide(dt, shape1, shape2, mtvX, mtvY)
-    local laser, missile, enemy
+    local laser, missile, beam, enemy
 
     if shape1.kind == "laser" then
         laser = self.entities:findByShape(shape1)
     elseif shape1.kind == "missile" then
         missile = self.entities:findByShape(shape1)
+    elseif shape1.kind == "beam" then
+        beam = self.entities:findByShape(shape1)
     elseif shape1.kind == "viking" then
         enemy = self.entities:findByShape(shape1)
     end
@@ -121,6 +123,8 @@ function PlayState:collide(dt, shape1, shape2, mtvX, mtvY)
         laser = self.entities:findByShape(shape2)
     elseif shape2.kind == "missile" then
         missile = self.entities:findByShape(shape2)
+    elseif shape2.kind == "beam" then
+        beam = self.entities:findByShape(shape2)
     elseif shape2.kind == "viking" then
         enemy = self.entities:findByShape(shape2)
     end
@@ -133,6 +137,10 @@ function PlayState:collide(dt, shape1, shape2, mtvX, mtvY)
     if missile and enemy then
         enemy:takeDamage(Constants.ROVER_MISSILE_DAMAGE)
         missile:kill()
+    end
+
+    if beam and enemy then
+        enemy:takeDamage(Constants.ROVER_LASER_DAMAGE)
     end
 end
 

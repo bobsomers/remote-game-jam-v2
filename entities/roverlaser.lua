@@ -10,7 +10,7 @@ local RoverLaser = Class(function(self, media, collider, position, direction)
     self.SPEED = Constants.ROVER_LASER_SPEED
 
     self.shape = self.collider:addRectangle(0, 0, self.SIZE.x, 500)
-    self.shape.kind = "roverlaser"
+    self.shape.kind = "beam"
     self.collider:addToGroup("friend", self.shape)
     self.shape:moveTo(position.x, position.y)
 

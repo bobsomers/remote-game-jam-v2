@@ -51,8 +51,18 @@ function Viking:reset()
     local initialDir = (self.curiosity:getPosition() - Vector(self.shape:center())):normalized()
     self.velocity = self.MOVE_SPEED * initialDir
     self.shape:setRotation((-math.pi/2)+math.atan2(self.velocity.y, self.velocity.x))
+
+    -- shooting stuffs
     self.fireRate = Constants.RANGED_VIKING_FIRE_RATE
-    self.fireTime = self.fireRate -- so they shoot quickly
+    self.fireTime = self.fireRate -- shoot right off the bat
+
+    -- melee stuffs
+    if self.isRanged then
+        self.meleeRate = Constants.RANGED_VIKING_MELEE_RATE
+    else
+        self.meleeRate = Constants.MELEE_VIKING_MELEE_RATE
+    end
+    self.meleeTime = self.meleeRate -- melee right off the bat
 
     -- animation data
     self.frame = 0
@@ -69,6 +79,17 @@ function Viking:takeDamage(amount)
         self.collider:remove(self.shape)
         self.zombie = true
         Signal.emit("viking-death")
+    end
+end
+
+function Viking:meleeAttack()
+    if self.meleeTime > self.meleeRate then
+        if self.isRanged then
+            self.curiosity:takeDamage(Constants.RANGED_VIKING_MELEE_DAMAGE)
+        else
+            self.curiosity:takeDamage(Constants.MELEE_VIKING_DAMAGE)
+        end
+        self.meleeTime = 0
     end
 end
 
@@ -91,6 +112,7 @@ function Viking:update(dt)
 
     -- always allow recharge, whether moving or not
     self.fireTime = self.fireTime + dt
+    self.meleeTime = self.meleeTime + dt
 
     if moving then
         -- update velocity and direction

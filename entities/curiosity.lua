@@ -68,6 +68,16 @@ function Curiosity:upgradeExplosive()
     self.explosive = true
 end
 
+function Curiosity:takeDamage(amount)
+    self.damage.health = math.max(self.damage.health - amount, 0)
+    if self.damage.health <= 0 then
+        self.collider:remove(self.shape)
+        self.zombie = true
+        -- TODO Player death
+        -- Signal.emit("viking-death")
+    end
+end
+
 function Curiosity:update(dt)
     local position = Vector(self.shape:center())
     local moving = false

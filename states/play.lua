@@ -131,7 +131,7 @@ function PlayState:draw()
 end
 
 function PlayState:collide(dt, shape1, shape2, mtvX, mtvY)
-    local laser, missile, beam, enemy
+    local laser, missile, beam, enemy, vikingshot, curiosity, rangedViking, meleeViking
 
     if shape1.kind == "laser" then
         laser = self.entities:findByShape(shape1)
@@ -141,6 +141,10 @@ function PlayState:collide(dt, shape1, shape2, mtvX, mtvY)
         beam = self.entities:findByShape(shape1)
     elseif shape1.kind == "viking" then
         enemy = self.entities:findByShape(shape1)
+    elseif shape1.kind == "vikingshot" then
+        vikingshot = self.entities:findByShape(shape1)
+    elseif shape1.kind == "curiosity" then
+        curiosity = self.entities:findByShape(shape1)
     end
 
     if shape2.kind == "laser" then
@@ -151,6 +155,10 @@ function PlayState:collide(dt, shape1, shape2, mtvX, mtvY)
         beam = self.entities:findByShape(shape2)
     elseif shape2.kind == "viking" then
         enemy = self.entities:findByShape(shape2)
+    elseif shape2.kind == "vikingshot" then
+        vikingshot = self.entities:findByShape(shape2)
+    elseif shape2.kind == "curiosity" then
+        curiosity = self.entities:findByShape(shape2)
     end
 
     if laser and enemy then
@@ -165,6 +173,15 @@ function PlayState:collide(dt, shape1, shape2, mtvX, mtvY)
 
     if beam and enemy then
         enemy:takeDamage(Constants.ROVER_LASER_DAMAGE)
+    end
+
+    if curiosity and enemy then
+        enemy:meleeAttack()
+    end
+
+    if curiosity and vikingshot then
+        curiosity:takeDamage(Constants.RANGED_VIKING_SHOT_DAMAGE)
+        vikingshot:kill()
     end
 end
 

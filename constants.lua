@@ -20,6 +20,11 @@ Constants.DEBUG_MODE = true
 Constants.CURIOSITY_SPEED = 100 -- 100 pixels/sec
 Constants.CURIOSITY_TURN_SPEED = math.pi / 3 -- pi/3 radians/sec
 Constants.CURIOSITY_FRAME_DURATION = 0.1 -- 1/10 of a sec
+Constants.CURIOSITY_BASE_FIRE_RATE = 0.7 -- 0.7 sec between lasers
+Constants.CURIOSITY_HEALTH = 100 -- 100 hit points
+
+-- Laser weapon settings.
+Constants.LASER_SPEED = 250 -- 250 pixels/sec
 
 -- Gameplay variabls things.
 Constants.HELPER_SPEED = 120

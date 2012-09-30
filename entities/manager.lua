@@ -28,7 +28,11 @@ end
 function EntityManager:update(dt)
     -- Update all entities we manage.
     for i, entity in ipairs(self.entities) do
-        entity:update(dt)
+        if entity.dead then
+            table.remove(self.entities, i)
+        else
+            entity:update(dt)
+        end
     end
 end
 

@@ -1,10 +1,13 @@
 local Class = require "hump.class"
 local Vector = require "hump.vector"
 local Constants = require "constants"
+local Laser = require "entities.laser"
+local Damage = require "entities.damage"
 
-local Curiosity = Class(function(self, collider, camera)
+local Curiosity = Class(function(self, collider, camera, entities)
     self.collider = collider
     self.camera = camera
+    self.entities = entities
 
     self.SIZE = Vector(50, 50)
     self.MOVE_SPEED = Constants.CURIOSITY_SPEED
@@ -23,6 +26,8 @@ local Curiosity = Class(function(self, collider, camera)
 
     self.head = love.graphics.newImage("assets/curiosityhead.png")
 
+    self.damage = Damage(self, Constants.CURIOSITY_HEALTH, self.SIZE.x, Vector(-self.SIZE.x / 2, -self.SIZE.y / 2 - 5))
+
     self:reset()
 end)
 
@@ -30,12 +35,32 @@ function Curiosity:reset()
     self.health = 100
     self.shape:moveTo(Constants.WORLD.x/2, Constants.WORLD.y/2)
 
+    self.headRotation = 0
+
     self.frame = 0
     self.frameTime = 0
+
+    self.fireTime = 0
+    self.fireRate = Constants.CURIOSITY_BASE_FIRE_RATE
+
+    -- TODO: reset these to non-upgraded
+    self.tripleFire = true
+    self:upgradeFireRate()
+    self.explosive = false
+
+    self.damage.health = 50
 end
 
 function Curiosity:getPosition()
     return Vector(self.shape:center())
+end
+
+function Curiosity:upgradeFireRate()
+    self.fireRate = self.fireRate / 3
+end
+
+function Curiosity:upgradeTripleFire()
+    self.tripleFire = true
 end
 
 function Curiosity:update(dt)
@@ -91,6 +116,41 @@ function Curiosity:update(dt)
             self.frameTime = 0
         end
     end
+
+    local mouseX, mouseY = self.camera.camera:worldCoords(love.mouse.getX(), love.mouse.getY())
+    local dx = mouseX - position.x
+    local dy = mouseY - position.y
+    self.headRotation = math.atan2(dy, dx) + math.pi / 2
+
+    self.fireTime = self.fireTime + dt
+    if love.mouse.isDown("l") and self.fireTime > self.fireRate then
+        self.entities:register(
+            Laser(self.collider, self:getPosition(),
+                  Vector(math.cos(self.headRotation - math.pi / 2),
+                         math.sin(self.headRotation - math.pi / 2)),
+                  self.explosive
+            )
+        )
+
+        if self.tripleFire then
+            self.entities:register(
+                Laser(self.collider, self:getPosition(),
+                      Vector(math.cos(self.headRotation - math.pi / 2 - math.pi / 15),
+                             math.sin(self.headRotation - math.pi / 2 - math.pi / 15)),
+                      self.explosive
+                )
+            )
+            self.entities:register(
+                Laser(self.collider, self:getPosition(),
+                      Vector(math.cos(self.headRotation - math.pi / 2 + math.pi / 15),
+                             math.sin(self.headRotation - math.pi / 2 + math.pi / 15)),
+                      self.explosive
+                )
+            )
+        end
+
+        self.fireTime = 0
+    end
 end
 
 function Curiosity:draw()
@@ -103,18 +163,15 @@ function Curiosity:draw()
         0, 0
     )
 
-    local mouseX, mouseY = self.camera.camera:worldCoords(love.mouse.getX(), love.mouse.getY())
-    local dx = mouseX - position.x
-    local dy = mouseY - position.y
-    local rotation = math.atan2(dy, dx) + math.pi / 2
-
     love.graphics.draw(self.head,
         position.x, position.y,
-        rotation,
+        self.headRotation,
         1, 1,
         8, 7,
         0, 0
     )
+
+    self.damage:draw()
 end
 
 return Curiosity

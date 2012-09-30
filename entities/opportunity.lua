@@ -1,11 +1,13 @@
 local Class = require "hump.class"
 local Vector = require "hump.vector"
 local Constants = require "constants"
+local Laser = require "entities.laser"
 
-local Opportunity = Class(function(self, collider, curiosity, camera)
+local Opportunity = Class(function(self, collider, curiosity, camera, entities)
     self.collider = collider
     self.curiosity = curiosity
     self.camera = camera
+    self.entities = entities
 
     self.SIZE = Vector(20, 20)
     self.MOVE_SPEED = Constants.HELPER_SPEED
@@ -28,8 +30,15 @@ end)
 function Opportunity:reset()
     self.shape:moveTo(50, 50)
     
+    self.headRotation = 0
+
     self.frame = 0
     self.frameTime = 0
+
+    self.fireTime = 0
+    self.fireRate = Constants.CURIOSITY_BASE_FIRE_RATE
+    
+    self.explosive = false
 end
 
 function Opportunity:update(dt)
@@ -48,6 +57,24 @@ function Opportunity:update(dt)
     distance = math.sqrt(math.pow(dx, 2) + math.pow(dy, 2))
     if distance > (Constants.HELPER_MINIMUM_DISTANCE + 100) then
         self.shape:moveTo(position.x, position.y)
+    end
+    
+    local mouseX, mouseY = self.camera.camera:worldCoords(love.mouse.getX(), love.mouse.getY())
+    local dx = mouseX - position.x
+    local dy = mouseY - position.y
+    self.headRotation = math.atan2(dy, dx) + math.pi / 2
+
+    self.fireTime = self.fireTime + dt
+    if love.mouse.isDown("l") and self.fireTime > self.fireRate then
+        self.entities:register(
+            Laser(self.collider, position,
+                  Vector(math.cos(self.headRotation - math.pi / 2),
+                         math.sin(self.headRotation - math.pi / 2)),
+                  self.explosive
+            )
+        )
+        
+        self.fireTime = 0
     end
 end
 
@@ -74,7 +101,7 @@ function Opportunity:draw()
         position.x, position.y,
         rotation,
         1, 1,
-        8, 7,
+        5, 15,
         0, 0
     )
 end

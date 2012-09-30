@@ -30,18 +30,18 @@ function PlayState:init()
     self.ground = Ground(self.cam)
 
     -- Load curiosity.
-    self.curiosity = Curiosity(self.collider, self.cam)
+    self.curiosity = Curiosity(self.collider, self.cam, self.entities)
     self.entities:register(self.curiosity)
 
     -- Move the camera over curiosity.
     self.cam:teleport(self.curiosity:getPosition())
     
     -- Load other rovers (for now)
-    self.spirit = Spirit(self.collider, self.curiosity, self.cam)
+    self.spirit = Spirit(self.collider, self.curiosity, self.cam, self.entities)
     self.entities:register(self.spirit)
-    self.opportunity = Opportunity(self.collider, self.curiosity, self.cam)
+    self.opportunity = Opportunity(self.collider, self.curiosity, self.cam, self.entities)
     self.entities:register(self.opportunity)
-    self.gibson = Gibson(self.collider, self.curiosity, self.cam)
+    self.gibson = Gibson(self.collider, self.curiosity, self.cam, self.entities)
     self.entities:register(self.gibson)
 
     -- Load viking manager

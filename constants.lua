@@ -11,7 +11,7 @@ Constants.SCREEN = Vector(800, 600)
 Constants.CENTER = Constants.SCREEN / 2
 
 -- World settings.
-Constants.WORLD = Vector(1000, 1000)
+Constants.WORLD = Vector(2000, 2000)
 
 -- Debug mode.
 Constants.DEBUG_MODE = true

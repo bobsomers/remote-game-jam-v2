@@ -242,7 +242,7 @@ function PlayState:SpawnVikings(howMany)
         else
             pos.y = min.y - Constants.VIKING_SPAWN_OFFSET_OFF_SCREEN
         end
-        self.entities:register(Viking(self.media, self.collider, self.curiosity, pos, false))
+        self.entities:register(Viking(self.media, self.entities, self.collider, self.curiosity, pos, false))
     end
     -- vikes from left and right
     for i = 1,howMany-(howMany/2) do
@@ -252,7 +252,7 @@ function PlayState:SpawnVikings(howMany)
         else
             pos.x = min.x - Constants.VIKING_SPAWN_OFFSET_OFF_SCREEN
         end
-        self.entities:register(Viking(self.media, self.collider, self.curiosity, pos, true))
+        self.entities:register(Viking(self.media, self.entities, self.collider, self.curiosity, pos, true))
     end
 end
 

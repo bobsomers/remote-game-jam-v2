@@ -3,9 +3,11 @@ local Vector = require "hump.vector"
 local Constants = require "constants"
 local Damage = require "entities.damage"
 local Signal = require "hump.signal"
+local VikingShot = require "entities.vikingshot"
 
-local Viking = Class(function(self, media, collider, curiosity, initialPos, isRanged)
+local Viking = Class(function(self, media, entities, collider, curiosity, initialPos, isRanged)
     self.media = media
+    self.entities = entities
     self.collider = collider
     self.curiosity = curiosity
     self.initialPos = initialPos
@@ -49,6 +51,8 @@ function Viking:reset()
     local initialDir = (self.curiosity:getPosition() - Vector(self.shape:center())):normalized()
     self.velocity = self.MOVE_SPEED * initialDir
     self.shape:setRotation((-math.pi/2)+math.atan2(self.velocity.y, self.velocity.x))
+    self.fireRate = Constants.RANGED_VIKING_FIRE_RATE
+    self.fireTime = self.fireRate -- so they shoot quickly
 
     -- animation data
     self.frame = 0
@@ -85,6 +89,8 @@ function Viking:update(dt)
         end
     end
 
+    -- always allow recharge, whether moving or not
+    self.fireTime = self.fireTime + dt
 
     if moving then
         -- update velocity and direction
@@ -116,6 +122,19 @@ function Viking:update(dt)
             self.frame = self.frame + 1
             self.frame = self.frame % 2
             self.frameTime = 0
+        end
+    elseif self.isRanged then
+        -- turn
+        self.shape:setRotation((-math.pi/2)+math.atan2(dir.y, dir.x))
+        -- shoot
+        if self.fireTime > self.fireRate then
+            local rotation = math.atan2(dir.y, dir.x) + math.pi / 2
+            self.entities:register(
+                VikingShot(self.media, self.collider, self:getPosition(),
+                           Vector(math.cos(rotation - math.pi / 2),
+                                  math.sin(rotation - math.pi / 2)))
+            )
+            self.fireTime = 0
         end
     end
 end

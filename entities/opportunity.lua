@@ -98,6 +98,15 @@ function Opportunity:update(dt)
     end
 end
 
+function Opportunity:takeDamage(amount)
+    self.damage.health = math.max(self.damage.health - amount, 0)
+    if self.damage.health <= 0 then
+        self.collider:remove(self.shape)
+        self.zombie = true
+        --Signal.emit("viking-death")
+    end
+end
+
 function Opportunity:draw()
     local position = self:getPosition()
     love.graphics.draw(self.frames[self.frame + 1],

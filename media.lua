@@ -3,6 +3,7 @@ local Class = require "hump.class"
 local Media = Class(function(self)
     self.LASER = love.graphics.newImage("assets/laserbullet.png")
     self.FIRE_PARTICLE = love.graphics.newImage("assets/fireparticle.png")
+    self.VIKING_ARROW = love.graphics.newImage("assets/arrow.png")
 
     self.CURIOSITY_FRAMES = {
         love.graphics.newImage("assets/curiosity1.png"),
@@ -55,6 +56,39 @@ local Media = Class(function(self)
         love.graphics.newImage("assets/ruins2.png"),
         love.graphics.newImage("assets/ruins3.png")
     }
+
+    self.WEAK_LASER = love.audio.newSource("assets/weaklaser.wav", "static")
+    self.WEAK_LASER:setVolume(0.3)
+    self.FAST_LASER = love.audio.newSource("assets/fastlaser.wav", "static")
+    self.FAST_LASER:setVolume(0.3)
+    self.TRIPLE_LASER = love.audio.newSource("assets/triplelaser.wav", "static")
+    self.TRIPLE_LASER:setVolume(0.3)
+
+    self.MISSILE_LAUNCH = love.audio.newSource("assets/missilelaunch.wav", "static")
+    self.MISSILE_LAUNCH:setVolume(0.3)
+
+    self.BEAM = love.audio.newSource("assets/beam.wav", "static")
+    self.BEAM:setVolume(0.5)
+	
+	self.ARROW = love.audio.newSource("assets/whoosh2.wav", "static");
+	self.ARROW:setVolume(0.5)
+
+	self.THUD = love.audio.newSource("assets/thud.wav", "static");
+	self.THUD:setVolume(0.9)
+	
+	self.EXPLODE = love.audio.newSource("assets/bomb.wav", "static");
+	self.EXPLODE:setVolume(0.5)
+	
+	self.DEATH = love.audio.newSource("assets/Fireball.wav", "static");
+	self.DEATH:setVolume(0.9)
+
+	self.HITBYLASER = love.audio.newSource("assets/cut.wav", "static");
+	self.HITBYLASER:setVolume(0.5)
+	
+    self.UPGRADE = love.audio.newSource("assets/upgrade.wav", "static")
+    self.UPGRADE:setVolume(0.5)
+
+    self.PARTICLE = love.graphics.newImage("assets/particle.png")
 end)
 
 return Media

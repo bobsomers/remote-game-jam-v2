@@ -80,7 +80,7 @@ function PlayState:enter(previous)
     -- MUSIC
     self.music = love.audio.newSource(Constants.MUSIC, "stream")
     self.music:setLooping(true)
-    self.music:setVolume(0.5)
+    self.music:setVolume(0.7)
     self.music:play()
 end
 
@@ -131,8 +131,10 @@ function PlayState:draw()
 end
 
 function PlayState:collide(dt, shape1, shape2, mtvX, mtvY)
-    local laser, missile, beam, enemy
+    local laser, missile, beam, enemy, vikingshot, goodguy,
+          rangedViking, meleeViking
 
+    -- find first entity
     if shape1.kind == "laser" then
         laser = self.entities:findByShape(shape1)
     elseif shape1.kind == "missile" then
@@ -141,8 +143,16 @@ function PlayState:collide(dt, shape1, shape2, mtvX, mtvY)
         beam = self.entities:findByShape(shape1)
     elseif shape1.kind == "viking" then
         enemy = self.entities:findByShape(shape1)
+    elseif shape1.kind == "vikingshot" then
+        vikingshot = self.entities:findByShape(shape1)
+    elseif shape1.kind == "curiosity" or
+           shape1.kind == "opportunity" or
+           shape1.kind == "spirit" or
+           shape1.kind == "gibson" then
+        goodguy = self.entities:findByShape(shape1)
     end
 
+    -- find second entity
     if shape2.kind == "laser" then
         laser = self.entities:findByShape(shape2)
     elseif shape2.kind == "missile" then
@@ -151,20 +161,29 @@ function PlayState:collide(dt, shape1, shape2, mtvX, mtvY)
         beam = self.entities:findByShape(shape2)
     elseif shape2.kind == "viking" then
         enemy = self.entities:findByShape(shape2)
+    elseif shape2.kind == "vikingshot" then
+        vikingshot = self.entities:findByShape(shape2)
+    elseif shape1.kind == "curiosity" or
+           shape1.kind == "opportunity" or
+           shape1.kind == "spirit" or
+           shape1.kind == "gibson" then
+        goodguy = self.entities:findByShape(shape2)
     end
 
+    -- collsion logic
     if laser and enemy then
         enemy:takeDamage(Constants.LASER_DAMAGE)
         laser:kill()
-    end
-
-    if missile and enemy then
+    elseif missile and enemy then
         enemy:takeDamage(Constants.ROVER_MISSILE_DAMAGE)
         missile:kill()
-    end
-
-    if beam and enemy then
+    elseif beam and enemy then
         enemy:takeDamage(Constants.ROVER_LASER_DAMAGE)
+    elseif goodguy and enemy then
+        enemy:meleeAttack(goodguy)
+    elseif goodguy and vikingshot then
+        goodguy:takeDamage(Constants.RANGED_VIKING_SHOT_DAMAGE)
+        vikingshot:kill()
     end
 end
 
@@ -201,6 +220,10 @@ function PlayState:vikingDeath()
         if not self.gibson then
             self.gibson = Gibson(self.media, self.collider, self.curiosity, self.cam, self.entities)
             self.entities:register(self.gibson)
+
+            love.audio.stop(self.media.UPGRADE)
+            love.audio.rewind(self.media.UPGRADE)
+            love.audio.play(self.media.UPGRADE)
             
             self.talkbox:reset()
             self.talkbox:olmecTalk(Constants.OLMECSUBJECT_ROVER)
@@ -212,6 +235,10 @@ function PlayState:vikingDeath()
         if not self.opportunity then
             self.opportunity = Opportunity(self.media, self.collider, self.curiosity, self.cam, self.entities)
             self.entities:register(self.opportunity)
+
+            love.audio.stop(self.media.UPGRADE)
+            love.audio.rewind(self.media.UPGRADE)
+            love.audio.play(self.media.UPGRADE)
             
             self.talkbox:reset()
             self.talkbox:olmecTalk(Constants.OLMECSUBJECT_ROVER)
@@ -223,6 +250,10 @@ function PlayState:vikingDeath()
         if not self.spirit then
             self.spirit = Spirit(self.media, self.collider, self.curiosity, self.cam, self.entities)
             self.entities:register(self.spirit)
+
+            love.audio.stop(self.media.UPGRADE)
+            love.audio.rewind(self.media.UPGRADE)
+            love.audio.play(self.media.UPGRADE)
             
             self.talkbox:reset()
             self.talkbox:olmecTalk(Constants.OLMECSUBJECT_ROVER)

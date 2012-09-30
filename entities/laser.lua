@@ -2,10 +2,10 @@ local Class = require "hump.class"
 local Vector = require "hump.vector"
 local Constants = require "constants"
 
-local Laser = Class(function(self, media, collider, position, direction, explosive)
+local Laser = Class(function(self, media, collider, position, direction, upgrade, silent)
     self.collider = collider
     self.direction = direction
-    self.explosive = explosive
+    self.upgrade = upgrade
 
     self.SIZE = Vector(7, 16)
     self.SPEED = Constants.LASER_SPEED
@@ -16,6 +16,20 @@ local Laser = Class(function(self, media, collider, position, direction, explosi
     self.shape:moveTo(position.x, position.y)
 
     self.image = media.LASER
+
+    if self.upgrade == "weak" then
+        love.audio.stop(media.WEAK_LASER)
+        love.audio.rewind(media.WEAK_LASER)
+        love.audio.play(media.WEAK_LASER)
+    elseif self.upgrade == "fast" then
+        love.audio.stop(media.FAST_LASER)
+        love.audio.rewind(media.FAST_LASER)
+        love.audio.play(media.FAST_LASER)
+    else -- triple & explosive
+        love.audio.stop(media.TRIPLE_LASER)
+        love.audio.rewind(media.TRIPLE_LASER)
+        love.audio.play(media.TRIPLE_LASER)
+    end
 
     self:reset()
 end)

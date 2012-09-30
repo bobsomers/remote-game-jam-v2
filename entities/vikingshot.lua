@@ -4,9 +4,10 @@ local Constants = require "constants"
 
 local VikingShot = Class(function(self, media, collider, position, direction)
     self.collider = collider
+	self.media = media
     self.direction = direction
 
-    self.SIZE = Vector(12, 12) --TODO
+    self.SIZE = Vector(5, 20)
     self.SPEED = Constants.RANGED_VIKING_SHOT_SPEED
 
     self.shape = self.collider:addRectangle(0, 0, self.SIZE.x, self.SIZE.y)
@@ -14,8 +15,12 @@ local VikingShot = Class(function(self, media, collider, position, direction)
     self.collider:addToGroup("foe", self.shape)
     self.shape:moveTo(position.x, position.y)
 
-    self.image = media.FIRE_PARTICLE
+    self.image = media.VIKING_ARROW
 
+    love.audio.stop(self.media.ARROW)
+    love.audio.rewind(self.media.ARROW)
+    love.audio.play(self.media.ARROW)
+	
     self:reset()
 end)
 
@@ -50,7 +55,7 @@ function VikingShot:draw()
 
     love.graphics.draw(self.image,
         position.x, position.y,
-        math.atan2(self.direction.y, self.direction.x) + math.pi / 2,
+        math.atan2(self.direction.y, self.direction.x) - math.pi / 2,
         1, 1,
         self.SIZE.x / 2, self.SIZE.y / 2,
         0, 0

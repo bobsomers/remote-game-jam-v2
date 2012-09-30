@@ -87,7 +87,6 @@ function Gibson:update(dt)
     local dy = mouseY - position.y
     self.headRotation = math.atan2(dy, dx) + math.pi / 2
 
-    self.fireTime = self.fireTime + dt
     if love.mouse.isDown("l") then        
         self.flamethrower.firing = true
         self.flamethrower.particles:start()
@@ -106,6 +105,15 @@ function Gibson:update(dt)
     end
     
     self.flamethrower:update(dt)
+end
+
+function Gibson:takeDamage(amount)
+    self.damage.health = math.max(self.damage.health - amount, 0)
+    if self.damage.health <= 0 then
+        self.collider:remove(self.shape)
+        self.zombie = true
+        --Signal.emit("viking-death")
+    end
 end
 
 function Gibson:draw()

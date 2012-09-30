@@ -68,6 +68,28 @@ function Curiosity:upgradeExplosive()
     self.explosive = true
 end
 
+function Curiosity:takeDamage(amount)
+    self.damage.health = math.max(self.damage.health - amount, 0)
+	
+    love.audio.stop(self.media.THUD)
+    love.audio.rewind(self.media.THUD)
+    love.audio.play(self.media.THUD)
+	
+    if self.damage.health <= 0 then
+        self.collider:remove(self.shape)
+        self.zombie = true
+        -- TODO Player death
+        -- Signal.emit("viking-death")
+		
+		love.audio.stop(self.media.EXPLODE)
+		love.audio.rewind(self.media.EXPLODE)
+		love.audio.play(self.media.EXPLODE)
+		love.audio.stop(self.media.DEATH)
+		love.audio.rewind(self.media.DEATH)
+		love.audio.play(self.media.DEATH)
+    end
+end
+
 function Curiosity:update(dt)
     local position = Vector(self.shape:center())
     local moving = false
@@ -141,11 +163,18 @@ function Curiosity:update(dt)
 
     self.fireTime = self.fireTime + dt
     if love.mouse.isDown("l") and self.fireTime > self.fireRate then
+        local upgrade = "weak"
+        if self.tripleFire then
+            upgrade = "triple"
+        elseif self.fastFire then
+            upgrade = "fast"
+        end
+
         self.entities:register(
             Laser(self.media, self.collider, self:getPosition(),
                   Vector(math.cos(self.headRotation - math.pi / 2),
                          math.sin(self.headRotation - math.pi / 2)),
-                  self.explosive
+                  upgrade, false
             )
         )
 
@@ -154,14 +183,14 @@ function Curiosity:update(dt)
                 Laser(self.media, self.collider, self:getPosition(),
                       Vector(math.cos(self.headRotation - math.pi / 2 - math.pi / 15),
                              math.sin(self.headRotation - math.pi / 2 - math.pi / 15)),
-                      self.explosive
+                      upgrade, true
                 )
             )
             self.entities:register(
                 Laser(self.media, self.collider, self:getPosition(),
                       Vector(math.cos(self.headRotation - math.pi / 2 + math.pi / 15),
                              math.sin(self.headRotation - math.pi / 2 + math.pi / 15)),
-                      self.explosive
+                      upgrade, true
                 )
             )
         end

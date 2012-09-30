@@ -34,11 +34,11 @@ function PlayState:init()
     self.entities:register(self.curiosity)
     
     -- Load other rovers (for now)
-    self.spirit = Spirit(self.collider, self.curiosity)
+    self.spirit = Spirit(self.collider, self.curiosity, self.cam)
     self.entities:register(self.spirit)
-    self.opportunity = Opportunity(self.collider, self.curiosity)
+    self.opportunity = Opportunity(self.collider, self.curiosity, self.cam)
     self.entities:register(self.opportunity)
-    self.gibson = Gibson(self.collider, self.curiosity)
+    self.gibson = Gibson(self.collider, self.curiosity, self.cam)
     self.entities:register(self.gibson)
 
     -- Load viking manager

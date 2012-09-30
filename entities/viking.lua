@@ -41,22 +41,21 @@ function Viking:update(dt)
     local moving = false
     local pos = Vector(self.shape:center())
 
-    self.shape:move(self.velocity*dt)
+    local newPos = Vector(self.shape:center()) + (self.velocity*dt)
     moving = true
     -- TODO: think of caching this value because the velocity isn't changing often
     self.shape:setRotation((-math.pi/2)+math.atan2(self.velocity.y, self.velocity.x))
 
-    -- shitty bounce code
-    if pos.x > Constants.WORLD.x or pos.x < 0 then
+    -- bounce code
+    if newPos.x > Constants.WORLD.x-1 or newPos.x < 0 then
         self.velocity.x = -1 * self.velocity.x
-        self.shape:move(self.velocity*dt)
-        self.shape:move(self.velocity*dt)
     end
-    if pos.y > Constants.WORLD.y or pos.y < 0 then
+    if newPos.y > Constants.WORLD.y-1 or newPos.y < 0 then
         self.velocity.y = -1 * self.velocity.y
-        self.shape:move(self.velocity*dt)
-        self.shape:move(self.velocity*dt)
     end
+    newPos.x = math.min(Constants.WORLD.x-1, math.max(0, newPos.x))
+    newPos.y = math.min(Constants.WORLD.y-1, math.max(0, newPos.y))
+    self.shape:moveTo(newPos.x, newPos.y)
 
     local speed_ratio = Vector(Constants.MELEE_VIKING_SPEED, Constants.MELEE_VIKING_SPEED):len() / self.velocity:len()
 

@@ -29,7 +29,7 @@ function PlayState:init()
     self.curiosity = Curiosity(self.collider, self.cam)
     
     -- Load other rovers (for now)
-    self.spirit = Spirit(self.collider)
+    self.spirit = Spirit(self.collider, self.curiosity)
     self.opportunity = Opportunity(self.collider)
     self.gibson = Gibson(self.collider)
 
@@ -65,6 +65,7 @@ function PlayState:update(dt)
     dt = math.min(dt, 1/15) -- Minimum 15 FPS.
 
     self.curiosity:update(dt)
+    self.spirit:update(dt)
 
     self.tempViking:update(dt) --TODO remove
 

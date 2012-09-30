@@ -39,10 +39,23 @@ function Curiosity:reset()
 
     self.fireTime = 0
     self.fireRate = Constants.CURIOSITY_BASE_FIRE_RATE
+
+    -- TODO: reset these to non-upgraded
+    self.tripleFire = true
+    self:upgradeFireRate()
+    self.explosive = false
 end
 
 function Curiosity:getPosition()
     return Vector(self.shape:center())
+end
+
+function Curiosity:upgradeFireRate()
+    self.fireRate = self.fireRate / 2
+end
+
+function Curiosity:upgradeTripleFire()
+    self.tripleFire = true
 end
 
 function Curiosity:update(dt)
@@ -106,8 +119,31 @@ function Curiosity:update(dt)
 
     self.fireTime = self.fireTime + dt
     if love.mouse.isDown("l") and self.fireTime > self.fireRate then
-        local laser = Laser(self.collider, self:getPosition(), Vector(math.cos(self.headRotation - math.pi / 2), math.sin(self.headRotation - math.pi / 2)))
-        self.entities:register(laser)
+        self.entities:register(
+            Laser(self.collider, self:getPosition(),
+                  Vector(math.cos(self.headRotation - math.pi / 2),
+                         math.sin(self.headRotation - math.pi / 2)),
+                  self.explosive
+            )
+        )
+
+        if self.tripleFire then
+            self.entities:register(
+                Laser(self.collider, self:getPosition(),
+                      Vector(math.cos(self.headRotation - math.pi / 2 - math.pi / 6),
+                             math.sin(self.headRotation - math.pi / 2 - math.pi / 6)),
+                      self.explosive
+                )
+            )
+            self.entities:register(
+                Laser(self.collider, self:getPosition(),
+                      Vector(math.cos(self.headRotation - math.pi / 2 + math.pi / 6),
+                             math.sin(self.headRotation - math.pi / 2 + math.pi / 6)),
+                      self.explosive
+                )
+            )
+        end
+
         self.fireTime = 0
     end
 end

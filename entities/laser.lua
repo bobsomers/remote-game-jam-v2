@@ -2,9 +2,10 @@ local Class = require "hump.class"
 local Vector = require "hump.vector"
 local Constants = require "constants"
 
-local Laser = Class(function(self, collider, position, direction)
+local Laser = Class(function(self, collider, position, direction, explosive)
     self.collider = collider
     self.direction = direction
+    self.explosive = explosive
 
     self.SIZE = Vector(7, 16)
     self.SPEED = Constants.LASER_SPEED

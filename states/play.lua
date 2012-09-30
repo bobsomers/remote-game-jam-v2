@@ -13,6 +13,7 @@ local EntityManager = require "entities.manager"
 local Viking = require "entities.viking"
 local TalkBox = require "entities.talkbox"
 local Media = require "media"
+local Crosshair = require "entities.crosshair"
 
 local PlayState = Gamestate.new()
 
@@ -53,16 +54,18 @@ function PlayState:init()
 
     self.minimap = MiniMap(self.entities)
     self.talkbox = TalkBox(self.media)
+    self.crosshair = Crosshair()
 end
 
 function PlayState:enter(previous)
     self.lastFpsTime = 0
     self:SpawnVikings(self.entities)
     self.talkbox:olmecTalk(Constants.OLMECSUBJECT_INTRO)
+    love.mouse.setVisible(false)
 end
 
 function PlayState:leave()
-    -- Nothing yet.
+    love.mouse.setVisible(true)
 end
 
 function PlayState:update(dt)
@@ -104,6 +107,7 @@ function PlayState:draw()
     -- Draw things in screen space.
     self.minimap:draw()
     self.talkbox:draw()
+    self.crosshair:draw()
 end
 
 function PlayState:collide(dt, shape1, shape2, mtvX, mtvY)

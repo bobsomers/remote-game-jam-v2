@@ -2,6 +2,7 @@ local Gamestate = require "hump.gamestate"
 local Constants = require "constants"
 local Collider = require "hardoncollider"
 local GameCam = require "entities.gamecam"
+local MiniMap = require "entities.minimap"
 local Curiosity = require "entities.curiosity"
 local Spirit = require "entities.spirit"
 local Opportunity = require "entities.opportunity"
@@ -51,6 +52,8 @@ function PlayState:init()
 
     -- Move the camera over curiosity.
     self.cam:teleport(self.curiosity:getPosition())
+
+    self.minimap = MiniMap(self.curiosity)
 end
 
 function PlayState:enter(previous)
@@ -114,6 +117,7 @@ function PlayState:draw()
     self.cam:detach()
 
     -- Draw things in screen space.
+    self.minimap:draw()
     love.graphics.print(self.olmecSays, 50, 550)
 end
 

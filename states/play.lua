@@ -201,6 +201,9 @@ function PlayState:vikingDeath()
         if not self.gibson then
             self.gibson = Gibson(self.media, self.collider, self.curiosity, self.cam, self.entities)
             self.entities:register(self.gibson)
+            
+            self.talkbox:reset()
+            self.talkbox:olmecTalk(Constants.OLMECSUBJECT_ROVER)
         end
     end
     if self.temple2.triggered then
@@ -209,6 +212,9 @@ function PlayState:vikingDeath()
         if not self.opportunity then
             self.opportunity = Opportunity(self.media, self.collider, self.curiosity, self.cam, self.entities)
             self.entities:register(self.opportunity)
+            
+            self.talkbox:reset()
+            self.talkbox:olmecTalk(Constants.OLMECSUBJECT_ROVER)
         end
     end
     if self.temple3.triggered then
@@ -217,6 +223,9 @@ function PlayState:vikingDeath()
         if not self.spirit then
             self.spirit = Spirit(self.media, self.collider, self.curiosity, self.cam, self.entities)
             self.entities:register(self.spirit)
+            
+            self.talkbox:reset()
+            self.talkbox:olmecTalk(Constants.OLMECSUBJECT_ROVER)
         end
     end
 end

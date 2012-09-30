@@ -2,9 +2,10 @@ local Class = require "hump.class"
 local Vector = require "hump.vector"
 local Constants = require "constants"
 
-local Viking = Class(function(self, collider)
+local Viking = Class(function(self, collider, initialPos)
     -- handle params
     self.collider = collider
+    self.initialPos = initialPos
 
     -- init constants
     self.SIZE = Vector(30, 30)
@@ -25,8 +26,7 @@ end)
 function Viking:reset()
     self.velocity = Vector(-self.MOVE_SPEED, self.MOVE_SPEED)
     self.health = Constants.MELEE_VIKING_HP
-
-    self.shape:moveTo(750, 510) --TODO fixme
+    self.shape:moveTo(self.initialPos.x, self.initialPos.y)
 end
 
 function Viking:update(dt)

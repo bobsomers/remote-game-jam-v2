@@ -7,6 +7,7 @@ local Spirit = require "entities.spirit"
 local Opportunity = require "entities.opportunity"
 local Gibson = require "entities.gibson"
 local Ground = require "entities.ground"
+local Vector = require "hump.vector"
 
 local PlayState = Gamestate.new()
 
@@ -34,7 +35,7 @@ function PlayState:init()
     self.gibson = Gibson(self.collider)
 
     -- Load temp viking
-    self.tempViking = TempViking(self.collider)
+    self.tempViking = TempViking(self.collider, Vector(750, 510))
 
     -- Initialize all the crap Olmec Chan says
     self.olmecSays = ""

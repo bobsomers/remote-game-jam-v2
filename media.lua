@@ -48,6 +48,12 @@ local Media = Class(function(self)
         love.graphics.newImage("assets/meleeviking1.png"),
         love.graphics.newImage("assets/meleeviking2.png")
     }
+
+    self.TEMPLE_IMAGES = {
+        love.graphics.newImage("assets/ruins1.png"),
+        love.graphics.newImage("assets/ruins2.png"),
+        love.graphics.newImage("assets/ruins3.png")
+    }
 end)
 
 return Media

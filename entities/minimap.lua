@@ -23,6 +23,8 @@ function MiniMap:draw()
                 self:drawCuriosity(entity)
             elseif entity.shape.kind == "viking" then
                 self:drawViking(entity)
+            elseif entity.shape.kind == "temple" then
+                self:drawTemple(entity)
             end
         end
     end
@@ -52,6 +54,18 @@ function MiniMap:drawViking(viking)
         Constants.SCREEN.x - 1 - self.SIZE.x - self.OFFSET.x + vikePos.x - 1,
         Constants.SCREEN.y - 1 - self.SIZE.y - self.OFFSET.y + vikePos.y - 1,
         3, 3)
+end
+
+function MiniMap:drawTemple(temple)
+    local templePos = temple:getPosition()
+    templePos.x = templePos.x / Constants.WORLD.x * self.SIZE.x
+    templePos.y = templePos.y / Constants.WORLD.y * self.SIZE.y
+
+    love.graphics.setColor(255, 255, 0, 255)
+    love.graphics.rectangle("fill",
+        Constants.SCREEN.x - 1 - self.SIZE.x - self.OFFSET.x + templePos.x - 3,
+        Constants.SCREEN.y - 1 - self.SIZE.y - self.OFFSET.y + templePos.y - 3,
+        6, 6)
 end
 
 return MiniMap

@@ -11,7 +11,7 @@ Constants.SCREEN = Vector(800, 600)
 Constants.CENTER = Constants.SCREEN / 2
 
 -- World settings.
-Constants.WORLD = Vector(2000, 2000)
+Constants.WORLD = Vector(3000, 3000)
 
 -- Debug mode.
 Constants.DEBUG_MODE = true
@@ -46,7 +46,6 @@ Constants.HELPER_FRAME_DURATION = 0.1 -- 1/10 of a sec
 Constants.HELPER_MINIMUM_DISTANCE = 150
 
 -- Viking general data
-Constants.VIKING_NUM_TO_SPAWN = 50
 Constants.VIKING_FRAME_DURATION = 0.1 -- 1/10 of a sec
 Constants.VIKING_SPAWN_OFFSET_OFF_SCREEN = 15
 -- Melee Viking data
@@ -59,6 +58,18 @@ Constants.RANGED_VIKING_MIN_SPEED = 20
 Constants.RANGED_VIKING_MAX_SPEED = 50
 Constants.RANGED_VIKING_HEALTH = 25
 Constants.RANGED_VIKING_RANGE = 150
+
+-- Temple settings.
+Constants.TEMPLE_LOCATION = {
+    Vector(600, 600),
+    Vector(2200, 1200),
+    Vector(1400, 2400)
+}
+Constants.TEMPLE_SPAWN_AMOUNT = {
+    6,
+    15,
+    40
+}
 
 -- Olmec Chan's speech thing
 Constants.OLMEC_SPEECH_TIME = 400

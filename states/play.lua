@@ -1,4 +1,5 @@
 local Gamestate = require "hump.gamestate"
+local Signal = require "hump.signal"
 local Constants = require "constants"
 local Collider = require "hardoncollider"
 local GameCam = require "entities.gamecam"
@@ -14,6 +15,7 @@ local Viking = require "entities.viking"
 local TalkBox = require "entities.talkbox"
 local Media = require "media"
 local Crosshair = require "entities.crosshair"
+local Temple = require "entities.temple"
 
 local PlayState = Gamestate.new()
 
@@ -41,25 +43,35 @@ function PlayState:init()
     self.curiosity = Curiosity(self.media, self.collider, self.cam, self.entities)
     self.entities:register(self.curiosity)
 
+    -- Load temples.
+    self.entities:register(Temple(self.media, self.collider, self.entities, self.curiosity, 1))
+    self.entities:register(Temple(self.media, self.collider, self.entities, self.curiosity, 2))
+    self.entities:register(Temple(self.media, self.collider, self.entities, self.curiosity, 3))
+
     -- Move the camera over curiosity.
     self.cam:teleport(self.curiosity:getPosition())
     
     -- Load other rovers (for now)
-    self.spirit = Spirit(self.media, self.collider, self.curiosity, self.cam, self.entities)
-    self.entities:register(self.spirit)
-    self.opportunity = Opportunity(self.media, self.collider, self.curiosity, self.cam, self.entities)
-    self.entities:register(self.opportunity)
-    self.gibson = Gibson(self.media, self.collider, self.curiosity, self.cam, self.entities)
-    self.entities:register(self.gibson)
+    --self.spirit = Spirit(self.media, self.collider, self.curiosity, self.cam, self.entities)
+    --self.entities:register(self.spirit)
+    --self.opportunity = Opportunity(self.media, self.collider, self.curiosity, self.cam, self.entities)
+    --self.entities:register(self.opportunity)
+    --self.gibson = Gibson(self.media, self.collider, self.curiosity, self.cam, self.entities)
+    --self.entities:register(self.gibson)
 
+    -- Load HUD things.
     self.minimap = MiniMap(self.entities)
     self.talkbox = TalkBox(self.media)
     self.crosshair = Crosshair()
+
+    -- Register signal listeners.
+    Signal.register("temple-triggered", function(which)
+        self:templeTriggered(which)
+    end)
 end
 
 function PlayState:enter(previous)
     self.lastFpsTime = 0
-    self:SpawnVikings(self.entities)
     self.talkbox:olmecTalk(Constants.OLMECSUBJECT_INTRO)
     love.mouse.setVisible(false)
 end
@@ -172,29 +184,33 @@ function PlayState:mousereleased(x, y, button)
     -- TODO
 end
 
-function PlayState:SpawnVikings(entities)
+function PlayState:templeTriggered(which)
+    self:SpawnVikings(Constants.TEMPLE_SPAWN_AMOUNT[which])
+end
+
+function PlayState:SpawnVikings(howMany)
     local pos = Vector(0,0)
     local min = Vector(self.cam.camera:worldCoords(0, 0))
     local max = Vector(self.cam.camera:worldCoords(Constants.SCREEN.x - 1, Constants.SCREEN.y - 1))
     -- vikes from top and bottom
-    for i = 1,math.ceil(Constants.VIKING_NUM_TO_SPAWN/2) do
+    for i = 1,math.ceil(howMany/2) do
         pos.x = math.random(min.x, max.x)
         if math.random() < 0.5 then
             pos.y = max.y + Constants.VIKING_SPAWN_OFFSET_OFF_SCREEN
         else
             pos.y = min.y - Constants.VIKING_SPAWN_OFFSET_OFF_SCREEN
         end
-        entities:register(Viking(self.media, self.collider, self.curiosity, pos, false))
+        self.entities:register(Viking(self.media, self.collider, self.curiosity, pos, false))
     end
     -- vikes from left and right
-    for i = 1,Constants.VIKING_NUM_TO_SPAWN-(Constants.VIKING_NUM_TO_SPAWN/2) do
+    for i = 1,howMany-(howMany/2) do
         pos.y = math.random(min.y, max.y)
         if math.random() < 0.5 then
             pos.x = max.x + Constants.VIKING_SPAWN_OFFSET_OFF_SCREEN
         else
             pos.x = min.x - Constants.VIKING_SPAWN_OFFSET_OFF_SCREEN
         end
-        entities:register(Viking(self.media, self.collider, self.curiosity, pos, true))
+        self.entities:register(Viking(self.media, self.collider, self.curiosity, pos, true))
     end
 end
 

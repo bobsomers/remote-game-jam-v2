@@ -41,6 +41,7 @@ function PlayState:init()
 
     -- Initialize all the crap Olmec Chan says
     self.olmecSays = ""
+    self.olmecAudio = ""
     self.olmecSpeakTime = 0
 
     -- Initialize the subjects that have more than one line
@@ -145,6 +146,7 @@ function PlayState:olmecTalk(subject)
     if self.olmecSpeakTime <= 0 then
         if subject == Constants.OLMECSUBJECT_INTRO then
             self.olmecSays = Constants.OLMECTALK_INTRO
+            self.olmecAudio = love.audio.newSource(Constants.OLMECTALK_INTRO_MP3, "stream")
         elseif subject == Constants.OLMECSUBJECT_WORLD then
             i = math.random(0, (table.getn(self.olmecWorldLines)))
             self.olmecSays = self.olmecWorldLines[i]
@@ -160,6 +162,8 @@ function PlayState:olmecTalk(subject)
             self.olmecSays = Constants.OLMECTALK_DEFEAT
         end
         self.olmecSpeakTime = Constants.OLMEC_SPEECH_TIME
+        self.olmecAudio:setVolume(1.0)
+        self.olmecAudio:play()
     end
 end
 

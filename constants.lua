@@ -44,6 +44,7 @@ Constants.OLMECSUBJECT_DEFEAT = "DEFEAT"
 
 -- Olmec Chan's lines.
 Constants.OLMECTALK_INTRO = "Earth sends another metal man to this planet. Welcome to die!"
+Constants.OLMECTALK_INTRO_MP3 = "assets/olmecSpeaks/earthsendsanothermetalman.mp3"
 Constants.OLMECTALK_WORLD1 = "Curiously, there are no cats on Mars."
 Constants.OLMECTALK_WORLD2 = "You should try anti-gravity. I'd let you borrow the book, but it's hard to put down."
 Constants.OLMECTALK_WORLD3 = "There's a giant pit over there. Wouldn't you be curious to see what's at the bottom?"

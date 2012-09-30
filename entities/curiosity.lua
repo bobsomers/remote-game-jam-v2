@@ -44,6 +44,7 @@ function Curiosity:reset()
     self.tireTrackTime = 0
     self.previousTracks = nil
 
+    self.fastFire = false
     self.tripleFire = false
     self.explosive = false
 end
@@ -53,11 +54,18 @@ function Curiosity:getPosition()
 end
 
 function Curiosity:upgradeFireRate()
-    self.fireRate = self.fireRate / 3
+    if not self.fastFire then
+        self.fireRate = self.fireRate / 3
+        self.fastFire = true
+    end
 end
 
 function Curiosity:upgradeTripleFire()
     self.tripleFire = true
+end
+
+function Curiosity:upgradeExplosive()
+    self.explosive = true
 end
 
 function Curiosity:update(dt)

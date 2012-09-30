@@ -44,9 +44,12 @@ function PlayState:init()
     self.entities:register(self.curiosity)
 
     -- Load temples.
-    self.entities:register(Temple(self.media, self.collider, self.entities, self.curiosity, 1))
-    self.entities:register(Temple(self.media, self.collider, self.entities, self.curiosity, 2))
-    self.entities:register(Temple(self.media, self.collider, self.entities, self.curiosity, 3))
+    self.temple1 = Temple(self.media, self.collider, self.entities, self.curiosity, 1)
+    self.entities:register(self.temple1)
+    self.temple2 = Temple(self.media, self.collider, self.entities, self.curiosity, 2)
+    self.entities:register(self.temple2)
+    self.temple3 = Temple(self.media, self.collider, self.entities, self.curiosity, 3)
+    self.entities:register(self.temple3)
 
     -- Move the camera over curiosity.
     self.cam:teleport(self.curiosity:getPosition())
@@ -67,6 +70,9 @@ function PlayState:init()
     -- Register signal listeners.
     Signal.register("temple-triggered", function(which)
         self:templeTriggered(which)
+    end)
+    Signal.register("viking-death", function()
+        self:vikingDeath()
     end)
 end
 
@@ -172,20 +178,28 @@ function PlayState:collideStop(dt, shape1, shape2)
     end
 end
 
-function PlayState:keypressed(key)
-    -- TODO
-end
-
-function PlayState:mousepressed(x, y, button)
-    -- TODO
-end
-
-function PlayState:mousereleased(x, y, button)
-    -- TODO
-end
-
 function PlayState:templeTriggered(which)
     self:SpawnVikings(Constants.TEMPLE_SPAWN_AMOUNT[which])
+end
+
+function PlayState:vikingDeath()
+    -- If there are no more vikings, give them their upgrade based on which
+    -- temples they triggered.
+    for _, entity in ipairs(self.entities.entities) do
+        if entity.shape and entity.shape.kind == "viking" and not entity.zombie then
+            return
+        end
+    end
+
+    if self.temple1.triggered then
+        self.curiosity:upgradeFireRate()
+    end
+    if self.temple2.triggered then
+        self.curiosity:upgradeTripleFire()
+    end
+    if self.temple3.triggered then
+        self.curiosity:upgradeExplosive()
+    end
 end
 
 function PlayState:SpawnVikings(howMany)

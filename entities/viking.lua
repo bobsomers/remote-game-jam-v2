@@ -2,6 +2,7 @@ local Class = require "hump.class"
 local Vector = require "hump.vector"
 local Constants = require "constants"
 local Damage = require "entities.damage"
+local Signal = require "hump.signal"
 
 local Viking = Class(function(self, media, collider, curiosity, initialPos, isRanged)
     self.media = media
@@ -63,6 +64,7 @@ function Viking:takeDamage(amount)
     if self.damage.health <= 0 then
         self.collider:remove(self.shape)
         self.zombie = true
+        Signal.emit("viking-death")
     end
 end
 

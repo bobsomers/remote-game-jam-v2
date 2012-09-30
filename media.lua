@@ -56,6 +56,22 @@ local Media = Class(function(self)
         love.graphics.newImage("assets/ruins2.png"),
         love.graphics.newImage("assets/ruins3.png")
     }
+
+    self.WEAK_LASER = love.audio.newSource("assets/weaklaser.wav", "static")
+    self.WEAK_LASER:setVolume(0.3)
+    self.FAST_LASER = love.audio.newSource("assets/fastlaser.wav", "static")
+    self.FAST_LASER:setVolume(0.3)
+    self.TRIPLE_LASER = love.audio.newSource("assets/triplelaser.wav", "static")
+    self.TRIPLE_LASER:setVolume(0.3)
+
+    self.MISSILE_LAUNCH = love.audio.newSource("assets/missilelaunch.wav", "static")
+    self.MISSILE_LAUNCH:setVolume(0.3)
+
+    self.BEAM = love.audio.newSource("assets/beam.wav", "static")
+    self.BEAM:setVolume(0.5)
+
+    self.UPGRADE = love.audio.newSource("assets/upgrade.wav", "static")
+    self.UPGRADE:setVolume(0.5)
 end)
 
 return Media

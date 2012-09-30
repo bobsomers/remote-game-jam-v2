@@ -16,6 +16,10 @@ local RoverMissile = Class(function(self, media, collider, position, direction)
 
     self.image = media.ROVER_MISSILE
 
+    love.audio.stop(media.MISSILE_LAUNCH)
+    love.audio.rewind(media.MISSILE_LAUNCH)
+    love.audio.play(media.MISSILE_LAUNCH)
+
     self:reset()
 end)
 

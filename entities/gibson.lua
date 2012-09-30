@@ -81,7 +81,8 @@ function Gibson:update(dt)
         self.entities:register(
             Laser(self.media, self.collider, position,
                   Vector(math.cos(self.headRotation - math.pi / 2),
-                         math.sin(self.headRotation - math.pi / 2))
+                         math.sin(self.headRotation - math.pi / 2)),
+                  "weak", false
             )
         )
         

@@ -16,6 +16,10 @@ local RoverLaser = Class(function(self, media, collider, position, direction)
 
     self.image = media.ROVER_LASER
 
+    love.audio.stop(media.BEAM)
+    love.audio.rewind(media.BEAM)
+    love.audio.play(media.BEAM)
+
     self:reset()
 end)
 

@@ -67,11 +67,11 @@ function Viking:update(dt)
     newPos.y = math.min(Constants.WORLD.y-1, math.max(0, newPos.y))
     self.shape:moveTo(newPos.x, newPos.y)
 
-    local speed_ratio = Vector(Constants.MELEE_VIKING_SPEED, Constants.MELEE_VIKING_SPEED):len() / self.velocity:len()
+    local animationSpeed = Vector(Constants.MELEE_VIKING_MAX_SPEED, Constants.MELEE_VIKING_MAX_SPEED):len() / self.velocity:len()
 
     if moving then
         self.frameTime = self.frameTime + dt
-        if self.frameTime > self.FRAME_DURATION*speed_ratio then
+        if self.frameTime > self.FRAME_DURATION*animationSpeed then
             self.frame = self.frame + 1
             self.frame = self.frame % 2
             self.frameTime = 0

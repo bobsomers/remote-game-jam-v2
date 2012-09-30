@@ -18,6 +18,8 @@ function PlayState:init()
     -- Forward collision detection to self method.
     self.collider = Collider(100, function(dt, shape1, shape2, mtvX, mtvY)
         self:collide(dt, shape1, shape2, mtvX, mtvY)
+    end, function(dt, shape1, shape2)
+        self:collideStop(dt, shape1, shape2)
     end)
 
     -- Game camera.
@@ -44,12 +46,6 @@ function PlayState:init()
     self.gibson = Gibson(self.collider, self.curiosity, self.cam, self.entities)
     self.entities:register(self.gibson)
 
-    -- Load viking manager
-    self.vikings = self:SpawnVikings()
-    for _, viking in ipairs(self.vikings) do
-        self.entities:register(viking)
-    end
-
     -- Initialize all the crap Olmec Chan says
     self.olmecSays = ""
     self.olmecAudio = ""
@@ -65,12 +61,12 @@ function PlayState:init()
     
     self:olmecTalk(Constants.OLMECSUBJECT_INTRO)
 
-    self.minimap = MiniMap(self.curiosity, self.vikings)
+    self.minimap = MiniMap(self.entities)
 end
 
 function PlayState:enter(previous)
     self.lastFpsTime = 0
-    self:SpawnVikings()
+    self:SpawnVikings(self.entities)
 
     -- TODO
 end
@@ -152,6 +148,31 @@ function PlayState:collide(dt, shape1, shape2, mtvX, mtvY)
 
     if laser and enemy then
         enemy:takeDamage(Constants.LASER_DAMAGE)
+        laser:kill()
+    end
+end
+
+function PlayState:collideStop(dt, shape1, shape2)
+    local laser, enemy
+
+    if shape1.kind == "laser" then
+        laser = self.entities:findByShape(shape1)
+    elseif shape1.kind == "viking" then
+        enemy = self.entities:findByShape(shape1)
+    end
+
+    if shape2.kind == "laser" then
+        laser = self.entities:findByShape(shape2)
+    elseif shape2.kind == "viking" then
+        enemy = self.entities:findByShape(shape2)
+    end
+
+    if laser and laser.zombie then
+        laser.dead = true
+    end
+
+    if enemy and enemy.zombie then
+        enemy.dead = true
     end
 end
 
@@ -199,8 +220,7 @@ function PlayState:olmecTalk(subject)
     end
 end
 
-function PlayState:SpawnVikings()
-    local vikings = {}
+function PlayState:SpawnVikings(entities)
     local pos = Vector(0,0)
     local min = Vector(self.cam.camera:worldCoords(0, 0))
     local max = Vector(self.cam.camera:worldCoords(Constants.SCREEN.x - 1, Constants.SCREEN.y - 1))
@@ -212,7 +232,7 @@ function PlayState:SpawnVikings()
         else
             pos.y = min.y - Constants.VIKING_SPAWN_OFFSET_OFF_SCREEN
         end
-        table.insert(vikings, Viking(self.collider, self.curiosity, pos, false))
+        entities:register(Viking(self.collider, self.curiosity, pos, false))
     end
     -- vikes from left and right
     for i = 1,Constants.VIKING_NUM_TO_SPAWN-(Constants.VIKING_NUM_TO_SPAWN/2) do
@@ -222,9 +242,8 @@ function PlayState:SpawnVikings()
         else
             pos.x = min.x - Constants.VIKING_SPAWN_OFFSET_OFF_SCREEN
         end
-        table.insert(vikings, Viking(self.collider, self.curiosity, pos, true))
+        entities:register(Viking(self.collider, self.curiosity, pos, true))
     end
-    return vikings
 end
 
 return PlayState

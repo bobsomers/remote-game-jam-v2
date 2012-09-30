@@ -68,7 +68,8 @@ end
 function Viking:takeDamage(amount)
     self.damage.health = math.max(self.damage.health - amount, 0)
     if self.damage.health <= 0 then
-        self.dead = true
+        self.collider:remove(self.shape)
+        self.zombie = true
     end
 end
 

@@ -25,7 +25,7 @@ Constants.CURIOSITY_HEALTH = 100 -- 100 hit points
 
 -- Laser weapon settings.
 Constants.LASER_SPEED = 250 -- 250 pixels/sec
-Constants.LASER_DAMAGE = 5
+Constants.LASER_DAMAGE = 7
 
 -- Rover laser weapon settings.
 Constants.ROVER_LASER_SPEED = 800
@@ -41,7 +41,7 @@ Constants.HELPER_FRAME_DURATION = 0.1 -- 1/10 of a sec
 Constants.HELPER_MINIMUM_DISTANCE = 150
 
 -- Viking general data
-Constants.VIKING_NUM_TO_SPAWN = 5
+Constants.VIKING_NUM_TO_SPAWN = 50
 Constants.VIKING_FRAME_DURATION = 0.1 -- 1/10 of a sec
 Constants.VIKING_SPAWN_OFFSET_OFF_SCREEN = 15
 -- Melee Viking data

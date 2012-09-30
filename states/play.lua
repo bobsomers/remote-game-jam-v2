@@ -2,6 +2,7 @@ local Gamestate = require "hump.gamestate"
 local Constants = require "constants"
 local Collider = require "hardoncollider"
 local GameCam = require "entities.gamecam"
+local MiniMap = require "entities.minimap"
 local Curiosity = require "entities.curiosity"
 local Spirit = require "entities.spirit"
 local Opportunity = require "entities.opportunity"
@@ -9,10 +10,11 @@ local Gibson = require "entities.gibson"
 local Ground = require "entities.ground"
 local Vector = require "hump.vector"
 
-local PlayState = Gamestate.new()
+-- enemy stuff
+local EntityManager = require "entities.manager"
+local Viking = require "entities.viking"
 
--- TODO make a list of enemies or some shit
-local TempViking = require "entities.viking"
+local PlayState = Gamestate.new()
 
 function PlayState:init()
     -- Forward collision detection to self method.
@@ -31,11 +33,11 @@ function PlayState:init()
     
     -- Load other rovers (for now)
     self.spirit = Spirit(self.collider, self.curiosity)
-    self.opportunity = Opportunity(self.collider)
-    self.gibson = Gibson(self.collider)
+    self.opportunity = Opportunity(self.collider, self.curiosity)
+    self.gibson = Gibson(self.collider, self.curiosity)
 
-    -- Load temp viking
-    self.tempViking = TempViking(self.collider, Vector(750, 510))
+    -- Load viking manager
+    self.vikings = EntityManager()
 
     -- Initialize all the crap Olmec Chan says
     self.olmecSays = ""
@@ -50,10 +52,13 @@ function PlayState:init()
 
     -- Move the camera over curiosity.
     self.cam:teleport(self.curiosity:getPosition())
+
+    self.minimap = MiniMap(self.curiosity)
 end
 
 function PlayState:enter(previous)
     self.lastFpsTime = 0
+    self:SpawnVikings()
 
     -- TODO
 end
@@ -67,8 +72,10 @@ function PlayState:update(dt)
 
     self.curiosity:update(dt)
     self.spirit:update(dt)
+    self.opportunity:update(dt)
+    self.gibson:update(dt)
 
-    self.tempViking:update(dt) --TODO remove
+    self.vikings:update(dt)
 
     -- Update Olmec talk box
     if self.olmecSpeakTime > 0 then
@@ -108,12 +115,12 @@ function PlayState:draw()
     self.spirit:draw()
     self.opportunity:draw()
     self.gibson:draw()
+    self.vikings:draw()
 
-    self.tempViking:draw() --TODO remove
-    
     self.cam:detach()
 
     -- Draw things in screen space.
+    self.minimap:draw()
     love.graphics.print(self.olmecSays, 50, 550)
 end
 
@@ -154,6 +161,13 @@ function PlayState:olmecTalk(subject)
             self.olmecSays = Constants.OLMECTALK_DEFEAT
         end
         self.olmecSpeakTime = Constants.OLMEC_SPEECH_TIME
+    end
+end
+
+function PlayState:SpawnVikings()
+    for i=1,5 do
+        local vike = Viking(self.collider, Vector(math.random(0,800), math.random(0,600)))
+        self.vikings:register(vike)
     end
 end
 

@@ -15,7 +15,7 @@ local Gibson = Class(function(self, collider, curiosity, camera, entities)
 
     self.shape = self.collider:addRectangle(0, 0, self.SIZE.x, self.SIZE.y)
     self.shape.kind = "gibson"
-    self.collider:addToGroup("gibson", self.shape)
+    self.collider:addToGroup("friend", self.shape)
 
     self.frames = {
         love.graphics.newImage("assets/gibson1.png"),

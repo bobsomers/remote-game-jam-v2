@@ -12,7 +12,7 @@ local RoverLaser = Class(function(self, collider, position, direction, explosive
 
     self.shape = self.collider:addRectangle(0, 0, self.SIZE.x, self.SIZE.y)
     self.shape.kind = "roverlaser"
-    self.collider:addToGroup("roverlasers", self.shape)
+    self.collider:addToGroup("friend", self.shape)
     self.shape:moveTo(position.x, position.y)
 
     self.image = love.graphics.newImage("assets/roverlaser.png"),

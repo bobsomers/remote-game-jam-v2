@@ -12,7 +12,7 @@ local Laser = Class(function(self, collider, position, direction, explosive)
 
     self.shape = self.collider:addRectangle(0, 0, self.SIZE.x, self.SIZE.y)
     self.shape.kind = "laser"
-    self.collider:addToGroup("lasers", self.shape)
+    self.collider:addToGroup("friend", self.shape)
     self.shape:moveTo(position.x, position.y)
 
     self.image = love.graphics.newImage("assets/laserbullet.png"),

@@ -10,11 +10,6 @@ Constants.AUTHOR = "Bob Somers, Ryan Schmitt, Tim Adam, and Paul Morales"
 Constants.SCREEN = Vector(800, 600)
 Constants.CENTER = Constants.SCREEN / 2
 
--- Gameplay variabls things.
-Constants.HELPER_SPEED = 120
-Constants.HELPER_TURN_SPEED = math.pi / 3 -- pi/3 radians/sec
-Constants.HELPER_FRAME_DURATION = 0.1 -- 1/10 of a sec
-
 -- Debug mode.
 Constants.DEBUG_MODE = true
 
@@ -22,6 +17,11 @@ Constants.DEBUG_MODE = true
 Constants.CURIOSITY_SPEED = 100 -- 100 pixels/sec
 Constants.CURIOSITY_TURN_SPEED = math.pi / 3 -- pi/3 radians/sec
 Constants.CURIOSITY_FRAME_DURATION = 0.1 -- 1/10 of a sec
+
+-- Gameplay variabls things.
+Constants.HELPER_SPEED = 120
+Constants.HELPER_FRAME_DURATION = 0.1 -- 1/10 of a sec
+Constants.HELPER_MINIMUM_DISTANCE = 150
 
 -- Melee Viking data
 Constants.MELEE_VIKING_HP = 100

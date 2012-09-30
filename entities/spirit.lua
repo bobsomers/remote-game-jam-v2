@@ -4,7 +4,6 @@ local Constants = require "constants"
 
 local Spirit = Class(function(self, collider, curiosity)
     self.collider = collider
-    self.camera = camera
     self.curiosity = curiosity
 
     self.SIZE = Vector(20, 20)
@@ -33,11 +32,7 @@ function Spirit:reset()
 end
 
 function Spirit:update(dt)
-    
-    -- Rotate to face Curiosity
     local curiosityPosition = self.curiosity:getPosition()
-    print("cpx: " .. curiosityPosition.x)
-    print("cpy: " .. curiosityPosition.y)
     local position = Vector(self.shape:center())
     local dx = curiosityPosition.x - position.x
     local dy = curiosityPosition.y - position.y
@@ -49,14 +44,21 @@ function Spirit:update(dt)
     delta:rotate_inplace(rotation)
     position = position + delta
 
-    self.shape:moveTo(position.x, position.y)
+    distance = math.sqrt(math.pow(dx, 2) + math.pow(dy, 2))
+    if distance > Constants.HELPER_MINIMUM_DISTANCE then
+        self.shape:moveTo(position.x, position.y)
+    end
 end
 
 function Spirit:draw()    
     local position = Vector(self.shape:center())
+    local curiosityPosition = self.curiosity:getPosition()
+    local dx = curiosityPosition.x - position.x
+    local dy = curiosityPosition.y - position.y
+    local rotation = math.atan2(dy, dx) + math.pi / 2
     love.graphics.draw(self.frames[self.frame + 1],
         position.x, position.y,
-        self.shape:rotation(),
+        rotation,
         .6, .6,
         self.SIZE.x / 2, self.SIZE.y / 2,
         0, 0

@@ -31,8 +31,8 @@ function PlayState:init()
     
     -- Load other rovers (for now)
     self.spirit = Spirit(self.collider, self.curiosity)
-    self.opportunity = Opportunity(self.collider)
-    self.gibson = Gibson(self.collider)
+    self.opportunity = Opportunity(self.collider, self.curiosity)
+    self.gibson = Gibson(self.collider, self.curiosity)
 
     -- Load temp viking
     self.tempViking = TempViking(self.collider, Vector(750, 510))
@@ -67,6 +67,8 @@ function PlayState:update(dt)
 
     self.curiosity:update(dt)
     self.spirit:update(dt)
+    self.opportunity:update(dt)
+    self.gibson:update(dt)
 
     self.tempViking:update(dt) --TODO remove
 

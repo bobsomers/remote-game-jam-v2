@@ -61,6 +61,9 @@ local Media = Class(function(self)
     self.FAST_LASER:setVolume(0.3)
     self.TRIPLE_LASER = love.audio.newSource("assets/triplelaser.wav", "static")
     self.TRIPLE_LASER:setVolume(0.3)
+
+    self.MISSILE_LAUNCH = love.audio.newSource("assets/missilelaunch.wav", "static")
+    self.MISSILE_LAUNCH:setVolume(0.3)
 end)
 
 return Media

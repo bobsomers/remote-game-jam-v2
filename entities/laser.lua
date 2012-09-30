@@ -20,7 +20,7 @@ local Laser = Class(function(self, collider, position, direction)
 end)
 
 function Laser:reset()
-    self.alive = true
+    self.dead = false
 end
 
 function Laser:update(dt)
@@ -29,11 +29,11 @@ function Laser:update(dt)
     position = position + self.direction * self.SPEED * dt
 
     -- Destroy when outside the world bounds.
-    if position.x > Constants.WORLD.x - 1 and
-       position.x < 0 and
-       position.y > Constants.WORLD.y - 1 and
+    if position.x > Constants.WORLD.x - 1 or
+       position.x < 0 or
+       position.y > Constants.WORLD.y - 1 or
        position.y < 0 then
-        self.alive = false
+        self.dead = true
     end
 
     self.shape:moveTo(position.x, position.y)

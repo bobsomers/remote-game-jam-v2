@@ -7,6 +7,7 @@ local Spirit = require "entities.spirit"
 local Opportunity = require "entities.opportunity"
 local Gibson = require "entities.gibson"
 local Ground = require "entities.ground"
+local Vector = require "hump.vector"
 
 local PlayState = Gamestate.new()
 
@@ -29,12 +30,12 @@ function PlayState:init()
     self.curiosity = Curiosity(self.collider, self.cam)
     
     -- Load other rovers (for now)
-    self.spirit = Spirit(self.collider)
+    self.spirit = Spirit(self.collider, self.curiosity)
     self.opportunity = Opportunity(self.collider)
     self.gibson = Gibson(self.collider)
 
     -- Load temp viking
-    self.tempViking = TempViking(self.collider)
+    self.tempViking = TempViking(self.collider, Vector(750, 510))
 
     -- Initialize all the crap Olmec Chan says
     self.olmecSays = ""
@@ -65,6 +66,7 @@ function PlayState:update(dt)
     dt = math.min(dt, 1/15) -- Minimum 15 FPS.
 
     self.curiosity:update(dt)
+    self.spirit:update(dt)
 
     self.tempViking:update(dt) --TODO remove
 

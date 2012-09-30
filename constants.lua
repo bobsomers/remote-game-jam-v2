@@ -14,7 +14,9 @@ Constants.CENTER = Constants.SCREEN / 2
 Constants.WORLD = Vector(1000, 1000)
 
 -- Gameplay variabls things.
-Constants.HELPER_SPEED = 10
+Constants.HELPER_SPEED = 120
+Constants.HELPER_TURN_SPEED = math.pi / 3 -- pi/3 radians/sec
+Constants.HELPER_FRAME_DURATION = 0.1 -- 1/10 of a sec
 
 -- Debug mode.
 Constants.DEBUG_MODE = true

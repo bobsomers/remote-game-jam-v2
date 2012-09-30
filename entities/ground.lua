@@ -1,34 +1,31 @@
 local Class = require "hump.class"
+local Vector = require "hump.vector"
+local Constants = require "constants"
 
-local Ground = Class(function(self)
+local Ground = Class(function(self, camera)
+    self.camera = camera
+
+    self.TILE_SIZE = Vector(200, 200)
+
     self.tile = love.graphics.newImage("assets/groundtile.png")
 end)
 
 function Ground:draw()
-    -- top row
-    self:drawAt(0  ,0)
-    self:drawAt(200,0)
-    self:drawAt(400,0)
-    self:drawAt(600,0)
-    --
-    self:drawAt(0  ,200)
-    self:drawAt(200,200)
-    self:drawAt(400,200)
-    self:drawAt(600,200)
-    --
-    self:drawAt(0  ,400)
-    self:drawAt(200,400)
-    self:drawAt(400,400)
-    self:drawAt(600,400)
-end
+    -- Figure out start and stop positions for tile drawing.
+    min = Vector(self.camera.camera:worldCoords(0, 0))
+    max = Vector(self.camera.camera:worldCoords(Constants.SCREEN.x - 1, Constants.SCREEN.y - 1))
 
-function Ground:drawAt(x, y)
-    love.graphics.draw(self.tile,
-                       x,y,  -- position
-                       0,    -- rotation
-                       1,1,  -- scale
-                       0,0,  -- offset
-                       0,0) -- shearing
+    min.x = min.x - (min.x % 200)
+    min.y = min.y - (min.y % 200)
+
+    max.x = max.x - (max.x % 200)
+    max.y = max.y - (max.y % 200)
+
+    for i = min.x, max.x, self.TILE_SIZE.x do
+        for j = min.y, max.y, self.TILE_SIZE.y do
+            love.graphics.draw(self.tile, i, j, 0, 1, 1, 0, 0, 0, 0)
+        end
+    end
 end
 
 return Ground

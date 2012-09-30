@@ -71,7 +71,15 @@ function Curiosity:update(dt)
     end
 
     delta:rotate_inplace(self.shape:rotation())
-    position = position + delta
+    local nextPos = position + delta
+
+    -- Disallow moves outside the world bounds.
+    if nextPos.x < Constants.WORLD.x - 1 and
+       nextPos.x > 0 and
+       nextPos.y < Constants.WORLD.y - 1 and
+       nextPos.y > 0 then
+        position = nextPos
+    end
 
     self.shape:moveTo(position.x, position.y)
 

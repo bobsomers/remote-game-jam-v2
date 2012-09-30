@@ -10,6 +10,9 @@ Constants.AUTHOR = "Bob Somers, Ryan Schmitt, Tim Adam, and Paul Morales"
 Constants.SCREEN = Vector(800, 600)
 Constants.CENTER = Constants.SCREEN / 2
 
+-- World settings.
+Constants.WORLD = Vector(1000, 1000)
+
 -- Gameplay variabls things.
 Constants.HELPER_SPEED = 10
 

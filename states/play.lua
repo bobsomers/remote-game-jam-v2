@@ -23,7 +23,7 @@ function PlayState:init()
     self.cam = GameCam()
 
     -- Load the map stuff
-    self.ground = Ground()
+    self.ground = Ground(self.cam)
 
     -- Load curiosity.
     self.curiosity = Curiosity(self.collider, self.cam)

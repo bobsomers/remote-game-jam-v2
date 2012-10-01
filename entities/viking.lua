@@ -21,6 +21,7 @@ local Viking = Class(function(self, media, entities, collider, curiosity, initia
         self.MOVE_SPEED = math.random(Constants.MELEE_VIKING_MIN_SPEED, Constants.MELEE_VIKING_MAX_SPEED)
     end
     self.FRAME_DURATION = Constants.VIKING_FRAME_DURATION
+    self.OFFSET_RADS = math.pi/32
 
 
     -- collison detection
@@ -130,11 +131,10 @@ function Viking:update(dt)
         -- choose what mode and direction
         if dist > Constants.VIKING_FLANK_RANGE and dist < Constants.VIKING_MAX_RANGE and self.chaseMode == true then
             self.chaseMode = false
-            local offsetRads = math.pi/32
             if math.random() < 0.5 then
-                self.flankRotationAmt = math.pi/2 - offsetRads
+                self.flankRotationAmt = math.pi/2 - self.OFFSET_RADS
             else
-                self.flankRotationAmt = -math.pi/2 + offsetRads
+                self.flankRotationAmt = -math.pi/2 + self.OFFSET_RADS
             end
         elseif (dist < Constants.VIKING_FLANK_RANGE or dist > Constants.VIKING_MAX_RANGE) and self.chaseMode == false then
             self.chaseMode = true
@@ -151,11 +151,12 @@ function Viking:update(dt)
         self.shape:setRotation((-math.pi/2)+math.atan2(self.velocity.y, self.velocity.x))
 
         -- bounce off walls
-        if newPos.x > Constants.WORLD.x-1 or newPos.x < 0 then
-            self.velocity.x = -1 * self.velocity.x
-        end
-        if newPos.y > Constants.WORLD.y-1 or newPos.y < 0 then
-            self.velocity.y = -1 * self.velocity.y
+        if newPos.x > Constants.WORLD.x-1 or newPos.x < 0 or newPos.y > Constants.WORLD.y-1 or newPos.y < 0 then
+            if self.flankRotationAmt > 0 then
+                self.flankRotationAmt = -math.pi/2 + self.OFFSET_RADS
+            else
+                self.flankRotationAmt = math.pi/2 + self.OFFSET_RADS
+            end
         end
         newPos.x = math.min(Constants.WORLD.x-1, math.max(0, newPos.x))
         newPos.y = math.min(Constants.WORLD.y-1, math.max(0, newPos.y))

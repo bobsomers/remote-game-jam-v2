@@ -47,7 +47,7 @@ function Curiosity:reset()
 
     self.fastFire = false
     self.tripleFire = false
-    self.explosive = true -- TODO: turn this off
+    self.explosive = false
 end
 
 function Curiosity:getPosition()

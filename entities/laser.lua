@@ -44,7 +44,7 @@ end
 
 function Laser:kill()
     if self.upgrade == "explosive" then
-        self.entities:register(Explosion(self.media, self.collider, Vector(self.shape:center())))
+        self.entities:register(Explosion(self.media, self.collider, self.entities, Vector(self.shape:center())))
     end
     self.collider:remove(self.shape)
     self.zombie = true

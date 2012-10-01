@@ -2,11 +2,7 @@ local Class = require "hump.class"
 local Vector = require "hump.vector"
 local Constants = require "constants"
 
-local Explosion = Class(function(self, media, collider, position)
-    self.collider = collider
-    self.direction = direction
-    self.upgrade = upgrade
-
+local Explosion = Class(function(self, media, collider, entities, position)
     self.SIZE = Vector(50, 50)
 
     self.image = media.PARTICLE
@@ -36,6 +32,13 @@ local Explosion = Class(function(self, media, collider, position)
     love.audio.stop(media.EXPLODE)
     love.audio.rewind(media.EXPLODE)
     love.audio.play(media.EXPLODE)
+
+    for shape in pairs(collider:shapesInRange(position.x - self.SIZE.x / 2, position.y - self.SIZE.y / 2, position.x + self.SIZE.x / 2, position.y + self.SIZE.y / 2)) do
+        if shape.kind == "viking" or shape.kind == "olmec" then
+            local entity = entities:findByShape(shape)
+            entity:takeDamage(Constants.EXPLOSION_DAMAGE)
+        end
+    end
 
     self:reset()
 end)

@@ -21,7 +21,7 @@ Constants.CURIOSITY_SPEED = 100 -- 100 pixels/sec
 Constants.CURIOSITY_TURN_SPEED = math.pi / 3 -- pi/3 radians/sec
 Constants.CURIOSITY_FRAME_DURATION = 0.1 -- 1/10 of a sec
 Constants.CURIOSITY_BASE_FIRE_RATE = 1 -- X sec between lasers
-Constants.CURIOSITY_HEALTH = 250 -- hit points
+Constants.CURIOSITY_HEALTH = 300 -- hit points
 Constants.CURIOSITY_FIRE_RATE_BONUS = 3 -- X times as fast
 
 -- Laser weapon settings.
@@ -29,10 +29,10 @@ Constants.LASER_SPEED = 250 -- 250 pixels/sec
 Constants.LASER_DAMAGE = 7
 
 -- Explosion upgrade.
-Constants.EXPLOSION_DAMAGE = 20
+Constants.EXPLOSION_DAMAGE = 10
 
 -- Rover settings.
-Constants.ROVER_HEALTH = 100 -- hit points
+Constants.ROVER_HEALTH = 125 -- hit points
 
 -- Rover laser weapon settings.
 Constants.ROVER_LASER_SPEED = 800
@@ -98,11 +98,11 @@ Constants.TEMPLE_SPAWN_AMOUNT = {
 -- Olmec settings.
 Constants.OLMEC_ANGULAR_SPEED = math.pi / 4 -- pi / 4 radians/sec
 Constants.OLMEC_DISTANCE = 250
-Constants.OLMEC_HEALTH = 1000
+Constants.OLMEC_HEALTH = 2000
 Constants.OLMEC_DAMAGE = 10
 Constants.OLMEC_FIRE_RATE = 1.5 -- 1.5 seconds between shots
-Constants.OLMEC_VIKING_RATE = 15 -- 15 seconds between viking waves
-Constants.OLMEC_VIKING_AMOUNT = 20 -- 20 vikings per wave
+Constants.OLMEC_VIKING_RATE = 7 -- 7 seconds between viking waves
+Constants.OLMEC_VIKING_AMOUNT = 10 -- 10 vikings per wave
 
 Constants.MUSIC = "assets/music.mp3"
 

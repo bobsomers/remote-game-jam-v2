@@ -77,7 +77,7 @@ function Gibson:update(dt)
 
     local advancing = false
     distance = math.sqrt(math.pow(dx, 2) + math.pow(dy, 2))
-    if distance > (Constants.HELPER_MINIMUM_DISTANCE - 50) then
+    if distance > Constants.GIBSON_MINIMUM_DISTANCE then
         self.shape:moveTo(position.x, position.y)
         advancing = true
     end

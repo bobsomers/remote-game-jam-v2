@@ -60,6 +60,11 @@ function Viking:reset()
     -- shooting stuffs
     self.fireRate = Constants.RANGED_VIKING_FIRE_RATE
     self.fireTime = self.fireRate -- shoot right off the bat
+    self.potShotFireRate = math.random(Constants.RANGED_VIKING_MIN_POT_SHOT_FIRE_RATE, Constants.RANGED_VIKING_MAX_POT_SHOT_FIRE_RATE)
+    self.potShotTime = 0
+    self.potShotDuration = Constants.RANGED_VIKING_POT_SHOT_DURATION
+    self.isPotShotting = false
+    self.potShotTaken = false
 
     -- melee stuffs
     if self.isRanged then
@@ -81,11 +86,7 @@ end
 function Viking:takeDamage(amount)
     self.chaseMode = true
     self.damage.health = math.max(self.damage.health - amount, 0)
-	
-	love.audio.stop(self.media.HITBYLASER)
-	love.audio.rewind(self.media.HITBYLASER)
-	love.audio.play(self.media.HITBYLASER)
-	
+    
     if self.damage.health <= 0 then
         self.collider:remove(self.shape)
         self.zombie = true
@@ -140,29 +141,62 @@ function Viking:update(dt)
             self.chaseMode = true
         end
 
-        -- update velocity and direction
-        if self.chaseMode then
-            self.curDir = curiosityDir
-        else
-            self.curDir = curiosityDir:rotated(self.flankRotationAmt)
+        -- take a pot shot?
+        if self.isRanged and self.chaseMode == false and not self.isPotShotting and self.fireTime > self.potShotFireRate then
+            -- start shooting
+            self.isPotShotting = true
         end
-        self.velocity = self.MOVE_SPEED * self.curDir
-        local newPos = Vector(self.shape:center()) + (self.velocity*dt)
-        self.shape:setRotation((-math.pi/2)+math.atan2(self.velocity.y, self.velocity.x))
 
-        -- bounce off walls
-        if newPos.x > Constants.WORLD.x-1 or newPos.x < 0 or newPos.y > Constants.WORLD.y-1 or newPos.y < 0 then
-            if self.flankRotationAmt > 0 then
-                self.flankRotationAmt = -math.pi/2 + self.OFFSET_RADS
+        -- pot shot or move
+        if self.isPotShotting then
+            -- face curiosity
+            local curiosityDirRads = math.atan2(curiosityDir.y, curiosityDir.x)
+            self.shape:setRotation((-math.pi/2)+curiosityDirRads)
+            -- update pot shot time
+            self.potShotTime = self.potShotTime + dt
+            -- take potshot halfway through the potshot duration
+            if self.isPotShotting and self.potShotTime > self.potShotDuration/2 and not self.potShotTaken then
+                local rotation = curiosityDirRads +  math.pi / 2
+                self.entities:register(
+                    VikingShot(self.media, self.collider, self:getPosition(),
+                               Vector(math.cos(rotation - math.pi / 2),
+                                      math.sin(rotation - math.pi / 2)))
+                )
+                self.fireTime = 0
+                self.potShotTaken = true
+            end
+            if self.potShotTime > self.potShotDuration then
+                self.potShotTime = 0
+                self.isPotShotting = false
+                self.potShotTaken = false
+            end
+        else
+            -- update velocity and direction
+            if self.chaseMode then
+                self.curDir = curiosityDir
             else
-                self.flankRotationAmt = math.pi/2 + self.OFFSET_RADS
+                self.curDir = curiosityDir:rotated(self.flankRotationAmt)
+            end
+            self.velocity = self.MOVE_SPEED * self.curDir
+            local newPos = Vector(self.shape:center()) + (self.velocity*dt)
+            self.shape:setRotation((-math.pi/2)+math.atan2(self.velocity.y, self.velocity.x))
+
+            -- bounce off walls
+            if newPos.x > Constants.WORLD.x-1 or newPos.x < 0 or newPos.y > Constants.WORLD.y-1 or newPos.y < 0 then
+                if self.flankRotationAmt > 0 then
+                    self.flankRotationAmt = -math.pi/2 + self.OFFSET_RADS
+                else
+                    self.flankRotationAmt = math.pi/2 + self.OFFSET_RADS
+                end
+            end
+            newPos.x = math.min(Constants.WORLD.x-1, math.max(0, newPos.x))
+            newPos.y = math.min(Constants.WORLD.y-1, math.max(0, newPos.y))
+
+            -- actually move now
+            if not self.isPotShotting then
+                self.shape:moveTo(newPos.x, newPos.y)
             end
         end
-        newPos.x = math.min(Constants.WORLD.x-1, math.max(0, newPos.x))
-        newPos.y = math.min(Constants.WORLD.y-1, math.max(0, newPos.y))
-
-        -- actually move now
-        self.shape:moveTo(newPos.x, newPos.y)
 
         -- animate
         local animationSpeed = 0

@@ -273,11 +273,11 @@ function PlayState:vikingDeath()
             love.audio.rewind(self.media.UPGRADE)
             love.audio.play(self.media.UPGRADE)
             
-            self.talkbox:reset()
-            self.talkbox:olmecTalk(Constants.OLMECSUBJECT_ROVER)
-
-            self.olmec = OlmecChan(self.media, self.collider, self.curiosity, self, self.entities)
+            self.olmec = OlmecChan(self.media, self.collider, self.curiosity, self, self.entities, self.talkbox)
             self.entities:register(self.olmec)
+            
+            self.talkbox:reset()
+            self.talkbox:olmecTalk(Constants.OLMECSUBJECT_FIGHT)
         end
     end
 end

@@ -105,7 +105,7 @@ Constants.OLMEC_HEALTH = 2000
 Constants.OLMEC_DAMAGE = 10
 Constants.OLMEC_FIRE_RATE = 1.5 -- 1.5 seconds between shots
 Constants.OLMEC_VIKING_RATE = 7 -- 7 seconds between viking waves
-Constants.OLMEC_VIKING_AMOUNT = 10 -- 10 vikings per wave
+Constants.OLMEC_VIKING_AMOUNT = 15 -- 15 vikings per wave
 
 Constants.MUSIC = "assets/music.mp3"
 

@@ -32,6 +32,8 @@ function MiniMap:draw()
                 self:drawCuriosity(entity)
             elseif entity.shape.kind == "viking" then
                 self:drawViking(entity)
+            elseif entity.shape.kind == "olmec" then
+                self:drawOlmec(entity)
             end
         end
     end
@@ -73,6 +75,18 @@ function MiniMap:drawTemple(temple)
         Constants.SCREEN.x - 1 - self.SIZE.x - self.OFFSET.x + templePos.x - 3,
         Constants.SCREEN.y - 1 - self.SIZE.y - self.OFFSET.y + templePos.y - 3,
         6, 6)
+end
+
+function MiniMap:drawOlmec(olmec)
+    local olmecPos = olmec:getPosition()
+    olmecPos.x = olmecPos.x / Constants.WORLD.x * self.SIZE.x
+    olmecPos.y = olmecPos.y / Constants.WORLD.y * self.SIZE.y
+
+    love.graphics.setColor(255, 0, 255, 255)
+    love.graphics.rectangle("fill",
+        Constants.SCREEN.x - 1 - self.SIZE.x - self.OFFSET.x + olmecPos.x - 2,
+        Constants.SCREEN.y - 1 - self.SIZE.y - self.OFFSET.y + olmecPos.y - 2,
+        4, 4)
 end
 
 return MiniMap

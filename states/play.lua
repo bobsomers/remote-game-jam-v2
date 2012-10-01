@@ -16,6 +16,7 @@ local TalkBox = require "entities.talkbox"
 local Media = require "media"
 local Crosshair = require "entities.crosshair"
 local Temple = require "entities.temple"
+local OlmecChan = require "entities.olmecchan"
 
 local PlayState = Gamestate.new()
 
@@ -76,6 +77,19 @@ function PlayState:enter(previous)
     self.lastFpsTime = 0
     self.talkbox:olmecTalk(Constants.OLMECSUBJECT_INTRO)
     love.mouse.setVisible(false)
+
+    -- TODO: testing boss fight
+    self.olmec = OlmecChan(self.media, self.collider, self.curiosity, self, self.entities)
+    self.entities:register(self.olmec)
+    self.curiosity:upgradeFireRate()
+    self.curiosity:upgradeTripleFire()
+    self.curiosity:upgradeExplosive()
+    self.gibson = Gibson(self.media, self.collider, self.curiosity, self.cam, self.entities)
+    self.entities:register(self.gibson)
+    self.opportunity = Opportunity(self.media, self.collider, self.curiosity, self.cam, self.entities)
+    self.entities:register(self.opportunity)
+    self.spirit = Spirit(self.media, self.collider, self.curiosity, self.cam, self.entities)
+    self.entities:register(self.spirit)
     
     -- MUSIC
     self.music = love.audio.newSource(Constants.MUSIC, "stream")
@@ -132,7 +146,7 @@ end
 
 function PlayState:collide(dt, shape1, shape2, mtvX, mtvY)
     local laser, missile, beam, enemy, vikingshot, goodguy,
-          rangedViking, meleeViking
+          rangedViking, meleeViking, olmec, bullet
 
     -- find first entity
     if shape1.kind == "laser" then
@@ -145,6 +159,10 @@ function PlayState:collide(dt, shape1, shape2, mtvX, mtvY)
         enemy = self.entities:findByShape(shape1)
     elseif shape1.kind == "vikingshot" then
         vikingshot = self.entities:findByShape(shape1)
+    elseif shape1.kind == "olmec" then
+        enemy = self.entities:findByShape(shape1)
+    elseif shape1.kind == "bullet" then
+        bullet = self.entities:findByShape(shape1)
     elseif shape1.kind == "curiosity" or
            shape1.kind == "opportunity" or
            shape1.kind == "spirit" or
@@ -163,6 +181,10 @@ function PlayState:collide(dt, shape1, shape2, mtvX, mtvY)
         enemy = self.entities:findByShape(shape2)
     elseif shape2.kind == "vikingshot" then
         vikingshot = self.entities:findByShape(shape2)
+    elseif shape2.kind == "olmec" then
+        enemy = self.entities:findByShape(shape2)
+    elseif shape2.kind == "bullet" then
+        bullet = self.entities:findByShape(shape2)
     elseif shape1.kind == "curiosity" or
            shape1.kind == "opportunity" or
            shape1.kind == "spirit" or
@@ -184,6 +206,9 @@ function PlayState:collide(dt, shape1, shape2, mtvX, mtvY)
     elseif goodguy and vikingshot then
         goodguy:takeDamage(Constants.RANGED_VIKING_SHOT_DAMAGE)
         vikingshot:kill()
+    elseif goodguy and bullet then
+        goodguy:takeDamage(Constants.OLMEC_DAMAGE)
+        bullet:kill()
     end
 end
 

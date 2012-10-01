@@ -78,6 +78,15 @@ Constants.TEMPLE_SPAWN_AMOUNT = {
     40
 }
 
+-- Olmec settings.
+Constants.OLMEC_ANGULAR_SPEED = math.pi / 4 -- pi / 4 radians/sec
+Constants.OLMEC_DISTANCE = 250
+Constants.OLMEC_HEALTH = 1000
+Constants.OLMEC_DAMAGE = 10
+Constants.OLMEC_FIRE_RATE = 1.5 -- 1.5 seconds between shots
+Constants.OLMEC_VIKING_RATE = 15 -- 15 seconds between viking waves
+Constants.OLMEC_VIKING_AMOUNT = 20 -- 20 vikings per wave
+
 Constants.MUSIC = "assets/music.mp3"
 
 -- Olmec Chan's speech thing

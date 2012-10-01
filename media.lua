@@ -89,6 +89,10 @@ local Media = Class(function(self)
     self.UPGRADE:setVolume(0.5)
 
     self.PARTICLE = love.graphics.newImage("assets/particle.png")
+
+    self.OLMEC_CLOSED = love.graphics.newImage("assets/UlmecChan1.png")
+    self.OLMEC_OPEN = love.graphics.newImage("assets/UlmecChan2.png")
+    self.OLMEC_BULLET = love.graphics.newImage("assets/Ulmecbullet.png")
 end)
 
 return Media

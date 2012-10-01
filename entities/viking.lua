@@ -22,6 +22,7 @@ local Viking = Class(function(self, media, entities, collider, curiosity, initia
     end
     self.FRAME_DURATION = Constants.VIKING_FRAME_DURATION
 
+
     -- collison detection
     self.shape = self.collider:addRectangle(0, 0, self.SIZE.x, self.SIZE.y)
     self.shape.kind = "viking"
@@ -51,6 +52,9 @@ function Viking:reset()
     local initialDir = (self.curiosity:getPosition() - Vector(self.shape:center())):normalized()
     self.velocity = self.MOVE_SPEED * initialDir
     self.shape:setRotation((-math.pi/2)+math.atan2(self.velocity.y, self.velocity.x))
+    self.chaseMode = true
+    self.curDir = initialDir
+    self.flankRotationAmt = 0
 
     -- shooting stuffs
     self.fireRate = Constants.RANGED_VIKING_FIRE_RATE
@@ -74,6 +78,7 @@ function Viking:getPosition()
 end
 
 function Viking:takeDamage(amount)
+    self.chaseMode = true
     self.damage.health = math.max(self.damage.health - amount, 0)
 	
 	love.audio.stop(self.media.HITBYLASER)
@@ -99,12 +104,17 @@ function Viking:meleeAttack(goodguy)
 end
 
 function Viking:update(dt)
-    local moving = true
+    -- calculate range and direction to curiosity
+    local curiosityDir = self.curiosity:getPosition() - Vector(self.shape:center())
+    local dist = curiosityDir:len()
+    curiosityDir:normalize_inplace()
 
-    -- calculate range and direction
-    local dir = self.curiosity:getPosition() - Vector(self.shape:center())
-    local dist = dir:len()
-    dir:normalize_inplace()
+    -- always allow recharge, whether moving or not
+    self.fireTime = self.fireTime + dt
+    self.meleeTime = self.meleeTime + dt
+
+    -- are we moving?
+    local moving = true
     if self.isRanged then
         if dist < Constants.RANGED_VIKING_RANGE then
             moving = false
@@ -115,26 +125,42 @@ function Viking:update(dt)
         end
     end
 
-    -- always allow recharge, whether moving or not
-    self.fireTime = self.fireTime + dt
-    self.meleeTime = self.meleeTime + dt
-
+    -- move or not
     if moving then
+        -- choose what mode and direction
+        if dist > Constants.VIKING_FLANK_RANGE and dist < Constants.VIKING_MAX_RANGE and self.chaseMode == true then
+            self.chaseMode = false
+            local offsetRads = math.pi/32
+            if math.random() < 0.5 then
+                self.flankRotationAmt = math.pi/2 - offsetRads
+            else
+                self.flankRotationAmt = -math.pi/2 + offsetRads
+            end
+        elseif (dist < Constants.VIKING_FLANK_RANGE or dist > Constants.VIKING_MAX_RANGE) and self.chaseMode == false then
+            self.chaseMode = true
+        end
+
         -- update velocity and direction
-        self.velocity = self.MOVE_SPEED * dir
+        if self.chaseMode then
+            self.curDir = curiosityDir
+        else
+            self.curDir = curiosityDir:rotated(self.flankRotationAmt)
+        end
+        self.velocity = self.MOVE_SPEED * self.curDir
         local newPos = Vector(self.shape:center()) + (self.velocity*dt)
         self.shape:setRotation((-math.pi/2)+math.atan2(self.velocity.y, self.velocity.x))
 
-        -- bounce off walls?
---        if newPos.x > Constants.WORLD.x-1 or newPos.x < 0 then
---            self.velocity.x = -1 * self.velocity.x
---        end
---        if newPos.y > Constants.WORLD.y-1 or newPos.y < 0 then
---            self.velocity.y = -1 * self.velocity.y
---        end
---        newPos.x = math.min(Constants.WORLD.x-1, math.max(0, newPos.x))
---        newPos.y = math.min(Constants.WORLD.y-1, math.max(0, newPos.y))
+        -- bounce off walls
+        if newPos.x > Constants.WORLD.x-1 or newPos.x < 0 then
+            self.velocity.x = -1 * self.velocity.x
+        end
+        if newPos.y > Constants.WORLD.y-1 or newPos.y < 0 then
+            self.velocity.y = -1 * self.velocity.y
+        end
+        newPos.x = math.min(Constants.WORLD.x-1, math.max(0, newPos.x))
+        newPos.y = math.min(Constants.WORLD.y-1, math.max(0, newPos.y))
 
+        -- actually move now
         self.shape:moveTo(newPos.x, newPos.y)
 
         -- animate
@@ -152,10 +178,11 @@ function Viking:update(dt)
         end
     elseif self.isRanged then
         -- turn
-        self.shape:setRotation((-math.pi/2)+math.atan2(dir.y, dir.x))
+        local curiosityDirRads = math.atan2(curiosityDir.y, curiosityDir.x)
+        self.shape:setRotation((-math.pi/2)+curiosityDirRads)
         -- shoot
         if self.fireTime > self.fireRate then
-            local rotation = math.atan2(dir.y, dir.x) + math.pi / 2
+            local rotation = curiosityDirRads +  math.pi / 2
             self.entities:register(
                 VikingShot(self.media, self.collider, self:getPosition(),
                            Vector(math.cos(rotation - math.pi / 2),

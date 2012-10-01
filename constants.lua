@@ -20,15 +20,16 @@ Constants.DEBUG_MODE = true
 Constants.CURIOSITY_SPEED = 100 -- 100 pixels/sec
 Constants.CURIOSITY_TURN_SPEED = math.pi / 3 -- pi/3 radians/sec
 Constants.CURIOSITY_FRAME_DURATION = 0.1 -- 1/10 of a sec
-Constants.CURIOSITY_BASE_FIRE_RATE = 0.7 -- 0.7 sec between lasers
-Constants.CURIOSITY_HEALTH = 100 -- 100 hit points
+Constants.CURIOSITY_BASE_FIRE_RATE = 1 -- X sec between lasers
+Constants.CURIOSITY_HEALTH = 100 -- hit points
+Constants.CURIOSITY_FIRE_RATE_BONUS = 1.5 -- X times as fast
 
 -- Laser weapon settings.
 Constants.LASER_SPEED = 250 -- 250 pixels/sec
 Constants.LASER_DAMAGE = 7
 
 -- Rover settings.
-Constants.ROVER_HEALTH = 100 -- 100 hit points
+Constants.ROVER_HEALTH = 50 -- hit points
 
 -- Rover laser weapon settings.
 Constants.ROVER_LASER_SPEED = 800
@@ -36,28 +37,34 @@ Constants.SPIRIT_BASE_FIRE_RATE = 3
 Constants.ROVER_LASER_DAMAGE = 2 -- continuous while penetrating!
 
 -- Rover missile weapon settings.
-Constants.ROVER_MISSILE_SPEED = 150
+Constants.ROVER_MISSILE_SPEED = 140
 Constants.ROVER_MISSILE_DAMAGE = 20
 Constants.OPPORTUNITY_BASE_FIRE_RATE = 2
 
 -- Gameplay variabls things.
 Constants.HELPER_SPEED = 120
 Constants.HELPER_FRAME_DURATION = 0.1 -- 1/10 of a sec
-Constants.HELPER_MINIMUM_DISTANCE = 150
+
+-- Helper rover minimum distances
+Constants.GIBSON_MINIMUM_DISTANCE = 400
+Constants.OPPORTUNITY_MINIMUM_DISTANCE = 300
+Constants.SPIRIT_MINIMUM_DISTANCE = 200
 
 -- Viking general data
 Constants.VIKING_FRAME_DURATION = 0.1 -- 1/10 of a sec
 Constants.VIKING_SPAWN_OFFSET_OFF_SCREEN = 15
+Constants.VIKING_FLANK_RANGE = 200
+Constants.VIKING_MAX_RANGE = 550
 -- Melee Viking data
-Constants.MELEE_VIKING_MIN_SPEED = 20
-Constants.MELEE_VIKING_MAX_SPEED = 50
+Constants.MELEE_VIKING_MIN_SPEED = 80
+Constants.MELEE_VIKING_MAX_SPEED = 110
 Constants.MELEE_VIKING_HEALTH = 25
 Constants.MELEE_VIKING_RANGE = 5
 Constants.MELEE_VIKING_DAMAGE = 10
 Constants.MELEE_VIKING_MELEE_RATE = 1
 -- Ranged Viking data
-Constants.RANGED_VIKING_MIN_SPEED = 20
-Constants.RANGED_VIKING_MAX_SPEED = 50
+Constants.RANGED_VIKING_MIN_SPEED = 80
+Constants.RANGED_VIKING_MAX_SPEED = 100
 Constants.RANGED_VIKING_HEALTH = 25
 Constants.RANGED_VIKING_RANGE = 150
 Constants.RANGED_VIKING_SHOT_SPEED = 200

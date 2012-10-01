@@ -66,7 +66,7 @@ function Opportunity:update(dt)
 
     local advancing = false
     distance = math.sqrt(math.pow(dx, 2) + math.pow(dy, 2))
-    if distance > (Constants.HELPER_MINIMUM_DISTANCE + 100) then
+    if distance > Constants.OPPORTUNITY_MINIMUM_DISTANCE then
         self.shape:moveTo(position.x, position.y)
         advancing = true
     end

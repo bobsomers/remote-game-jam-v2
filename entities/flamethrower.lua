@@ -41,13 +41,13 @@ function Flamethrower:update(dt)
             -- Expose through constants
             self.entities:register(Fire(self.media, self.collider, position, 
                 Vector(math.cos(direction),
-                       math.sin(direction)), false, 0.3))
+                       math.sin(direction)), false, Constants.ROVER_FLAME_LIFETIME))
 
             self.particles:setPosition(position.x, position.y)
             self.particles:setDirection(direction)
 
             -- Also this
-            self.cooldown = 0.15
+            self.cooldown = 1
         end
     end
 

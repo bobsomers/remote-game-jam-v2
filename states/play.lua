@@ -187,11 +187,23 @@ function PlayState:collide(dt, shape1, shape2, mtvX, mtvY)
     if laser and enemy then
         enemy:takeDamage(Constants.LASER_DAMAGE)
         laser:kill()
+	
+        love.audio.stop(self.media.HITBYLASER)
+        love.audio.rewind(self.media.HITBYLASER)
+        love.audio.play(self.media.HITBYLASER)
     elseif missile and enemy then
         enemy:takeDamage(Constants.ROVER_MISSILE_DAMAGE)
         missile:kill()
+        
+        love.audio.stop(self.media.HITBYLASER)
+        love.audio.rewind(self.media.HITBYLASER)
+        love.audio.play(self.media.HITBYLASER)
     elseif beam and enemy then
         enemy:takeDamage(Constants.ROVER_LASER_DAMAGE)
+        
+        love.audio.stop(self.media.HITBYLASER)
+        love.audio.rewind(self.media.HITBYLASER)
+        love.audio.play(self.media.HITBYLASER)
     elseif flame and enemy then
         enemy:takeDamage(Constants.ROVER_FLAME_DAMAGE)
     elseif goodguy and enemy and enemy.shape.kind ~= "olmec" then

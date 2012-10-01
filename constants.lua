@@ -42,7 +42,8 @@ Constants.ROVER_MISSILE_DAMAGE = 20
 Constants.OPPORTUNITY_BASE_FIRE_RATE = 2
 
 -- Rover flame weapon settings.
-Constants.ROVER_FLAME_DAMAGE = 0.1
+Constants.ROVER_FLAME_DAMAGE = 0.2
+Constants.ROVER_FLAME_LIFETIME = 0.2
 
 -- Gameplay variabls things.
 Constants.HELPER_SPEED = 120

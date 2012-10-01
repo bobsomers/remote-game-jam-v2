@@ -81,11 +81,7 @@ end
 function Viking:takeDamage(amount)
     self.chaseMode = true
     self.damage.health = math.max(self.damage.health - amount, 0)
-	
-	love.audio.stop(self.media.HITBYLASER)
-	love.audio.rewind(self.media.HITBYLASER)
-	love.audio.play(self.media.HITBYLASER)
-	
+    
     if self.damage.health <= 0 then
         self.collider:remove(self.shape)
         self.zombie = true

@@ -57,7 +57,7 @@ function Fire:update(dt)
 end
 
 function Fire:draw()
-    --[[ Don't draw "fire"
+    
     local position = Vector(self.shape:center())
 
     love.graphics.draw(self.image,
@@ -67,7 +67,6 @@ function Fire:draw()
         self.SIZE.x / 2, self.SIZE.y / 2,
         0, 0
     )
-    --]]
 end
 
 return Fire

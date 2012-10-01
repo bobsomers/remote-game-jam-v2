@@ -55,7 +55,7 @@ end
 
 function Curiosity:upgradeFireRate()
     if not self.fastFire then
-        self.fireRate = self.fireRate / 3
+        self.fireRate = self.fireRate / Constants.CURIOSITY_FIRE_RATE_BONUS
         self.fastFire = true
     end
 end

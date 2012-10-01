@@ -128,7 +128,7 @@ function Viking:update(dt)
     -- move or not
     if moving then
         -- choose what mode and direction
-        if dist > Constants.VIKING_FLANK_RANGE and self.chaseMode == true then
+        if dist > Constants.VIKING_FLANK_RANGE and dist < Constants.VIKING_MAX_RANGE and self.chaseMode == true then
             self.chaseMode = false
             local offsetRads = math.pi/32
             if math.random() < 0.5 then
@@ -136,7 +136,7 @@ function Viking:update(dt)
             else
                 self.flankRotationAmt = -math.pi/2 + offsetRads
             end
-        elseif dist < Constants.VIKING_FLANK_RANGE and self.chaseMode == false then
+        elseif (dist < Constants.VIKING_FLANK_RANGE or dist > Constants.VIKING_MAX_RANGE) and self.chaseMode == false then
             self.chaseMode = true
         end
 

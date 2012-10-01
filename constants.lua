@@ -37,7 +37,7 @@ Constants.SPIRIT_BASE_FIRE_RATE = 3
 Constants.ROVER_LASER_DAMAGE = 2 -- continuous while penetrating!
 
 -- Rover missile weapon settings.
-Constants.ROVER_MISSILE_SPEED = 120
+Constants.ROVER_MISSILE_SPEED = 140
 Constants.ROVER_MISSILE_DAMAGE = 20
 Constants.OPPORTUNITY_BASE_FIRE_RATE = 2
 
@@ -50,9 +50,10 @@ Constants.HELPER_MINIMUM_DISTANCE = 150
 Constants.VIKING_FRAME_DURATION = 0.1 -- 1/10 of a sec
 Constants.VIKING_SPAWN_OFFSET_OFF_SCREEN = 15
 Constants.VIKING_FLANK_RANGE = 200
+Constants.VIKING_MAX_RANGE = 550
 -- Melee Viking data
-Constants.MELEE_VIKING_MIN_SPEED = 40
-Constants.MELEE_VIKING_MAX_SPEED = 100
+Constants.MELEE_VIKING_MIN_SPEED = 80
+Constants.MELEE_VIKING_MAX_SPEED = 110
 Constants.MELEE_VIKING_HEALTH = 25
 Constants.MELEE_VIKING_RANGE = 5
 Constants.MELEE_VIKING_DAMAGE = 10

@@ -21,15 +21,15 @@ Constants.CURIOSITY_SPEED = 100 -- 100 pixels/sec
 Constants.CURIOSITY_TURN_SPEED = math.pi / 3 -- pi/3 radians/sec
 Constants.CURIOSITY_FRAME_DURATION = 0.1 -- 1/10 of a sec
 Constants.CURIOSITY_BASE_FIRE_RATE = 1 -- X sec between lasers
-Constants.CURIOSITY_HEALTH = 100 -- hit points
-Constants.CURIOSITY_FIRE_RATE_BONUS = 1.5 -- X times as fast
+Constants.CURIOSITY_HEALTH = 250 -- hit points
+Constants.CURIOSITY_FIRE_RATE_BONUS = 3 -- X times as fast
 
 -- Laser weapon settings.
 Constants.LASER_SPEED = 250 -- 250 pixels/sec
 Constants.LASER_DAMAGE = 7
 
 -- Rover settings.
-Constants.ROVER_HEALTH = 50 -- hit points
+Constants.ROVER_HEALTH = 100 -- hit points
 
 -- Rover laser weapon settings.
 Constants.ROVER_LASER_SPEED = 800

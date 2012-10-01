@@ -77,19 +77,6 @@ function PlayState:enter(previous)
     self.lastFpsTime = 0
     self.talkbox:olmecTalk(Constants.OLMECSUBJECT_INTRO)
     love.mouse.setVisible(false)
-
-    -- TODO: testing boss fight
-    self.olmec = OlmecChan(self.media, self.collider, self.curiosity, self, self.entities)
-    self.entities:register(self.olmec)
-    self.curiosity:upgradeFireRate()
-    self.curiosity:upgradeTripleFire()
-    self.curiosity:upgradeExplosive()
-    self.gibson = Gibson(self.media, self.collider, self.curiosity, self.cam, self.entities)
-    self.entities:register(self.gibson)
-    self.opportunity = Opportunity(self.media, self.collider, self.curiosity, self.cam, self.entities)
-    self.entities:register(self.opportunity)
-    self.spirit = Spirit(self.media, self.collider, self.curiosity, self.cam, self.entities)
-    self.entities:register(self.spirit)
     
     -- MUSIC
     self.music = love.audio.newSource(Constants.MUSIC, "stream")
@@ -201,7 +188,7 @@ function PlayState:collide(dt, shape1, shape2, mtvX, mtvY)
         missile:kill()
     elseif beam and enemy then
         enemy:takeDamage(Constants.ROVER_LASER_DAMAGE)
-    elseif goodguy and enemy then
+    elseif goodguy and enemy and enemy.shape.kind ~= "olmec" then
         enemy:meleeAttack(goodguy)
     elseif goodguy and vikingshot then
         goodguy:takeDamage(Constants.RANGED_VIKING_SHOT_DAMAGE)
@@ -282,6 +269,9 @@ function PlayState:vikingDeath()
             
             self.talkbox:reset()
             self.talkbox:olmecTalk(Constants.OLMECSUBJECT_ROVER)
+
+            self.olmec = OlmecChan(self.media, self.collider, self.curiosity, self, self.entities)
+            self.entities:register(self.olmec)
         end
     end
 end

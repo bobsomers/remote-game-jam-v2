@@ -4,12 +4,13 @@ local Constants = require "constants"
 local Damage = require "entities.damage"
 local OlmecBullet = require "entities.olmecbullet"
 
-local OlmecChan = Class(function(self, media, collider, curiosity, play, entities)
+local OlmecChan = Class(function(self, media, collider, curiosity, play, entities, talkbox)
     self.media = media
     self.collider = collider
     self.curiosity = curiosity
     self.play = play
     self.entities = entities
+    self.talkbox = talkbox
 
     self.SIZE = Vector(60, 60)
     self.ANGULAR_SPEED = Constants.OLMEC_ANGULAR_SPEED
@@ -67,6 +68,9 @@ function OlmecChan:takeDamage(amount)
 		love.audio.stop(self.media.DEATH)
 		love.audio.rewind(self.media.DEATH)
 		love.audio.play(self.media.DEATH)
+        
+        self.talkbox:reset()
+        self.talkbox:olmecTalk(Constants.OLMECSUBJECT_DEFEAT)
     end
 end
 

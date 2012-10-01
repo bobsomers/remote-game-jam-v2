@@ -41,12 +41,15 @@ Constants.ROVER_MISSILE_SPEED = 140
 Constants.ROVER_MISSILE_DAMAGE = 20
 Constants.OPPORTUNITY_BASE_FIRE_RATE = 2
 
+-- Rover flame weapon settings.
+Constants.ROVER_FLAME_DAMAGE = 1
+
 -- Gameplay variabls things.
 Constants.HELPER_SPEED = 120
 Constants.HELPER_FRAME_DURATION = 0.1 -- 1/10 of a sec
 
 -- Helper rover minimum distances
-Constants.GIBSON_MINIMUM_DISTANCE = 400
+Constants.GIBSON_MINIMUM_DISTANCE = 50
 Constants.OPPORTUNITY_MINIMUM_DISTANCE = 300
 Constants.SPIRIT_MINIMUM_DISTANCE = 200
 

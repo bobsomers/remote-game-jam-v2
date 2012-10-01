@@ -15,7 +15,7 @@ local Fire = Class(function(self, media, collider, position, direction, explosiv
     self.shape = self.collider:addCircle(self.position.x, self.position.y, 10)
     self.shape.lifetime = 1
     self.shape.velocity = Vector(self.direction) * 200
-    self.shape.kind = "laser"
+    self.shape.kind = "flame"
     self.collider:addToGroup("friend", self.shape)
     self.shape:moveTo(position.x, position.y)
 

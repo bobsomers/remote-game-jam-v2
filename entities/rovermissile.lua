@@ -1,6 +1,7 @@
 local Class = require "hump.class"
 local Vector = require "hump.vector"
 local Constants = require "constants"
+local SmokeTrail = require "entities.smoketrail"
 
 local RoverMissile = Class(function(self, media, collider, position, direction)
     self.collider = collider
@@ -15,6 +16,8 @@ local RoverMissile = Class(function(self, media, collider, position, direction)
     self.shape:moveTo(position.x, position.y)
 
     self.image = media.ROVER_MISSILE
+
+    self.trail = SmokeTrail(media, self)
 
     love.audio.stop(media.MISSILE_LAUNCH)
     love.audio.rewind(media.MISSILE_LAUNCH)
@@ -33,10 +36,16 @@ function RoverMissile:kill()
     self.zombie = true
 end
 
+function RoverMissile:getPosition()
+    return Vector(self.shape:center())
+end
+
 function RoverMissile:update(dt)
     local position = Vector(self.shape:center())
 
     position = position + self.direction * self.SPEED * dt
+
+    self.trail:update(dt)
 
     -- Destroy when outside the world bounds.
     if position.x > Constants.WORLD.x - 1 or
@@ -50,6 +59,8 @@ function RoverMissile:update(dt)
 end
 
 function RoverMissile:draw()
+    self.trail:draw()
+
     local position = Vector(self.shape:center())
 
     love.graphics.draw(self.image,

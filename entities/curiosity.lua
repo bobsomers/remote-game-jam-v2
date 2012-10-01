@@ -70,11 +70,23 @@ end
 
 function Curiosity:takeDamage(amount)
     self.damage.health = math.max(self.damage.health - amount, 0)
+	
+    love.audio.stop(self.media.THUD)
+    love.audio.rewind(self.media.THUD)
+    love.audio.play(self.media.THUD)
+	
     if self.damage.health <= 0 then
         self.collider:remove(self.shape)
         self.zombie = true
         -- TODO Player death
         -- Signal.emit("viking-death")
+		
+		love.audio.stop(self.media.EXPLODE)
+		love.audio.rewind(self.media.EXPLODE)
+		love.audio.play(self.media.EXPLODE)
+		love.audio.stop(self.media.DEATH)
+		love.audio.rewind(self.media.DEATH)
+		love.audio.play(self.media.DEATH)
     end
 end
 

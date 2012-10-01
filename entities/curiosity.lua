@@ -5,9 +5,10 @@ local Laser = require "entities.laser"
 local Damage = require "entities.damage"
 local TireTrack = require "entities.tiretrack"
 
-local Curiosity = Class(function(self, media, collider, camera, entities)
+local Curiosity = Class(function(self, media, collider, entities, camera, entities)
     self.media = media
     self.collider = collider
+    self.entities = entities
     self.camera = camera
     self.entities = entities
 
@@ -46,7 +47,7 @@ function Curiosity:reset()
 
     self.fastFire = false
     self.tripleFire = false
-    self.explosive = false
+    self.explosive = true -- TODO: turn this off
 end
 
 function Curiosity:getPosition()
@@ -164,14 +165,16 @@ function Curiosity:update(dt)
     self.fireTime = self.fireTime + dt
     if love.mouse.isDown("l") and self.fireTime > self.fireRate then
         local upgrade = "weak"
-        if self.tripleFire then
+        if self.explosive then
+            upgrade = "explosive"
+        elseif self.tripleFire then
             upgrade = "triple"
         elseif self.fastFire then
             upgrade = "fast"
         end
 
         self.entities:register(
-            Laser(self.media, self.collider, self:getPosition(),
+            Laser(self.media, self.collider, self.entities, self:getPosition(),
                   Vector(math.cos(self.headRotation - math.pi / 2),
                          math.sin(self.headRotation - math.pi / 2)),
                   upgrade, false
@@ -180,14 +183,14 @@ function Curiosity:update(dt)
 
         if self.tripleFire then
             self.entities:register(
-                Laser(self.media, self.collider, self:getPosition(),
+                Laser(self.media, self.collider, self.entities, self:getPosition(),
                       Vector(math.cos(self.headRotation - math.pi / 2 - math.pi / 15),
                              math.sin(self.headRotation - math.pi / 2 - math.pi / 15)),
                       upgrade, true
                 )
             )
             self.entities:register(
-                Laser(self.media, self.collider, self:getPosition(),
+                Laser(self.media, self.collider, self.entities, self:getPosition(),
                       Vector(math.cos(self.headRotation - math.pi / 2 + math.pi / 15),
                              math.sin(self.headRotation - math.pi / 2 + math.pi / 15)),
                       upgrade, true

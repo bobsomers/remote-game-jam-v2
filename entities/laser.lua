@@ -1,9 +1,12 @@
 local Class = require "hump.class"
 local Vector = require "hump.vector"
 local Constants = require "constants"
+local Explosion = require "entities.explosion"
 
-local Laser = Class(function(self, media, collider, position, direction, upgrade, silent)
+local Laser = Class(function(self, media, collider, entities, position, direction, upgrade, silent)
+    self.media = media
     self.collider = collider
+    self.entities = entities
     self.direction = direction
     self.upgrade = upgrade
 
@@ -15,7 +18,7 @@ local Laser = Class(function(self, media, collider, position, direction, upgrade
     self.collider:addToGroup("friend", self.shape)
     self.shape:moveTo(position.x, position.y)
 
-    self.image = media.LASER
+    self.image = self.media.LASER
 
     if self.upgrade == "weak" then
         love.audio.stop(media.WEAK_LASER)
@@ -40,6 +43,9 @@ function Laser:reset()
 end
 
 function Laser:kill()
+    if self.upgrade == "explosive" then
+        self.entities:register(Explosion(self.media, self.collider, Vector(self.shape:center())))
+    end
     self.collider:remove(self.shape)
     self.zombie = true
 end

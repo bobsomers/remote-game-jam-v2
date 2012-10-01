@@ -41,7 +41,7 @@ function PlayState:init()
     self.ground = Ground(self.media, self.cam)
 
     -- Load curiosity.
-    self.curiosity = Curiosity(self.media, self.collider, self.cam, self.entities)
+    self.curiosity = Curiosity(self.media, self.collider, self.entities, self.cam, self.entities)
     self.entities:register(self.curiosity)
 
     -- Load temples.

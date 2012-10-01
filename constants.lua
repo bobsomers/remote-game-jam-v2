@@ -28,6 +28,9 @@ Constants.CURIOSITY_FIRE_RATE_BONUS = 3 -- X times as fast
 Constants.LASER_SPEED = 250 -- 250 pixels/sec
 Constants.LASER_DAMAGE = 7
 
+-- Explosion upgrade.
+Constants.EXPLOSION_DAMAGE = 20
+
 -- Rover settings.
 Constants.ROVER_HEALTH = 100 -- hit points
 

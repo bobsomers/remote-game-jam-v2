@@ -44,7 +44,11 @@ Constants.OPPORTUNITY_BASE_FIRE_RATE = 2
 -- Gameplay variabls things.
 Constants.HELPER_SPEED = 120
 Constants.HELPER_FRAME_DURATION = 0.1 -- 1/10 of a sec
-Constants.HELPER_MINIMUM_DISTANCE = 150
+
+-- Helper rover minimum distances
+Constants.GIBSON_MINIMUM_DISTANCE = 400
+Constants.OPPORTUNITY_MINIMUM_DISTANCE = 300
+Constants.SPIRIT_MINIMUM_DISTANCE = 200
 
 -- Viking general data
 Constants.VIKING_FRAME_DURATION = 0.1 -- 1/10 of a sec

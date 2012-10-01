@@ -52,10 +52,6 @@ end
 function OlmecChan:takeDamage(amount)
     self.damage.health = math.max(self.damage.health - amount, 0)
 	
-    love.audio.stop(self.media.THUD)
-    love.audio.rewind(self.media.THUD)
-    love.audio.play(self.media.THUD)
-	
     if self.damage.health <= 0 then
         self.collider:remove(self.shape)
         self.zombie = true

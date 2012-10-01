@@ -188,22 +188,40 @@ function PlayState:collide(dt, shape1, shape2, mtvX, mtvY)
         enemy:takeDamage(Constants.LASER_DAMAGE)
         laser:kill()
 	
-        love.audio.stop(self.media.HITBYLASER)
-        love.audio.rewind(self.media.HITBYLASER)
-        love.audio.play(self.media.HITBYLASER)
-    elseif missile and enemy then
+        if enemy == "olmec" then
+            love.audio.stop(self.media.THUD)
+            love.audio.rewind(self.media.THUD)
+            love.audio.play(self.media.THUD)
+        else
+            love.audio.stop(self.media.HITBYLASER)
+            love.audio.rewind(self.media.HITBYLASER)
+            love.audio.play(self.media.HITBYLASER)
+        end
+    elseif missile and enemy and enemy.shape.kind ~= "olmec" then
         enemy:takeDamage(Constants.ROVER_MISSILE_DAMAGE)
         missile:kill()
         
-        love.audio.stop(self.media.HITBYLASER)
-        love.audio.rewind(self.media.HITBYLASER)
-        love.audio.play(self.media.HITBYLASER)
-    elseif beam and enemy then
+        if enemy == "olmec" then
+            love.audio.stop(self.media.THUD)
+            love.audio.rewind(self.media.THUD)
+            love.audio.play(self.media.THUD)
+        else
+            love.audio.stop(self.media.HITBYLASER)
+            love.audio.rewind(self.media.HITBYLASER)
+            love.audio.play(self.media.HITBYLASER)
+        end
+    elseif beam and enemy and enemy.shape.kind ~= "olmec" then
         enemy:takeDamage(Constants.ROVER_LASER_DAMAGE)
         
-        love.audio.stop(self.media.HITBYLASER)
-        love.audio.rewind(self.media.HITBYLASER)
-        love.audio.play(self.media.HITBYLASER)
+        if enemy == "olmec" then
+            love.audio.stop(self.media.THUD)
+            love.audio.rewind(self.media.THUD)
+            love.audio.play(self.media.THUD)
+        else
+            love.audio.stop(self.media.HITBYLASER)
+            love.audio.rewind(self.media.HITBYLASER)
+            love.audio.play(self.media.HITBYLASER)
+        end
     elseif flame and enemy then
         enemy:takeDamage(Constants.ROVER_FLAME_DAMAGE)
     elseif goodguy and enemy and enemy.shape.kind ~= "olmec" then

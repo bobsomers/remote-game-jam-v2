@@ -17,7 +17,7 @@ Constants.CENTER = Constants.SCREEN / 2
 Constants.WORLD = Vector(3000, 3000)
 
 -- Debug mode.
-Constants.DEBUG_MODE = true
+Constants.DEBUG_MODE = false
 
 -- Player settings.
 Constants.CURIOSITY_SPEED = 100 -- 100 pixels/sec

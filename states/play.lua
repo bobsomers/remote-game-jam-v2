@@ -131,7 +131,7 @@ function PlayState:draw()
 end
 
 function PlayState:collide(dt, shape1, shape2, mtvX, mtvY)
-    local laser, missile, beam, enemy, vikingshot, goodguy,
+    local laser, missile, beam, flame, enemy, vikingshot, goodguy,
           rangedViking, meleeViking
 
     -- find first entity
@@ -141,6 +141,8 @@ function PlayState:collide(dt, shape1, shape2, mtvX, mtvY)
         missile = self.entities:findByShape(shape1)
     elseif shape1.kind == "beam" then
         beam = self.entities:findByShape(shape1)
+    elseif shape1.kind == "flame" then
+        flame = self.entities:findByShape(shape1)
     elseif shape1.kind == "viking" then
         enemy = self.entities:findByShape(shape1)
     elseif shape1.kind == "vikingshot" then
@@ -159,6 +161,8 @@ function PlayState:collide(dt, shape1, shape2, mtvX, mtvY)
         missile = self.entities:findByShape(shape2)
     elseif shape2.kind == "beam" then
         beam = self.entities:findByShape(shape2)
+    elseif shape2.kind == "flame" then
+        flame = self.entities:findByShape(shape1)
     elseif shape2.kind == "viking" then
         enemy = self.entities:findByShape(shape2)
     elseif shape2.kind == "vikingshot" then
@@ -179,6 +183,8 @@ function PlayState:collide(dt, shape1, shape2, mtvX, mtvY)
         missile:kill()
     elseif beam and enemy then
         enemy:takeDamage(Constants.ROVER_LASER_DAMAGE)
+    elseif flame and enemy then
+        enemy:takeDamage(Constants.ROVER_FLAME_DAMAGE)
     elseif goodguy and enemy then
         enemy:meleeAttack(goodguy)
     elseif goodguy and vikingshot then

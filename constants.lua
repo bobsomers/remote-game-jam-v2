@@ -5,6 +5,9 @@ local Constants = {}
 -- Game info.
 Constants.TITLE = "Revenge of Olmec (Chan)"
 Constants.AUTHOR = "Bob Somers, Ryan Schmitt, Tim Adam, and Paul Morales"
+Constants.FEAT = "Feat. Andrew Chan"
+Constants.INSTRUCTIONS = "WASD to move. Left click to shoot."
+Constants.INSTRUCTIONS2 = "Press any key to continue."
 
 -- Screen dimensions.
 Constants.SCREEN = Vector(800, 600)

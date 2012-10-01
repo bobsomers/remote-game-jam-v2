@@ -60,6 +60,11 @@ function Viking:reset()
     -- shooting stuffs
     self.fireRate = Constants.RANGED_VIKING_FIRE_RATE
     self.fireTime = self.fireRate -- shoot right off the bat
+    self.potShotFireRate = math.random(Constants.RANGED_VIKING_MIN_POT_SHOT_FIRE_RATE, Constants.RANGED_VIKING_MAX_POT_SHOT_FIRE_RATE)
+    self.potShotTime = 0
+    self.potShotDuration = Constants.RANGED_VIKING_POT_SHOT_DURATION
+    self.isPotShotting = false
+    self.potShotTaken = false
 
     -- melee stuffs
     if self.isRanged then
@@ -158,7 +163,38 @@ function Viking:update(dt)
         newPos.y = math.min(Constants.WORLD.y-1, math.max(0, newPos.y))
 
         -- actually move now
-        self.shape:moveTo(newPos.x, newPos.y)
+        if not self.isPotShotting then
+            self.shape:moveTo(newPos.x, newPos.y)
+        end
+
+        -- take a pot shot?
+        if self.isRanged and self.chaseMode == false and not self.isPotShotting and self.fireTime > self.potShotFireRate then
+            -- start shooting
+            self.isPotShotting = true
+        end
+        if self.isPotShotting then
+            -- face curiosity
+            local curiosityDirRads = math.atan2(curiosityDir.y, curiosityDir.x)
+            self.shape:setRotation((-math.pi/2)+curiosityDirRads)
+            -- update pot shot time
+            self.potShotTime = self.potShotTime + dt
+            -- take potshot halfway through the potshot duration
+            if self.isPotShotting and self.potShotTime > self.potShotDuration/2 and not self.potShotTaken then
+                local rotation = curiosityDirRads +  math.pi / 2
+                self.entities:register(
+                    VikingShot(self.media, self.collider, self:getPosition(),
+                               Vector(math.cos(rotation - math.pi / 2),
+                                      math.sin(rotation - math.pi / 2)))
+                )
+                self.fireTime = 0
+                self.potShotTaken = true
+            end
+            if self.potShotTime > self.potShotDuration then
+                self.potShotTime = 0
+                self.isPotShotting = false
+                self.potShotTaken = false
+            end
+        end
 
         -- animate
         local animationSpeed = 0
